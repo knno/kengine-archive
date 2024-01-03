@@ -1,0 +1,15 @@
+var inst = wrapper.instance;
+
+
+if event_arg == 1 {
+    if inst.x > 800 {
+        if inst.direction == 45 inst.direction = 135 else inst.direction = 225;
+    } else if inst.x < 0 {
+        if inst.direction == 135 inst.direction = 45 else inst.direction = 315;
+    }
+    if inst.y > 600 {
+        if inst.direction == 225 inst.direction = 135; else inst.direction = 45;
+    } else if inst.y < 0 {
+        if inst.direction == 135 inst.direction = 225 else inst.direction = 315;
+    }
+}

@@ -1,0 +1,37 @@
+{
+    "docdash": {
+        "shortenTypes": false,
+        "collapse": "top",
+        "navLevel": 2,
+        "sectionOrder": ["Tutorials", "Classes", "Namespaces", "Global", "Externals", "Events"]
+    },
+    "plugins": [
+        "plugins/markdown",
+        "plugins/jsdocgml"
+    ],
+    "recurseDepth": 12,
+    "source": {
+        "includePattern": ".+\\.gml$",
+        "excludePattern": ""
+    },
+    "sourceType": "script",
+    "tags": {
+        "allowUnknownTags": true,
+        "dictionaries": [
+            "jsdoc",
+            "closure"
+        ]
+    },
+    "opts": {
+        "template": "templates/code"
+    },
+    "templates": {
+        "monospaceLinks": true,
+        "cleverLinks": true,
+        "default": {
+            "useLongnameInNav": true,
+            "useNewNameInNav": true,
+            "outputSourceFiles": true
+        }
+    }
+}

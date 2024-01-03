@@ -1,0 +1,30 @@
+{
+  "name": "kengine",
+  "version": "0.0.1",
+  "description": "A GameMaker framework that helps with modding functions for your projects.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/knno/kengine.git"
+  },
+  "keywords": [
+    "gamemaker",
+    "GML",
+    "engine",
+    "game"
+  ],
+  "author": "Kenan Masri <kenanmasri@outlook.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/knno/kengine/issues"
+  },
+  "homepage": "https://github.com/knno/kengine#readme",
+  "scripts": {
+    "jsdoc": "npx jsdoc -u docs/tutorials . README.md -r -c docs/jsdoc.json -d docs/output",
+    "prepublishOnly": "npm run jsdoc"
+  },
+  "dependencies": {
+    "docdash": "^2.0.1",
+    "jsdoc": "^4.0.2"
+  }
+}
