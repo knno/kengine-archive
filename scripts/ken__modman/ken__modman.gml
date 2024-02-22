@@ -520,7 +520,7 @@ function __KengineModsMod(options) constructor {
 		}
 	
 		self.asset_confs = _asset_confs;
-		// TODO: Events.
+		// TODO: Add an event.
 	}
 
 	self.toString = function() {

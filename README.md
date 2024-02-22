@@ -92,25 +92,25 @@ Kengine is a set of script files that add many possibilites into your GameMaker 
 - `utils` functions:
   - This contains most functions that you can use in your project.
   - It also contains other utility functions for arrays, structs, strings ...etc.
-  - See [this page](TODO:tutorial:utils-link) for more information.
+  - See [this page](https://knno.github.io/kengine/tutorial-Utils) for more information.
 
 Kengine also finds specific extension scripts that you can have added to the project. Such scripts should contain a function `ken_init_ext_<name>` that is run when Kengine starts. Some of these extensions are internal and required to run smoothly. Here are a few:
 
 - `parser` extension:
-  - This extension contributes a way to parse external script files. It depends on [Tiny Expression Runtime](https://github.com/YAL-GameMaker/tiny-expression-runtime/) for parsing the files (included with a few modifications). Although, with some work, you can replace it with any interpreter you may already have. See [this page](TODO:tutorial:parser-link) for more information.
+  - This extension contributes a way to parse external script files. It depends on [Tiny Expression Runtime](https://github.com/YAL-GameMaker/tiny-expression-runtime/) for parsing the files (included with a few modifications). Although, with some work, you can replace it with any interpreter you may already have. See [this page](https://knno.github.io/kengine/tutorial-Parser) for more information.
 
 - `mods` extension:
-  - This extension adds the ability to read external ZIP files that act as "mods". A Mod is a set of asset configuration files (called `AssetConf`) that define what assets to add or replace. See [This page](TODO:tutorial:modding-link) for more information.
+  - This extension adds the ability to read external ZIP files that act as "mods". A Mod is a set of asset configuration files (called `AssetConf`) that define what assets to add or replace. See [This page](https://knno.github.io/kengine/tutorial-Mods) for more information.
 
 - `panels` extension:
   - This extension adds a very basic GUI system called "Kengine panels". It is required for the Console to work. Otherwise, you can disable the Console completely and remove this.
-  - [Click here](TODO:tutorial:panels-link) to learn how to use Panels.
+  - [Click here](https://knno.github.io/kengine/tutorial-Panels) to learn how to use Panels.
 
 - `tests` extension:
   - This extension adds a system for doing tests inside your project. It adds a Test constructor, a Fixture and a Test Manager.
   - Any script that starts with `ken_test_` is **called twice** in order to find its fixtures and to run the actual test.
   - A fixture is simply an object with `setup` and `cleanup` functions that are required for the test. Mulitple tests can have the same fixtures (by the name.)
-  - To learn more about the tests system, [click here](TODO:tutorial:tests-link).
+  - To learn more about the tests system, [click here](https://knno.github.io/kengine/tutorial-Tests).
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -226,7 +226,7 @@ See the [open issues](https://github.com/knno/kengine/issues) for a full list of
 <!-- LICENSE -->
 ## License
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
+Distributed under the MIT License. See `LICENSE` for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -237,10 +237,10 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 ## Contact
 
 Kenan Masri
-Discord: `knno`
+* Discord: `knno`
+* Project link: [https://github.com/knno/kengine](https://github.com/knno/kengines)
+<!-- Marketplace link: [https://marketplace.] -->
 
-Project link: [https://github.com/knno/kengine](https://github.com/knno/kengines)
-Marketplace link: [https://marketplace.]
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 

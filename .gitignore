@@ -1,4 +1,3 @@
-__*/
 build/
 dest/
 dist/
@@ -7,8 +6,9 @@ logs/
 tmp/
 dumps/
 
-__*/
-__*
+__old*.*
+__old_*/
+__ignore__*/
 
 docs/output/
 

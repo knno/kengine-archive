@@ -29,7 +29,7 @@ Kengine.panels._input_histories = [];
  * @typedef {Struct} PanelOptions
  * @memberof Kengine.panels.Panel
  * @description Panel options struct.
- * @todo Set properties of this panel options.
+ * @todo Needs documentation
  * 
  */
 
@@ -258,7 +258,7 @@ function __KenginePanelsPanel(options) constructor {
  * @typedef {Struct} PanelItemOptions
  * @memberof Kengine.panels.PanelItem
  * @description PanelItem options struct.
- * @todo Set properties of this panel options.
+ * @todo Needs documentation
  * 
  */
 

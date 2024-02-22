@@ -117,7 +117,7 @@
 
 /**
  * @member KENGINE_PARSER_FIELD_RULES
- * @type {String|Undefined}
+ * @type {Array<Any>}
  * @memberof Kengine~constants
  * @description Set some member/field rules for the parser. They are used in the same order. All rules will execute, no breaks.
  * Do not use empty strings.
@@ -201,9 +201,17 @@
  */
 #macro KENGINE_WRAPPED_OBJECT obj_ken_object
 
-
-#macro KENGINE_ASSET_TYPES_ORDER [\
-	"sprite", "tileset", "sound", KENGINE_CUSTOM_SCRIPT_ASSETTYPE_NAME, "object", "rm",\ //... etc. "tilemap", TODO: Update this array.
-]
+/**
+ * @member KENGINE_ASSET_TYPES_ORDER
+ * @type {Array}
+ * @memberof Kengine~constants
+ * @description Order for asset evaluations. Do not modify unless you know what you are doing.
+ * Put the dependants last and put the dependencies that do not depend on others first.
+ * @defaultvalue ["sprite", "tileset", "sound", KENGINE_CUSTOM_SCRIPT_ASSETTYPE_NAME, "object", "rm",]
+ * 
+ */
+#macro KENGINE_ASSET_TYPES_ORDER ([\
+	"sprite", "tileset", "sound", KENGINE_CUSTOM_SCRIPT_ASSETTYPE_NAME, "object", "rm",\
+])
 
 #endregion Configs

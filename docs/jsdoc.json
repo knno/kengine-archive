@@ -11,7 +11,7 @@
     ],
     "recurseDepth": 12,
     "source": {
-        "includePattern": ".+\\ken_.*.gml$",
+        "includePattern": ".+\\\\(ken_|__Kengine|Kengine).*.gml$",
         "excludePattern": ""
     },
     "sourceType": "script",
