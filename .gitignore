@@ -20,3 +20,5 @@ _*.todo
 *.resource_order
 
 options/
+
+.terminal.bashrc

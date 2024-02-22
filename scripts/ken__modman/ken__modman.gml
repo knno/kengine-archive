@@ -1,15 +1,33 @@
-function ken_mods_read_file(filepath, show_err=true) {
+/**
+ * @namespace mods
+ * @memberof Kengine
+ * @description Kengine's Mods extension
+ *
+ */
+Kengine.mods = {};
+
+/**
+ * @function read_file
+ * @memberof Kengine.mods
+ * @param {String} filepath Path to file, checked relative to Game, program, working, and game_save_id directories respectively.
+ * @param {Bool} [show_err=true] Whether to write a console error.
+ * @return {String|Undefined} file contents as string. Undefined if there's an error.
+ *
+ */
+Kengine.mods.read_file = function(filepath, show_err=true) {
 	// TODO: Consider online files.
 	var jsonc;
 	var fpath = filepath;
 	var choices = [
-		GAME_EXE_DIRECTORY,
 		program_directory,
 		working_directory,
 		game_save_id,
 	];
 	var i = array_length(choices);
 	while (--i >= 0) {
+		if string_ends_with(choices[i], "/") or string_ends_with(choices[i], "\\")  {
+			choices[i] = string_copy(choices[i], 1, string_length(choices[i])-1);
+		}
 		fpath = choices[i] + filepath;
 		if file_exists(fpath) {
 			filepath = fpath;
@@ -44,11 +62,11 @@ function ken_mods_read_file(filepath, show_err=true) {
 	}
 }
 
-function ken_mods_parse_mod_file(_mod, filepath) {
+Kengine.mods.parse_mod_file = function(_mod, filepath) {
 	// Parse twice the mod file strings to resolve @ symbols. And return a struct.
 	// Struct contains assetconfs, and general confs.
 	var result;
-	var modtext = ken_mods_read_file(filepath, true);
+	var modtext = Kengine.mods.read_file(filepath, true);
 	if modtext == undefined {
 		Kengine.console.echo_ext(string("Kengine: Mods: Warning: mod file \"{0}\" was not loaded due to error.", _mod), c_yellow, true, true);
 		return undefined;
@@ -64,10 +82,10 @@ function ken_mods_parse_mod_file(_mod, filepath) {
 	var imports_found_per_file = [];
 	while true {
 		try {
-			values_map(result, method({imports, imports_found_per_file}, function(val) {
+			Kengine.utils.data.values_map(result, method({imports, imports_found_per_file}, function(val) {
 				var dir = "@import ";
 				if string_starts_with(val, dir) {
-					var val2 = ken_mods_read_file(string_copy(val, string_length(dir)+1, string_length(val) - string_length(dir)), false);
+					var val2 = Kengine.mods.read_file(string_copy(val, string_length(dir)+1, string_length(val) - string_length(dir)), false);
 					if val2 == undefined {
 						throw {type: "FAIL_PARSE_FILE"};
 					}
@@ -99,9 +117,9 @@ function ken_mods_parse_mod_file(_mod, filepath) {
 	return result;
 }
 
-function ken_mods_default_game_find_mods() {
+Kengine.mods.default_game_find_mods = function() {
 
-	return ken_mods_default_dir_find_mods();
+	return Kengine.mods.default_dir_find_mods();
 
 	// Write your mod loading code here.
 	// A sample way to load your mods is written below.
@@ -121,14 +139,14 @@ function ken_mods_default_game_find_mods() {
 }
 
 /**
- * @function ken_mods_default_dir_find_mods
+ * @function default_dir_find_mods
+ * @memberof Kengine.mods
  * @description Find directory mods. Return Mod objects.
  * @return {Array<Kengine.mods.Mod>}
  *
  */
-function ken_mods_default_dir_find_mods() {
+Kengine.mods.default_dir_find_mods = function() {
 	var choices = [
-		GAME_EXE_DIRECTORY,
 		program_directory,
 		working_directory,
 		game_save_id,
@@ -140,10 +158,13 @@ function ken_mods_default_dir_find_mods() {
 	var file_name, dir_name;
 
 	for (var i=0; i<array_length(choices); i++) {
+		if string_ends_with(choices[i], "/") or string_ends_with(choices[i], "\\") {
+			choices[i] = string_copy(choices[i], 1, string_length(choices[i])-1);
+		}
 		file_name = file_find_first(choices[i] + "/mods/" + "*.zip", fa_archive);
 		while (file_name != "")
 			{
-			Kengine.console.debug("Found ZIP archive: \"" + choices[i] + "/mods/" + file_name + "\"");
+			Kengine.console.debug("Kengine: Found ZIP archive: \"" + choices[i] + "/mods/" + file_name + "\"");
 			array_push(_files, choices[i] + "/mods/" + file_name);
 			file_name = file_find_next();
 			}
@@ -156,7 +177,7 @@ function ken_mods_default_dir_find_mods() {
 				dir_name = file_find_next();
 				continue;
 			}
-			Kengine.console.debug("Found mod: \"" + choices[i] + "/mods/" + dir_name + "\"");
+			Kengine.console.debug("Kengine: Found mod: \"" + choices[i] + "/mods/" + dir_name + "\"");
 			array_push(_dirs, choices[i] + "/mods/" + dir_name);
 			dir_name = file_find_next();
 			}
@@ -165,7 +186,7 @@ function ken_mods_default_dir_find_mods() {
 		file_name = file_find_first(choices[i] + "/" + "*.zip", fa_archive);
 		while (file_name != "")
 			{
-			Kengine.console.debug("Found ZIP archive: \"" + "/" + file_name + "\"");
+			Kengine.console.debug("Kengine: Found ZIP archive: \"" + "/" + file_name + "\"");
 			array_push(_files, choices[i] + "/" + file_name);
 			file_name = file_find_next();
 			}
@@ -223,14 +244,27 @@ function ken_mods_default_dir_find_mods() {
 	return mods_found;
 }
 
-
 /**
- * @namespace mods
- * @memberof Kengine
- * @description Kengine's Mods extension
+ * @function get_acceptable_asset_confs_types_names
+ * @memberof Kengine.mods
+ * @static
+ * @description Return the names of types that asset confs can be in, and will be read from mod files.
+ * This is to filter out asset types that are totally not replaceable and not addable.
  *
  */
-Kengine.mods = {};
+Kengine.mods.get_acceptable_asset_confs_types_names = function(asset_confs_types_names) {
+	var a = [];
+	for (var i=0; i<array_length(asset_confs_types_names); i++) {
+		var b = Kengine.utils.structs.get(Kengine.asset_types, asset_confs_types_names[i]);
+		if b != undefined {
+			if b.is_addable or b.is_replaceable {
+				array_push(a, asset_confs_types_names[i]);
+			}
+		}
+	}
+	return a;
+}
+
 
 /**
  * @typedef {Struct} ModOptions
@@ -246,16 +280,14 @@ Kengine.mods = {};
 /**
  * @function Mod
  * @constructor
- * @new_name Kengine.mods.Mod
  * @memberof Kengine.mods
  * @description A mod is a group of {@link Kengine.mods.AssetConf} to be added as Assets, or replace other Assets.
  * When enabling a mod, this happens. And when disabling it, all new assets are deleted and replaced ones are restored.
- * This class is swappable through {@link Kengine.conf.exts.mods.mod_class}. You can also extend this class from its original definition: `Kengine.mods.DefaultMod`.
  *
  * @param {Kengine.mods.Mod.ModOptions} options A struct containing key-value configuration of the mod.
  *
  */
-Kengine.mods.DefaultMod = function(options) constructor {
+function __KengineModsMod(options) constructor {
 	var this = self;
 
 	if not struct_exists(options, "name") {
@@ -343,7 +375,11 @@ Kengine.mods.DefaultMod = function(options) constructor {
 
 	self.get_all_asset_confs = function() {
 		var _asset_confs = [];
-		var _asset_confs_names = struct_get_names(self.asset_confs);
+		var _asset_confs_names = Kengine.mods.get_acceptable_asset_confs_types_names(struct_get_names(self.asset_confs));
+		array_sort(_asset_confs_names, function(a, b) {
+			var sort_ref_array = KENGINE_ASSET_TYPES_ORDER;
+			return array_get_index(sort_ref_array, a) - array_get_index(sort_ref_array, b);
+		})
 		for (var i=0; i<array_length(_asset_confs_names); i++) {
 			for (var j=0; j<array_length(self.asset_confs[$ _asset_confs_names[i]]); j++) {
 				array_push(_asset_confs, self.asset_confs[$ _asset_confs_names[i]][j])
@@ -395,7 +431,7 @@ Kengine.mods.DefaultMod = function(options) constructor {
 	self.resolve_dependencies = function() {
 		for (var i=0; i<array_length(self.dependencies); i++) {
 			if is_string(self.dependencies[i]) {
-				var __mod = Kengine.mods.mod_manager.mods.get_ind(self.dependencies[i], Kengine.utils.cmps.cmp_val1_val2_name);
+				var __mod = Kengine.mods.mod_manager.mods.get_ind(self.dependencies[i], Kengine.cmps.cmp_val1_val2_name);
 				if __mod != -1 {
 					self.dependencies[i] = Kengine.mods.mod_manager.mods.get(__mod);
 				}
@@ -410,7 +446,7 @@ Kengine.mods.DefaultMod = function(options) constructor {
 	 *
 	 */
 	self.update = function() {
-		var payload = ken_mods_parse_mod_file(self.name, self.source);
+		var payload = Kengine.mods.parse_mod_file(self.name, self.source);
 		if payload == undefined {
 			return false;
 		}
@@ -437,14 +473,14 @@ Kengine.mods.DefaultMod = function(options) constructor {
 		} else {
 			_asset_confs = asset_confs;
 		}
-		
+
 		// _asset_confs is asset_confs but as struct.
 
 		var ms;
 		var typ;
 		var conf, opts;
 		var c = true;
-		var asset_confs_names = struct_get_names(_asset_confs);
+		var asset_confs_names = Kengine.mods.get_acceptable_asset_confs_types_names(struct_get_names(_asset_confs));
 		for (var i=0; i<array_length(asset_confs_names); i++) {
 			a = Kengine.utils.structs.get(_asset_confs, asset_confs_names[i]);
 			for (var j=0; j<array_length(a); j++) {
@@ -484,7 +520,7 @@ Kengine.mods.DefaultMod = function(options) constructor {
 		}
 	
 		self.asset_confs = _asset_confs;
-		// Events.
+		// TODO: Events.
 	}
 
 	self.toString = function() {
@@ -494,6 +530,8 @@ Kengine.mods.DefaultMod = function(options) constructor {
 	Kengine.utils.events.fire("mods__mod__init__after", {_mod: this,});
 	Kengine.mods.mod_manager.mods.add_once(self);
 }
+
+Kengine.mods.Mod = __KengineModsMod;
 
 /**
  * @typedef {Struct} ModManagerOptions
@@ -507,14 +545,12 @@ Kengine.mods.DefaultMod = function(options) constructor {
 /**
  * @function ModManager
  * @constructor
- * @new_name Kengine.mods.ModManager
  * @memberof Kengine.mods
  * @description A mod manager is a singleton object that manages {@link Kengine.mods.Mod} objects.
- * This class is swappable through {@link Kengine.conf.exts.mods.mod_manager_class}. You can also extend this class from its original definition: `Kengine.mods.DefaultModManager`.
  * @param {Kengine.mods.ModManager.ModManagerOptions} options A struct containing key-value configuration of the mod manager.
  * 
  */
-Kengine.mods.DefaultModManager = function(options) constructor {
+function __KengineModsModManager(options) constructor {
 	var this = self;
 	/**
 	 * @name options
@@ -548,7 +584,7 @@ Kengine.mods.DefaultModManager = function(options) constructor {
 	 * @return {Collection|Array<Kengine.mods.Mod>}
 	 * 
 	 */
-	self.find_mods_func = Kengine.utils.structs.set_default(self.options, "find_mods_func", ken_mods_default_game_find_mods);
+	self.find_mods_func = Kengine.utils.structs.set_default(self.options, "find_mods_func", Kengine.mods.default_game_find_mods);
 	self.find_mods = function() {
 		var this = self;
 		var mods = [];
@@ -565,7 +601,7 @@ Kengine.mods.DefaultModManager = function(options) constructor {
 			}
 		} else {
 			var __is_empty = false;
-			if is_instanceof(mods, Kengine.Collection) {
+			if is_instanceof(mods, __KengineCollection) {
 				if mods.length() == 0 {
 					__is_empty = true;
 				}
@@ -578,8 +614,8 @@ Kengine.mods.DefaultModManager = function(options) constructor {
 				Kengine.console.echo_ext(string("Kengine: Mods: Warning: No mods are found since there is no \"find_mods\" function option for {0}", self.toString()), c_yellow, true, true);
 			}
 		}
-		if not is_instanceof(mods, Kengine.Collection) {
-			mods = new Kengine.Collection(mods);
+		if not is_instanceof(mods, __KengineCollection) {
+			mods = new __KengineCollection(mods);
 		}
 		Kengine.utils.events.fire("mods__mod_manager__find_mods__after", {mod_manager: this, mods: mods});
 		
@@ -628,7 +664,7 @@ Kengine.mods.DefaultModManager = function(options) constructor {
 	 */
 	self.enable = function(_mod, force=0) {
 		if is_string(_mod) {
-			var mod_ind = self.mods.get_ind(_mod, Kengine.utils.cmps.cmp_val1_val2_name);
+			var mod_ind = self.mods.get_ind(_mod, Kengine.cmps.cmp_val1_val2_name);
 			if mod_ind == -1 {
 				throw Kengine.utils.errors.create(Kengine.utils.errors.types.mods__mod__does_not_exist, string("Mod \"{0}\" does not exist.", _mod));
 			}
@@ -701,7 +737,7 @@ Kengine.mods.DefaultModManager = function(options) constructor {
 	self.disable = function(_mod, force=0) {
 		var mods;
 		if is_string(_mod) {
-			var mod_ind = self.mods.get_ind(_mod, Kengine.utils.cmps.cmp_val1_val2_name);
+			var mod_ind = self.mods.get_ind(_mod, Kengine.cmps.cmp_val1_val2_name);
 			if mod_ind == -1 {
 				throw Kengine.utils.errors.create(Kengine.utils.errors.types.mods__mod__does_not_exist, string("Mod \"{0}\" does not exist.", _mod));
 			}
@@ -768,10 +804,13 @@ Kengine.mods.DefaultModManager = function(options) constructor {
 		}
 	}
 
-	self.mods = is_array(self.mods) ? new Kengine.Collection(self.mods) : self.mods;
+	/// feather disable GM1063
+	self.mods = is_array(self.mods) ? new __KengineCollection(self.mods) : self.mods;
 
 	Kengine.utils.events.fire("mods__mod_manager__init__after", {mod_manager: this,});
 }
+
+Kengine.mods.ModManager = __KengineModsModManager;
 
 /**
  * @typedef {Struct} AssetConfOptions
@@ -783,14 +822,12 @@ Kengine.mods.DefaultModManager = function(options) constructor {
 /**
  * @function AssetConf
  * @constructor
- * @new_name Kengine.mods.AssetConf
  * @memberof Kengine.mods
  * @param {Kengine.mods.AssetConf.AssetConfOptions} options The options to initiate the `AssetConf` with.
  * @description An AssetConf is a configuration object for an asset to be applied or unapplied. AssetConfs are created when creating or updating the mod using `mod.update` function.
- * This class is swappable through {@link Kengine.conf.exts.mods.asset_conf_class}. You can also extend this class from its original definition: `Kengine.mods.DefaultAssetConf`.
  * 
  */
-Kengine.mods.DefaultAssetConf = function(options) constructor {
+function __KengineModsAssetConf(options) constructor {
 	var this = self;
 	self.options = options;
 	Kengine.utils.events.fire("mods__asset_conf__init__before", {asset_conf: this,});
@@ -801,7 +838,9 @@ Kengine.mods.DefaultAssetConf = function(options) constructor {
 	 * @name conf
 	 * @type {Struct}
 	 * @memberof Kengine.mods.AssetConf
-	 * @description The internal confs of this AssetConf. Note: underscore confs are stripped out.
+	 * @description The internal confs of this AssetConf.
+	 * 
+	 * Note - underscore confs are stripped out.
 	 *
 	 */
 	self.conf = {};
@@ -846,8 +885,10 @@ Kengine.mods.DefaultAssetConf = function(options) constructor {
 	 */
 	self.apply = function(source_mod) {
 		var this = self;
+		self.source_mod = source_mod;
 		if self.is_applied return;
-		var assettype = Kengine.asset_types[$ self.conf.type];
+		Kengine.console.debug("Kengine: Applying AssetConf: " + string(self));
+		var assettype = Kengine.asset_types[$ this.conf.type];
 		if not Kengine.utils.structs.exists(self.conf, "replaces") {
 			if not assettype.is_addable {
 				throw Kengine.utils.errors.create(Kengine.utils.errors.types.asset__asset_type__cannot_add, string("Cannot add Asset of AssetType \"{0}\".", assettype.name));
@@ -856,43 +897,19 @@ Kengine.mods.DefaultAssetConf = function(options) constructor {
 
 		Kengine.utils.events.fire("mods__asset_conf__apply__before", {asset_conf: this,});
 		if !struct_exists(Kengine.asset_types, self.conf.type) {
-			throw Kengine.utils.errors.create(Kengine.utils.errors.types.assettype__does_not_exist, string("AssetType \"{0}\" for AssetConf \"{1}\" does exist.", self.conf.type, self.conf.name));
+			throw Kengine.utils.errors.create(Kengine.utils.errors.types.assettype__does_not_exist, string("AssetType \"{0}\" for AssetConf \"{1}\" does not exist.", self.conf.type, self.conf.name));
 		}
 
 		self.asset = new Kengine.Asset(assettype, self.conf.name);
 
-		// switch (self.conf.type) {
-			// Here we can manipulate per type of asset.
-		// }
+		if Kengine.utils.structs.exists(assettype, "assets_conf_resolve") {
+			self.source_mod_base = filename_dir(self.source_mod.source);
+			assettype.assets_conf_resolve(self.asset, self.conf, self);
+		}
 
-		if Kengine.utils.structs.exists(self.conf, "vars") {
-			var vs = struct_get_names(self.conf.vars);
-			for (var i=0; i<array_length(vs); i++) {
-				if vs[i] == "instance_var_struct" {
-					if struct_exists(self.conf.vars[$ vs[i]], "sprite_index") {
-						if is_string(self.conf.vars[$ vs[i]][$ "sprite_index"]) {
-							self.conf.vars[$ vs[i]][$ "sprite_index"] = Kengine.utils.get_asset("sprite", self.conf.vars[$ vs[i]][$ "sprite_index"]).id;
-						}
-					}
-				} else if vs[i] == "event_scripts" {
-					var evs = struct_get_names(self.conf.vars.event_scripts);
-					for (var j=0; j<array_length(evs); j++) {
-						var filepath = filename_dir(source_mod.source);
-						var f = filepath + "/" + self.conf.vars.event_scripts[$ evs[j]]
-						if not string_ends_with(f, ".vsl") {
-							continue;
-						}
-						var _ev_vsl_text = ken_mods_read_file(f, true);
-						if _ev_vsl_text != undefined {
-							var _ev_vsl = new Kengine.Asset(Kengine.asset_types.vsl, source_mod.name + "__" + self.conf.name + "__ev_" + evs[j], false);
-							_ev_vsl.src = _ev_vsl_text;
-							_ev_vsl.compile();
-							self.conf.vars.event_scripts[$ evs[j]] = _ev_vsl;
-						}
-					}
-				}
-				self.asset[$ vs[i]] = self.conf.vars[$ vs[i]];
-			}
+		var vs = struct_get_names(self.conf);
+		for (var i=0; i<array_length(vs); i++) {
+			self.asset[$ vs[i]] = self.conf[$ vs[i]];
 		}
 
 		if struct_exists(self.conf, "replaces") {
@@ -900,7 +917,7 @@ Kengine.mods.DefaultAssetConf = function(options) constructor {
 			self.target.replace_by(self.asset);
 		} else {
 			self.target = self.asset;
-			self.target.tags.add_once(Kengine.constants.ASSET_TAG_ADDED);
+			self.target.tags.add_once(KENGINE_ASSET_TAG_ADDED);
 		}
 
 		self.is_applied = true;
@@ -915,17 +932,21 @@ Kengine.mods.DefaultAssetConf = function(options) constructor {
 	 */
 	self.unapply = function(source_mod) {
 		var this = self;
+		var is_added;
 		if not self.is_applied return;
 		Kengine.utils.events.fire("mods__asset_conf__unapply__before", {asset_conf: this,});
 		if self.target == self.asset {
-			self.target.tags.remove(Kengine.constants.ASSET_TAG_ADDED);
+			is_added = true;
+			self.target.tags.remove(KENGINE_ASSET_TAG_ADDED);
 		} else {
+			is_added = false;
 			self.target.replaced_by = undefined;
-			self.target.tags.remove(Kengine.constants.ASSET_TAG_REPLACED);
+			self.target.tags.remove(KENGINE_ASSET_TAG_REPLACED);
 		}
 		if struct_exists(self.asset, "remove") {
 			self.asset.remove();
 		}
+		delete self.asset;
 		self.asset = undefined;
 
 		self.is_applied = false;
@@ -939,27 +960,7 @@ Kengine.mods.DefaultAssetConf = function(options) constructor {
 	Kengine.utils.events.fire("mods__asset_conf__init__after", {asset_conf: this,});
 }
 
-/// @description Define DO EV and DO EV
-/// @function do_ev
-/// @param {Struct} ev 
-/// @param {Real} ev_arg
-function do_ev(ev, ev_arg) {
-	var scr = "";
-	if not variable_instance_exists(self, "wrapper") exit;
-	Kengine.utils.structs.set_default(wrapper.asset, "event_scripts", {});
-	scr = Kengine.utils.structs.get(wrapper.asset.event_scripts, ev);
-	if scr != undefined {
-		if is_instanceof(scr, Kengine.Asset) {
-			return Kengine.utils.parser.interpret_asset(scr, wrapper, {wrapper, event: ev.name, event_arg: ev_arg, vsl_object: wrapper,});
-		} else if is_method(scr) {
-			return method({wrapper, event: ev.name, event_arg: ev_arg, vsl_object: wrapper}, scr)();
-		} else if is_string(scr) {
-			switch scr {
-				case "draw_self": draw_self(); return;
-			}
-		}
-	}
-}
+Kengine.mods.AssetConf = __KengineModsAssetConf;
 
 
 function ken_init_ext_mods() {
@@ -1005,6 +1006,13 @@ function ken_init_ext_mods() {
 	 * @description AssetConf does not have a name.
 	 */
 	Kengine.utils.errors.types.mods__asset_conf__no_name = "AssetConf does not have a name.";
+
+	/**
+	 * @member {String} mods__asset_conf__no_resolve
+	 * @memberof Kengine.utils.errors.types
+	 * @description AssetConf property not found.
+	 */
+	Kengine.utils.errors.types.mods__asset_conf__no_resolve = "AssetConf property not found."
 
 	/**
 	 * @member {String} mods__asset_conf__does_not_exist
@@ -1256,10 +1264,6 @@ function ken_init_ext_mods() {
 	 *
 	 */
 	Kengine.utils.events.define("mods__mod_manager__find_mods__after");
-
-	Kengine.mods.Mod = Kengine.utils.structs.set_default(Kengine.conf.exts.mods, "mod_class", Kengine.mods.DefaultMod);
-	Kengine.mods.ModManager = Kengine.utils.structs.set_default(Kengine.conf.exts.mods, "mod_manager_class", Kengine.mods.DefaultModManager);
-	Kengine.mods.AssetConf = Kengine.utils.structs.set_default(Kengine.conf.exts.mods, "asset_conf_class", Kengine.mods.DefaultAssetConf);
 
 	Kengine.mods.mod_manager = new Kengine.mods.ModManager();
 	Kengine.mods.mod_manager.reload_mods(true);

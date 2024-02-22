@@ -7,10 +7,10 @@
  * @param {Real} y1 The top left y of the rectangle to be checked.
  * @param {Real} x2 The bottom right x of the rectangle to be checked.
  * @param {Real} y2 The bottom right y of the rectangle to be checked.
- * @memberof Kengine.fn.tiles
  * @return {Bool}
  *
  */
+
 function is_tile_meeting(tile_layer, tiles, x1,y1,x2,y2) {
 	var _layer = tile_layer;
 	var tm = layer_tilemap_get_id(_layer);

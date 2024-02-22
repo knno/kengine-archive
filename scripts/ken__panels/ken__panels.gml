@@ -6,9 +6,8 @@
  */
 Kengine.panels = {
 	focused: undefined,
+	collection: undefined,
 };
-
-Kengine.utils.structs.set_default(Kengine.conf.exts, "panels", {});
 
 Kengine.panels._autoc_instance_vars = [
 	"id", "visible", "solid", "persistent", "depth", "alarm",
@@ -22,14 +21,6 @@ Kengine.panels._autoc_instance_vars = [
 	"in_sequence", "sequence_instance",
 	"phy_active", "phy_angular_velocity", "phy_angular_damping", "phy_linear_velocity_x", "phy_linear_velocity_y", "phy_linear_damping", "phy_speed_x", "phy_speed_y", "phy_position_x", "phy_position_y", "phy_position_xprevious", "phy_position_yprevious", "phy_rotation", "phy_fixed_rotation", "phy_bullet", "phy_speed", "phy_com_x", "phy_com_y", "phy_dynamic", "phy_kinematic", "phy_inertia", "phy_mass", "phy_sleeping", "phy_collision_points", "phy_collision_x", "phy_collision_y", "phy_col_normal_x", "phy_col_normal_y",
 ];
-
-/**
- * @name collection
- * @type {Kengine.Collection}
- * @memberof Kengine.panels
- * @description This collection contains all {@link Kengine.panel.Panel} objects created.
- */
-Kengine.panels.collection = new Kengine.Collection();
 
 Kengine.panels._input_histories = [];
 
@@ -52,7 +43,7 @@ Kengine.panels._input_histories = [];
  * @param {Kengine.panels.Panel.PanelOptions} options an initial struct for setting options.
  * 
  */
-function __KengineDefaultPanel(options) constructor {
+function __KenginePanelsPanel(options) constructor {
 	self.options = options;
 	// TODO: Add events.
 
@@ -75,18 +66,17 @@ function __KengineDefaultPanel(options) constructor {
 	self.inner_box_enabled = _structs.set_default(self.options, "inner_box_enabled", true);
 
 	self.box_colors = _structs.set_default(self.options, "box_colors", [
-		// KENGINE: c_aqua,c_ltgray,c_gray,c_blue,
-		$600030, c_ltgray, c_gray, $AA0070,
+		$883300, $883300, $883300, $883300,
 	]);
 
 	self.inner_box_colors = _structs.set_default(self.options, "inner_box_colors", [
-		// KENGINE: $100000,$201010,c_black,$301500,
-		$100010, $201020, c_black, $301530,
+		c_black, c_black, c_black, c_black,
 	]);
 
 	self.alpha = _structs.set_default(options, "alpha", 1);
 
 	self.collapse_height = _structs.set_default(self.options, "collapse_height", 30);
+	self.draw_collapsed = _structs.set_default(self.options, "draw_collapsed", false);
 	self.visible = _structs.set_default(self.options, "visible", true);
 
 	is_focused = false;
@@ -103,6 +93,11 @@ function __KengineDefaultPanel(options) constructor {
 
 	self._step = function() {
 		var _mouse_click_interval = 15; // fps
+		var _mouse_x = device_mouse_x_to_gui(0);
+		var _mouse_y = device_mouse_y_to_gui(0);
+		x = clamp(x, 0, window_get_width()-width);
+		y = clamp(y, 0, window_get_height()-collapse_height-16);
+
 		var hh = collapse_height;
 		if not self.collapsed {
 			hh = height;
@@ -112,7 +107,7 @@ function __KengineDefaultPanel(options) constructor {
 
 		if self.visible {
 			var _m_inside = false;
-			if mouse_x >= x and mouse_y >= y and mouse_x < x + width and mouse_y < y + hh {
+			if _mouse_x >= x and _mouse_y >= y and _mouse_x < x + width and _mouse_y < y + hh {
 				_m_inside = true;
 			}
 			var _mb_pressed, _mb_held, _mb_released, _mb_pressed_twice = false, _mb_pressed_thrice = false;
@@ -137,18 +132,18 @@ function __KengineDefaultPanel(options) constructor {
 					_mb_press_count = 1;
 				}
 				_mb_press_timer = _mouse_click_interval;
-				_m_x = mouse_x;
-				_m_y = mouse_y;
+				_m_x = _mouse_x;
+				_m_y = _mouse_y;
 
 			} else if _mb_held and not _mb_drag and _m_inside {
-				if (mouse_x != _m_x or mouse_y != _m_y) and !_mb_drag and _mb_press_count == 1 and drag_enabled and is_focused {
-					if (mouse_y < y + collapse_height)
+				if (_mouse_x != _m_x or _mouse_y != _m_y) and !_mb_drag and _mb_press_count == 1 and drag_enabled and is_focused {
+					if (_mouse_y < y + collapse_height)
 						{
 						_mb_drag = true;
 						_drag_anchor = false;
 						}
 				}
-				if not _mb_drag and (mouse_x == _m_x and mouse_y == _m_y) {
+				if not _mb_drag and (_mouse_x == _m_x and _mouse_y == _m_y) {
 					_mb_drag = false;
 				}
 
@@ -162,8 +157,8 @@ function __KengineDefaultPanel(options) constructor {
 			}
 			
 			if _mb_held and _drag_anchor and _mb_drag and is_focused {
-				x = clamp(mouse_x + _drag_anchor_x, 0, window_get_width()-width);
-				y = clamp(mouse_y + _drag_anchor_y, 0, window_get_height()-collapse_height-16);
+				x = clamp(_mouse_x + _drag_anchor_x, 0, window_get_width()-width);
+				y = clamp(_mouse_y + _drag_anchor_y, 0, window_get_height()-collapse_height-16);
 			}
 
 
@@ -181,7 +176,7 @@ function __KengineDefaultPanel(options) constructor {
 			}
 			
 			if _mb_pressed_twice and _m_inside and collapse_enabled {
-				if (mouse_y < y + collapse_height)
+				if (_mouse_y < y + collapse_height)
 					{
 					collapsed = not collapsed;
 					}
@@ -193,15 +188,19 @@ function __KengineDefaultPanel(options) constructor {
 		}
 	}
 	self._draw = function() {
-		if not self.visible return;
 		
 		draw_set_alpha(alpha);
 
 		var hh = collapse_height;
-		if not self.collapsed {
+		if self.draw_collapsed {
 			hh = height;
 		} else {
-			if hh == 0 hh = 16;
+			if not self.visible return;
+			if not self.collapsed {
+				hh = height;
+			} else {
+				if hh == 0 hh = 16;
+			}
 		}
 
 		if is_focused { draw_set_alpha(alpha) } else { draw_set_alpha(0.9*alpha); }
@@ -274,7 +273,7 @@ function __KengineDefaultPanel(options) constructor {
  * @param {Kengine.panels.PanelItem.PanelItemOptions} options an initial struct for setting options.
  * 
  */
-function __KengineDefaultPanelItem(options) constructor {
+function __KenginePanelsPanelItem(options) constructor {
 	self.options = options;
 
 	default_width = 20;
@@ -299,8 +298,7 @@ function __KengineDefaultPanelItem(options) constructor {
 	self.alpha = _structs.exists(self.options, "alpha") ? _structs.get(self.options, "alpha") : (parent != undefined ? (_structs.exists(parent, "alpha") ? parent.alpha : default_alpha ) : default_alpha);
 
 	self.box_colors = _structs.set_default(options, "box_colors", [
-		// KENGINE: c_aqua,c_ltgray,c_gray,c_blue,
-		$600030, c_ltgray, c_gray, $AA0070,
+		$200,c_dkgrey,$200,c_dkgrey,
 	]);
 
 	self.visible = _structs.set_default(options, "visible", true);
@@ -318,11 +316,21 @@ function __KengineDefaultPanelItem(options) constructor {
 	self.options = undefined;
 }
 
-
-function __KengineDefaultPanelItemGUIElement(options) : __KengineDefaultPanelItem(options) constructor {
+/**
+ * @function PanelItemGUIElement
+ * @constructor
+ * @abstract
+ * @new_name Kengine.panels.PanelItemGUIElement
+ * @todo Needs documentation
+ * @memberof Kengine.panels
+ * @description A base panel item that represents a GUI element to draw. This is for watching variables.
+ * @param {Kengine.panels.PanelItem.PanelItemOptions} options an initial struct for setting options.
+ * 
+ */
+function __KenginePanelsPanelItemGUIElement(options) : __KenginePanelsPanelItem(options) constructor {
 	var _structs = Kengine.utils.structs;
 
-	self.id = _structs.set_default(options, "id", true);
+	self.id = _structs.set_default(options, "id", -1);
 	self.type = _structs.set_default(options, "type", "div");
 	self.class = _structs.set_default(options, "class", "");
 	self.padding = _structs.set_default(options, "padding", 32);
@@ -355,7 +363,7 @@ function __KengineDefaultPanelItemGUIElement(options) : __KengineDefaultPanelIte
 		draw_set_halign(halign);
 		draw_set_alpha(alpha);
 		var u = parent.x + x;
-		var v = parent.y + y;
+		var v = parent.y + y + parent.collapse_height;
 		var u0 = u;
 		var ele, c, w,h, uv;
 		w = 0; h = 0;
@@ -364,12 +372,16 @@ function __KengineDefaultPanelItemGUIElement(options) : __KengineDefaultPanelIte
 		for (var i = 0; i < array_length(self.children); i++) {
 			ele = self.children[i];
 			if ele.visible {
-				draw_set_color(ele.hover ? c_red : c);
+				if ele.class == "arrow" {
+					draw_set_color(ele.hover ? $DD9900 : c);
+				} else {
+					draw_set_color(c);
+				}
 				if ele.type == "div" {
 					u = u0;
 				}
-				uv = draw_child(ele, u + self.padding, v);
-				u = uv[0] - self.padding; v = uv[1];
+				uv = draw_child(ele, u + self.padding, v + self.padding);
+				u = uv[0] - self.padding; v = uv[1] - self.padding;
 				draw_set_color(c);
 				if ele.type == "br" or ele.type == "div" {
 					if ele.value != "" {
@@ -402,12 +414,18 @@ function __KengineDefaultPanelItemGUIElement(options) : __KengineDefaultPanelIte
 		var v = _y;
 		var w = 0, h = 0;
 
+		var _mouse_x = device_mouse_x_to_gui(0);
+		var _mouse_y = device_mouse_y_to_gui(0);
 		var u0 = u;
 		if array_length(element.children) > 0 {
 			for (var i = 0; i < array_length(element.children); i++) {
 				ele = element.children[i];
 				if ele.visible {
-					draw_set_color(ele.hover ? c_red : c);
+					if ele.class == "arrow" {
+						draw_set_color(ele.hover ? $DD9900 : c);
+					} else {
+						draw_set_color(c);
+					}
 					if ele.type == "div" {
 						u = u0;
 					}
@@ -441,15 +459,20 @@ function __KengineDefaultPanelItemGUIElement(options) : __KengineDefaultPanelIte
 				w = string_width(element.value);
 				h = string_height(element.value);
 				element.hover = false;
-				if (mouse_x >= u && mouse_x <= u + w && mouse_y >= v && mouse_y <= v + h) {
+				if (_mouse_x >= u && _mouse_x <= u + w && _mouse_y >= v && _mouse_y <= v + h) {
 					element.hover = true;
 					if mouse_check_button_pressed(mb_left) {
 						if element.class == "arrow" {
 							set_element_toggle(element);
+							mouse_clear(mb_left);
 						}
 					}
 				}
-				draw_set_color(element.hover ? c_red: element.color);
+				if element.class == "arrow" {
+					draw_set_color(element.hover ? $DD9900: element.color);
+				} else {
+					draw_set_color(element.color);
+				}
 				draw_text(u, v, string(element.value));
 				u = u0;
 				if element.class == "arrow" {
@@ -507,14 +530,14 @@ function __KengineDefaultPanelItemGUIElement(options) : __KengineDefaultPanelIte
 				break;
 				
 			default:
-				span = new Kengine.panels.PanelItemGUIElement({
+				span = new __KenginePanelsPanelItemGUIElement({
 					"type": "span",
 					"value": (!created_arrow ? " " : "") + string(obj),
 					"parent": par,
 				});
 				array_push(par.children, span);
 
-				br = new Kengine.panels.PanelItemGUIElement({
+				br = new __KenginePanelsPanelItemGUIElement({
 					"type": "br",
 					"class": "",
 					"value": "\n",
@@ -526,7 +549,7 @@ function __KengineDefaultPanelItemGUIElement(options) : __KengineDefaultPanelIte
 		}
 		
 		if _arrow {
-			span = new Kengine.panels.PanelItemGUIElement({
+			span = new __KenginePanelsPanelItemGUIElement({
 				"type": "span",
 				"value": "▼", // 
 				"class": "arrow",
@@ -539,7 +562,7 @@ function __KengineDefaultPanelItemGUIElement(options) : __KengineDefaultPanelIte
 		}
 		
 		if _extra != "" {
-			span = new Kengine.panels.PanelItemGUIElement({
+			span = new __KenginePanelsPanelItemGUIElement({
 				"type": "span",
 				"value": _extra,
 				"class": "extra",
@@ -560,7 +583,7 @@ function __KengineDefaultPanelItemGUIElement(options) : __KengineDefaultPanelIte
 			} else {
 				_n = "";
 				_v = obj[i];
-				_p = new Kengine.panels.PanelItemGUIElement({
+				_p = new __KenginePanelsPanelItemGUIElement({
 					"type": "div",
 					"value": "",
 					"parent": par,
@@ -572,7 +595,7 @@ function __KengineDefaultPanelItemGUIElement(options) : __KengineDefaultPanelIte
 			/*if (typeof(_v) == "array" or typeof(_v) == "struct" or typeof(_v) == "ref") {
 				if typeof(_v) == "array" {
 					// Now create arrow for array.
-					span = new Kengine.panels.PanelItemGUIElement({
+					span = new __KenginePanelsPanelItemGUIElement({
 						"type": "span",
 						"value": "[",
 						"class": "arrow",
@@ -586,19 +609,19 @@ function __KengineDefaultPanelItemGUIElement(options) : __KengineDefaultPanelIte
 			}*/
 
 			if _n != "" {
-				span = new Kengine.panels.PanelItemGUIElement({
+				span = new __KenginePanelsPanelItemGUIElement({
 					"type": "span",
 					"value": _n + ": ",
 					"parent": _p,
 					"class": "def",
-					"color": c_white,
+					"color": c_gray,
 				});			
 				array_push(_p.children, span);
 			}
 			created_arrow = false;
 			create_layout(_v, _p);
 		}
-		br = new Kengine.panels.PanelItemGUIElement({
+		br = new __KenginePanelsPanelItemGUIElement({
 			"type": "br",
 			"value": "",
 			"parent": par,
@@ -647,9 +670,11 @@ function __KengineDefaultPanelItemGUIElement(options) : __KengineDefaultPanelIte
 		var v = _y;
 		var w = 0, h = 0;
 		var mx, my;
-		
-		mx = mouse_x;
-		my = mouse_y;
+
+		var _mouse_x = device_mouse_x_to_gui(0);
+		var _mouse_y = device_mouse_y_to_gui(0);
+		mx = _mouse_x;
+		my = _mouse_y;
 
 		var u0 = u;
 		if element.visible {
@@ -739,7 +764,6 @@ function __KengineDefaultPanelItemGUIElement(options) : __KengineDefaultPanelIte
 	if self.type == "div" { create_layout(self.value); }
 }
 
-
 /**
  * @function PanelItemInputBox
  * @constructor
@@ -748,7 +772,7 @@ function __KengineDefaultPanelItemGUIElement(options) : __KengineDefaultPanelIte
  * @description A `PanelItemInputBox` is a text box that can be readonly or writable on self or parent focus.
  * @param {Struct} options an initial struct for setting options.
  */
-function __KengineDefaultPanelItemInputBox(options) : __KengineDefaultPanelItem(options) constructor {
+function __KenginePanelsPanelItemInputBox(options) : __KenginePanelsPanelItem(options) constructor {
 	self.text = "";
 	self.readonly = Kengine.utils.structs.set_default(options, "readonly", true);
 	self.identifier = Kengine.utils.structs.set_default(options, "identifier", "__all"); // for autoc, history...
@@ -773,6 +797,7 @@ function __KengineDefaultPanelItemInputBox(options) : __KengineDefaultPanelItem(
 	cursor_talpha = 1;
 	cursor_tspeed = .5;
 	cursor_ttimer = 0;
+	cusror_color = c_white;
 
 	kbd_key_timer = 0;
 	kbd_last_key = vk_nokey;
@@ -789,14 +814,16 @@ function __KengineDefaultPanelItemInputBox(options) : __KengineDefaultPanelItem(
 	str_width = string_width("_");
 
 	self.step = function() {
+		var _mouse_x = device_mouse_x_to_gui(0);
+		var _mouse_y = device_mouse_y_to_gui(0);
 		var game_speed = game_get_speed(gamespeed_fps);
 		// 1. Editable?
 		if not readonly {
 		// 1.1 Cursor
-			if visible {
+			if visible and parent.visible {
 				var temp_pos;
 				var _m_inside = false;
-				if mouse_x >= parent.x + x and mouse_y >= parent.y + y and mouse_x < parent.x + x + width and mouse_y < parent.y + y + height {
+				if _mouse_x >= parent.x + x and _mouse_y >= parent.y + y and _mouse_x < parent.x + x + width and _mouse_y < parent.y + y + height {
 					_m_inside = true;
 				}
 				var _mb_pressed, _mb_held, _mb_released, _mb_pressed_twice = false, _mb_pressed_thrice = false;
@@ -818,15 +845,15 @@ function __KengineDefaultPanelItemInputBox(options) : __KengineDefaultPanelItem(
 					}
 
 					// Backspace
-					if ken_keyboard_check(vk_backspace) & (kbd_key_timer == 0 or kbd_key_timer > kbd_hold_timer*game_speed) {
+					if Kengine.utils.input.keyboard_check(vk_backspace) & (kbd_key_timer == 0 or kbd_key_timer > kbd_hold_timer*game_speed) {
 						if kbd_sel_start != -1 {
 							selection_remove();
 						}
 					}
 
 					// Arrows + Ctrl Arrows
-					if (ken_keyboard_check(vk_left) & (kbd_key_timer == 0 or kbd_key_timer > kbd_hold_timer*game_speed)) {
-						if (ken_keyboard_check(vk_shift)) {
+					if (Kengine.utils.input.keyboard_check(vk_left) & (kbd_key_timer == 0 or kbd_key_timer > kbd_hold_timer*game_speed)) {
+						if (Kengine.utils.input.keyboard_check(vk_shift)) {
 							if (kbd_sel_start == -1) {
 								// Begin selection
 								kbd_sel_start = cursor_pos;
@@ -835,26 +862,26 @@ function __KengineDefaultPanelItemInputBox(options) : __KengineDefaultPanelItem(
 								// Remove selection
 								kbd_sel_start = -1;
 							}
-							if (ken_keyboard_check(vk_control)) {
+							if (Kengine.utils.input.keyboard_check(vk_control)) {
 								var cp = cursor_pos;
-								cursor_pos = string_find_pos(value, " ", 1, cursor_pos);
+								cursor_pos = Kengine.utils.strings.string_pos_direction(value, " ", 1, cursor_pos);
 								if (cursor_pos > cp) {cursor_pos = 0;}
 							}
 							autoc = "";
 							cursor_talpha = 1;
 							cursor_ttimer = 0;
 							if cursor_pos>0 cursor_pos -= 1;
-					} else if (ken_keyboard_check(vk_right) & (kbd_key_timer == 0 or kbd_key_timer > kbd_hold_timer*game_speed)) {
-						if (ken_keyboard_check(vk_shift)) {
+					} else if (Kengine.utils.input.keyboard_check(vk_right) & (kbd_key_timer == 0 or kbd_key_timer > kbd_hold_timer*game_speed)) {
+						if (Kengine.utils.input.keyboard_check(vk_shift)) {
 							if (kbd_sel_start == -1) {
 								kbd_sel_start = cursor_pos;
 							}
 						} else {
 							kbd_sel_start = -1;
 						}
-						if (ken_keyboard_check(vk_control)) {
-							var cp = cursor_pos-1;
-							cursor_pos = string_find_pos(value, " ", -1, cursor_pos+1);
+						if (Kengine.utils.input.keyboard_check(vk_control)) {
+							var cp = cursor_pos-1
+							cursor_pos = Kengine.utils.strings.string_pos_direction(value, " ", -1, cursor_pos+1);
 							if (cursor_pos < cp) {cursor_pos = string_length(value);}
 						}
 						autoc = "";
@@ -866,7 +893,7 @@ function __KengineDefaultPanelItemInputBox(options) : __KengineDefaultPanelItem(
 
 					// History
 					if history_enabled {
-						if ken_keyboard_check_pressed(vk_down) {
+						if Kengine.utils.input.keyboard_check_pressed(vk_down) {
 							if array_length(Kengine.panels._input_histories) > 0 {
 								autoc = "";
 								cursor_talpha = 1; cursor_ttimer = 0;
@@ -879,9 +906,9 @@ function __KengineDefaultPanelItemInputBox(options) : __KengineDefaultPanelItem(
 								value_temp = value;
 								cursor_pos = string_length(value);
 								keyboard_string = value;
-								ken_keyboard_clear(vk_down);
+								Kengine.utils.input.keyboard_clear(vk_down);
 							}
-						} else if ken_keyboard_check_pressed(vk_up) {
+						} else if Kengine.utils.input.keyboard_check_pressed(vk_up) {
 							if array_length(Kengine.panels._input_histories) > 0 {
 								autoc = "";
 								cursor_talpha = 1; cursor_ttimer = 0;
@@ -894,13 +921,13 @@ function __KengineDefaultPanelItemInputBox(options) : __KengineDefaultPanelItem(
 								value_temp = value;
 								cursor_pos = string_length(value);
 								keyboard_string = value;
-								ken_keyboard_clear(vk_up);
+								Kengine.utils.input.keyboard_clear(vk_up);
 							}
 						}
 					}
 					
 					// Copy paste
-					if ken_keyboard_check(vk_control) and (ken_keyboard_check_pressed(ord("X")) or ken_keyboard_check_pressed(ord("C"))) {
+					if Kengine.utils.input.keyboard_check(vk_control) and (Kengine.utils.input.keyboard_check_pressed(ord("X")) or Kengine.utils.input.keyboard_check_pressed(ord("C"))) {
 						var copy;
 						if kbd_sel_start != -1 {
 							copy = selection_get();
@@ -908,7 +935,7 @@ function __KengineDefaultPanelItemInputBox(options) : __KengineDefaultPanelItem(
 							copy = text;
 						}
 						clipboard_set_text(copy);
-						if ken_keyboard_check_pressed(ord("X")) {
+						if Kengine.utils.input.keyboard_check_pressed(ord("X")) {
 							var temp_pos_ltr = false;
 							if cursor_pos > kbd_sel_start {
 								temp_pos_ltr = true;
@@ -922,12 +949,12 @@ function __KengineDefaultPanelItemInputBox(options) : __KengineDefaultPanelItem(
 						}
 						cursor_talpha = 1;
 						cursor_ttimer = 0;
-						if ken_keyboard_check_pressed(ord("X")) {
-							ken_keyboard_clear(ord("X"));
+						if Kengine.utils.input.keyboard_check_pressed(ord("X")) {
+							Kengine.utils.input.keyboard_clear(ord("X"));
 						} else {
-							ken_keyboard_clear(ord("C"));
+							Kengine.utils.input.keyboard_clear(ord("C"));
 						}
-					} else if ken_keyboard_check(vk_control) and ken_keyboard_check_pressed(ord("V")) {
+					} else if Kengine.utils.input.keyboard_check(vk_control) and Kengine.utils.input.keyboard_check_pressed(ord("V")) {
 						temp_pos = cursor_pos;
 						if clipboard_has_text() {
 							if kbd_sel_start != -1 {
@@ -941,11 +968,11 @@ function __KengineDefaultPanelItemInputBox(options) : __KengineDefaultPanelItem(
 							keyboard_string = value;
 							cursor_pos = temp_pos + string_length(copied);
 						}
-						ken_keyboard_clear(ord("V"));
+						Kengine.utils.input.keyboard_clear(ord("V"));
 					}
 
 					// Autocomplete
-					if ken_keyboard_check_pressed(vk_tab) and autoc_enabled {
+					if Kengine.utils.input.keyboard_check_pressed(vk_tab) and autoc_enabled {
 						if value != "" {
 							cursor_talpha = 1;
 							cursor_ttimer = 0;
@@ -954,7 +981,7 @@ function __KengineDefaultPanelItemInputBox(options) : __KengineDefaultPanelItem(
 							value_temp = value;
 							keyboard_string = value;
 						}
-						ken_keyboard_clear(vk_tab);
+						Kengine.utils.input.keyboard_clear(vk_tab);
 					}
 
 					// Cursor
@@ -985,7 +1012,7 @@ function __KengineDefaultPanelItemInputBox(options) : __KengineDefaultPanelItem(
 								value_temp = value;
 								keyboard_lastchar = "";
 								keyboard_string = value;
-								ken_keyboard_clear(keyboard_key);
+								Kengine.utils.input.keyboard_clear(keyboard_key);
 								keyboard_key = vk_nokey;
 
 							} else if keyboard_key != vk_enter {
@@ -1011,7 +1038,7 @@ function __KengineDefaultPanelItemInputBox(options) : __KengineDefaultPanelItem(
 								value_temp = value;
 								keyboard_lastchar = "";
 								keyboard_string = value;
-								ken_keyboard_clear(keyboard_key);
+								Kengine.utils.input.keyboard_clear(keyboard_key);
 								keyboard_key = vk_nokey;
 								kbd_key_timer = 0;
 							}
@@ -1028,8 +1055,8 @@ function __KengineDefaultPanelItemInputBox(options) : __KengineDefaultPanelItem(
 						keyboard_lastkey != vk_lcontrol and 
 						keyboard_lastkey != vk_rcontrol) {kbd_last_key = keyboard_lastkey;}
 
-					if (ken_keyboard_check_released(vk_left)
-					or ken_keyboard_check_released(vk_right)) {
+					if (Kengine.utils.input.keyboard_check_released(vk_left)
+					or Kengine.utils.input.keyboard_check_released(vk_right)) {
 						kbd_last_key= vk_nokey;
 						kbd_key_timer= 0;
 						keyboard_lastkey = vk_nokey;
@@ -1056,6 +1083,8 @@ function __KengineDefaultPanelItemInputBox(options) : __KengineDefaultPanelItem(
 				draw_rectangle(parent.x+x,parent.y+y,parent.x+x+width,parent.y+y+height, false);
 			}
 			if !active {
+				draw_set_color(c_dkgray);
+			} else {
 				draw_set_color(c_gray);
 			}
 			draw_rectangle(parent.x+x,parent.y+y,parent.x+x+width,parent.y+y+height, true);
@@ -1089,7 +1118,7 @@ function __KengineDefaultPanelItemInputBox(options) : __KengineDefaultPanelItem(
 		if cursor_talpha {
 			var cursor_offset = string_width(string_copy(value, 0, cursor_pos));
 		
-			draw_set_color(box_colors[1]);
+			draw_set_color(cusror_color);
 			draw_set_alpha(1);
 			draw_line(
 				parent.x + x + 5 + cursor_offset,
@@ -1137,7 +1166,7 @@ function __KengineDefaultPanelItemInputBox(options) : __KengineDefaultPanelItem(
 
 	autoc_add_ind = function(reversed) {
 		autoc_pos += reversed ? -1 : 1;
-		if autoc_pos > array_length(Kengine.panels._autocs) {
+		if autoc_pos >= array_length(Kengine.panels._autocs) {
 			autoc_pos = 0;
 		}
 		if autoc_pos < 0 {
@@ -1145,7 +1174,7 @@ function __KengineDefaultPanelItemInputBox(options) : __KengineDefaultPanelItem(
 		}
 		return autoc_pos;
 	}
-	
+
 	autoc_find_next = function(str, reversed=false) {
 		var i, indexing;
 		indexing = false;
@@ -1153,19 +1182,19 @@ function __KengineDefaultPanelItemInputBox(options) : __KengineDefaultPanelItem(
 		if string_char_at(str, 1) == "/" {
 			__b = "/";
 		}
-		
+
 		if autoc == "" or autoc == str {
 			autoc_pos = 0;
 			autoc = string_copy(str, 1+string_length(__b), string_length(str));
 			Kengine.panels._autocs = [];
 			indexing = true;
 		}
-		
+
 		// pop last word
-		var _x = string_explode(" ", autoc);
+		var _x = string_split(autoc, " ");
 		autoc = _x[array_length(_x)-1];
 		_x[array_length(_x)-1] = "";
-		autoc_extra_pre = string_implode(" ", _x);
+		autoc_extra_pre = string_join_ext(" ", _x);
 		
 		var a, b;
 		if string_pos("global.", autoc) == 1 {
@@ -1187,6 +1216,8 @@ function __KengineDefaultPanelItemInputBox(options) : __KengineDefaultPanelItem(
 		}
 		
 		if indexing {
+			var n;
+			var _do_autoc = false;
 			if a != undefined {
 				var _inter = Kengine.utils.structs.set_default(parent, "interpret", Kengine.utils.parser.interpret);
 				var _a = _inter(a, 2);
@@ -1198,50 +1229,92 @@ function __KengineDefaultPanelItemInputBox(options) : __KengineDefaultPanelItem(
 				if typeof(_a) == "ref" {
 					if instance_exists(_a) {
 						for (var j=0; j<array_length(Kengine.panels._autoc_instance_vars); j++) {
-							if string_char_at(Kengine.panels._autoc_instance_vars[j], 0) == "_" continue;
-							if string_pos(b, Kengine.panels._autoc_instance_vars[j]) == 1 or b == "" {
-								Kengine.panels._autocs[array_length(Kengine.panels._autocs)] = Kengine.panels._autoc_instance_vars[j];
+							_do_autoc = true;
+							if Kengine.utils.is_private(_a, Kengine.panels._autoc_instance_vars[j]) == true {
+								_do_autoc = false;
+							}
+							if Kengine.utils.is_public(_a, Kengine.panels._autoc_instance_vars[j]) {	
+								_do_autoc = true;
+							}
+							if _do_autoc {
+								if string_pos(b, Kengine.panels._autoc_instance_vars[j]) == 1 or b == "" {
+									Kengine.panels._autocs[array_length(Kengine.panels._autocs)] = Kengine.panels._autoc_instance_vars[j];
+								}
 							}
 						}
 						var _v = variable_instance_get_names(_a);
-						for (var j=0; j<array_length(_v); j++) {
-							if string_char_at(_v[j], 0) == "_" continue;
-							if string_pos(b, _v[j]) == 1 or b == "" {
-								Kengine.panels._autocs[array_length(Kengine.panels._autocs)] = _v[j];
+						for (var j=0; j<array_length(_v); j++) {							
+							_do_autoc = true;
+							if Kengine.utils.is_private(_a, _v[j]) == true {
+								_do_autoc = false;
+							}
+							if Kengine.utils.is_public(_a, _v[j]) {	
+								_do_autoc = true;
+							}
+							if _do_autoc {
+								if string_pos(b, _v[j]) == 1 or b == "" {
+									Kengine.panels._autocs[array_length(Kengine.panels._autocs)] = _v[j];
+								}
 							}
 						}
 					}
 				} else if is_struct(_a) {
-					if Kengine.utils.is_private(_a, Kengine.utils.parser.constants.default_private) == false {
-							var _d = struct_get_names(_a);
-							for (var j=0; j<array_length(_d);j+=1) {
-								if string_char_at(_d[j], 0) == "_" continue;
+					if Kengine.utils.is_private(_a) != true {
+						var _d = struct_get_names(_a);
+						for (var j=0; j<array_length(_d);j+=1) {
+							_do_autoc = true;
+							if Kengine.utils.is_private(_a, _d[j]) == true {
+								_do_autoc = false;
+							}
+							if Kengine.utils.is_public(_a, _d[j]) {	
+								_do_autoc = true;
+							}
+							if _do_autoc {
+								// if string_char_at(_d[j], 0) == "_" continue;
 								if string_pos(b, _d[j]) == 1 or b == "" {
 									Kengine.panels._autocs[array_length(Kengine.panels._autocs)] = _d[j];
 								}
+							}
 						}
 					}
 				} else {
 					// Scripts and methods.
 					var scrs = Kengine.asset_types.script.assets.filter(function(val) {
-						return not Kengine.utils.is_private(val, Kengine.utils.parser.constants.default_private);
-						// return not val.get_is_private();
+						return not Kengine.utils.is_private(val);
 					});
 					for (var j=0; j<array_length(scrs); j++) {
 						var _n = scrs[j].name;
-						if string_char_at(_n, 0) == "_" continue;
-						if string_pos(b, _n) == 1 or b == "" {
-							if string_pos(a, _n) == 1 {
-								Kengine.panels._autocs[array_length(Kengine.panels._autocs)] = _n;
+						_do_autoc = true;
+						if Kengine.utils.is_private(scrs[j]) == true {
+							_do_autoc = false;
+						}
+						if Kengine.utils.is_public(scrs[j]) == true {
+							_do_autoc = true;
+						}
+						if _do_autoc {
+							// if string_char_at(_n, 0) == "_" continue;
+							if string_pos(b, _n) == 1 or b == "" {
+								if string_pos(a, _n) == 1 {
+									Kengine.panels._autocs[array_length(Kengine.panels._autocs)] = _n;
+								}
 							}
 						}
 					}
 				}
 			}
 
+			// TXR map
+			var txr_a = ds_map_keys_to_array(Kengine.utils.parser._TXR.System._function_map);
+			for (i=0; i<array_length(txr_a);i++;) {
+				n = txr_a[i];
+				if string_pos(autoc, n) == 1 {
+					Kengine.panels._autocs[array_length(Kengine.panels._autocs)] = n;
+				}
+			}
+
 			// Instances
 			with all {
-				var n = string(object_get_name(object_index));
+				n = string(object_get_name(object_index));
 				if string_pos(other.autoc, n) == 1 {
 					Kengine.panels._autocs[array_length(Kengine.panels._autocs)] = n;
 				}
@@ -1271,7 +1344,19 @@ function __KengineDefaultPanelItemInputBox(options) : __KengineDefaultPanelItem(
 				}
 			}
 		}
+		var _autoc = string_split(autoc, ".");
+		_autoc = _autoc[array_length(_autoc)-1];
+
 		for (i=0; i<array_length(Kengine.panels._autocs); i++) {
+			if string_pos(_autoc, Kengine.panels._autocs[i]) == 1 {
+				if autoc_pos == i {
+					__b = string_copy(autoc, 1, string_length(autoc) - string_length(_autoc));
+					autoc_add_ind(reversed);
+					var ret = __b + Kengine.panels._autocs[i]; // + autoc_extra_pre + a + "." 
+					cursor_pos = string_length(ret);
+					return ret;
+				}
+			}
 			if string_pos(autoc, Kengine.panels._autocs[i]) == 1 {
 				if autoc_pos == i {
 					autoc_add_ind(reversed);
@@ -1294,7 +1379,7 @@ function __KengineDefaultPanelItemInputBox(options) : __KengineDefaultPanelItem(
  * @description A base button.
  * @param {Struct} options
  */
-function __KengineDefaultPanelItemButton(options) : __KengineDefaultPanelItem(options) constructor {
+function __KenginePanelsPanelItemButton(options) : __KenginePanelsPanelItem(options) constructor {
 	width = sprite_get_width(ken__spr_icons);
 	height = sprite_get_height(ken__spr_icons);
 	valign = fa_middle;
@@ -1333,6 +1418,8 @@ function __KengineDefaultPanelItemButton(options) : __KengineDefaultPanelItem(op
 	}
 	
 	self.step = function() {
+		var _mouse_x = device_mouse_x_to_gui(0);
+		var _mouse_y = device_mouse_y_to_gui(0);
 		if x == 0 {
 			x += 5;
 		}
@@ -1344,7 +1431,7 @@ function __KengineDefaultPanelItemButton(options) : __KengineDefaultPanelItem(op
 		var _y = parent.y + y;
 		if self.visible {
 			var _m_inside = false;
-			if mouse_x >= _x and mouse_y >= _y and mouse_x < _x + width and mouse_y < _y + height {
+			if _mouse_x >= _x and _mouse_y >= _y and _mouse_x < _x + width and _mouse_y < _y + height {
 				_m_inside = true;
 			}
 			var _mb_pressed, _mb_held, _mb_released, _mb_pressed_twice = false, _mb_pressed_thrice = false;
@@ -1372,8 +1459,8 @@ function __KengineDefaultPanelItemButton(options) : __KengineDefaultPanelItem(op
  * @description A console is an extended {@link kengine~panel.Panel} with many features for debugging.
  * @param {Struct} options an initial struct for setting options.
  */
-function __KengineDefaultConsole(options) : __KengineDefaultPanel(options) constructor {
-	var c_echo = $880088, c_error = $2000ff, c_debug = $008800;
+function __KenginePanelsConsole(options) : __KenginePanelsPanel(options) constructor {
+	var c_echo = $DD9900, c_error = $2000ff, c_debug = $008800;
 
 	color_echo = Kengine.utils.structs.set_default(options, "color_echo", c_echo);
 	color_error = Kengine.utils.structs.set_default(options, "color_error", c_error);
@@ -1385,7 +1472,7 @@ function __KengineDefaultConsole(options) : __KengineDefaultPanel(options) const
 	enabled = Kengine.utils.structs.set_default(options, "enabled", true);
 
 	// 0 = disable, 1 = only error, 2 = error + info, 3 = error + warnings + info, 4 = error + warnings + info + debug
-	verbosity = Kengine.utils.structs.exists(options, "verbosity") ? options.verbosity : ((Kengine.conf.debug == true) ? 4 : 3);
+	verbosity = Kengine.utils.structs.exists(options, "verbosity") ? options.verbosity : ((KENGINE_DEBUG) ? 4 : 3);
 
 	str_height = string_height("|");
 	str_width = string_width("_");
@@ -1401,14 +1488,17 @@ function __KengineDefaultConsole(options) : __KengineDefaultPanel(options) const
 	title = "";
 	default_autocs = [];
 	drag_enabled = false;
+	box_colors = [
+		$300500, $300500, $300500, $300500,
+	];
 
 	scroll_pos = 0;
 	scroll_hpos = 0;
 	interpret = struct_exists(options, "interpreter") ? options.interpreter : function(value) {
 		if string_count(" ", value) > 0 {
-			return Kengine.utils.parser.interpret(value, {_allow_private: true,});
+			return Kengine.utils.parser.interpret(value, {__allow_private: KENGINE_CONSOLE_ALLOW_PRIVATE, script_object: "console", event: "input"});
 		} else {
-			return Kengine.utils.parser.interpret("return " + string(value) + ";", {_allow_private: true,});
+			return Kengine.utils.parser.interpret_val(value, {__allow_private: KENGINE_CONSOLE_ALLOW_PRIVATE, script_object: "console", event: "input"});
 		}
 	};
 	toggle_key  = Kengine.utils.structs.set_default(options, "toggle_key", 192); // `
@@ -1439,7 +1529,7 @@ function __KengineDefaultConsole(options) : __KengineDefaultPanel(options) const
 	self.input_check = function(value) {
 		try {
 			var result = self.interpret(value);
-			self.echo(result);
+			if not is_undefined(result) self.echo(result);
 		} catch (e) {
 			self.echo_error(e.message);
 			show_debug_message(e);
@@ -1447,6 +1537,11 @@ function __KengineDefaultConsole(options) : __KengineDefaultPanel(options) const
 	}
 
 	self.step = function() {
+		var _mouse_x = device_mouse_x_to_gui(0);
+		var _mouse_y = device_mouse_y_to_gui(0);
+		width = window_get_width();
+		inputbox.width = width;
+
 		draw_set_font(font);
 		str_height = string_height("|");
 		str_width = string_width("_");
@@ -1462,9 +1557,9 @@ function __KengineDefaultConsole(options) : __KengineDefaultPanel(options) const
 
 		self._step();
 		
-		if ken_keyboard_check_pressed(vk_enter) {
+		if Kengine.utils.input.keyboard_check_pressed(vk_enter) {
 			if inputbox.value != ""  and  visible  and (not collapsed) {
-				ken_keyboard_clear(vk_enter);
+				Kengine.utils.input.keyboard_clear(vk_enter);
 				if inputbox.history_enabled Kengine.panels._input_histories[array_length(Kengine.panels._input_histories)] = inputbox.value;
 				inputbox.value = string_replace_all(inputbox.value, "\\n", chr(13));
 				self.echo(">"+inputbox.value);
@@ -1484,11 +1579,11 @@ function __KengineDefaultConsole(options) : __KengineDefaultPanel(options) const
 		}
 		
 		if toggle_key != undefined {
-			if ken_keyboard_check_pressed(toggle_key) and enabled {
+			if Kengine.utils.input.keyboard_check_pressed(toggle_key) and enabled {
 				visible = not visible;
 				collapsed = not collapsed;
 				lines_notify_current=0; notify_state=0;
-				ken_keyboard_clear(toggle_key);
+				Kengine.utils.input.keyboard_clear(toggle_key);
 				keyboard_lastkey = vk_nokey;
 				keyboard_lastchar = "";
 				if (not collapsed) and (visible) {
@@ -1501,7 +1596,7 @@ function __KengineDefaultConsole(options) : __KengineDefaultPanel(options) const
 		if is_focused and visible and not self.collapsed {
 			// Activate input on click inside
 			var _m_inside = false;
-			if mouse_x >= x and mouse_y >= y and mouse_x < x + width and mouse_y < y + height {
+			if _mouse_x >= x and _mouse_y >= y and _mouse_x < x + width and _mouse_y < y + height {
 				_m_inside = true;
 			}
 			var _mb_pressed, _mb_held, _mb_released, _mb_pressed_twice = false, _mb_pressed_thrice = false;
@@ -1525,7 +1620,7 @@ function __KengineDefaultConsole(options) : __KengineDefaultPanel(options) const
 				} else {
 					if scroll_pos > 0 scroll_pos -= min(scroll_pos, scroll_inc);
 				}
-				ken_keyboard_clear(vk_pagedown);
+				Kengine.utils.input.keyboard_clear(vk_pagedown);
 			} else if keyboard_check_pressed(vk_pageup) or mouse_wheel_up() {
 				if keyboard_check_direct(vk_shift) {
 					if scroll_hpos > 0 scroll_hpos -= scroll_inc*3;
@@ -1534,12 +1629,12 @@ function __KengineDefaultConsole(options) : __KengineDefaultPanel(options) const
 						scroll_pos += min(lines_max - lines_count, scroll_inc);
 					}
 				}
-				ken_keyboard_clear(vk_pageup);
+				Kengine.utils.input.keyboard_clear(vk_pageup);
 			}
 			
 			// Clicking triangle
 			if _mb_pressed {
-				if point_in_triangle(mouse_x, mouse_y, width-25-12, height-25-15, width-25+12, height-25-15, width-25, height-25+5) {
+				if point_in_triangle(_mouse_x, _mouse_y, width-25-12, height-25-15, width-25+12, height-25-15, width-25, height-25+5) {
 					scroll_pos = 0;
 					scroll_hpos = 0;
 					mouse_clear(mb_left);
@@ -1548,8 +1643,17 @@ function __KengineDefaultConsole(options) : __KengineDefaultPanel(options) const
 		}
 	}
 	self.draw = function() {
+		if notify_state == 1 {
+			self.draw_collapsed = true;
+			height = str_height*(lines_notify_current);
+		} else {
+			self.draw_collapsed = false;
+		}
 		self._draw();
 		draw_set_font(font);
+		draw_set_halign(fa_left);
+		draw_set_valign(fa_top);
+		draw_set_alpha(1);
 		if self.visible and not self.collapsed and is_focused {
 			// Draw console lines.
 			var _texty;
@@ -1569,7 +1673,7 @@ function __KengineDefaultConsole(options) : __KengineDefaultPanel(options) const
 				draw_text(x+4-scroll_hpos, y+1+((lines_count-1)-(i-scroll_pos))*str_height, _texty);
 			}
 			if scroll_pos > 0 or scroll_hpos > 0 {
-				draw_set_color(box_colors[0]);
+				draw_set_color(color_echo);
 				draw_triangle(
 					width -25-12, height-25-15,
 					width -25+12, height-25-15,
@@ -1580,7 +1684,7 @@ function __KengineDefaultConsole(options) : __KengineDefaultPanel(options) const
 			draw_set_color(c_white);
 			draw_set_alpha(1);
 		} else {
-			
+
 			if notify_state == 1 {
 				// If timer ends, show info: off
 				if notify_timer == 0 { lines_notify_current=0; notify_state=0; exit;}
@@ -1629,7 +1733,7 @@ function __KengineDefaultConsole(options) : __KengineDefaultPanel(options) const
 			var new_str = string_replace_all(arg0, "\\n", "%EscapedNewLine%");
 			new_str = string_replace_all(new_str, "\n", chr(13));
 			new_str = string_replace_all(new_str, "%EscapedNewLine%", "\\n");
-			var a = string_explode(chr(13), new_str);
+			var a = string_split(new_str, chr(13));
 			for (var i=0; i<array_length(a); i++;) {
 				for (m=lines_max-1; m>0; m--;) {
 					texts[m] = texts[m-1];
@@ -1655,7 +1759,7 @@ function __KengineDefaultConsole(options) : __KengineDefaultPanel(options) const
 		if notify == true and notify_enabled {
 			if lines_notify_current < lines_notify lines_notify_current ++;
 			notify_timer = notify_show_time * game_get_speed(gamespeed_fps);
-			notify_state = 1;
+			if not self.visible or self.collapsed notify_state = 1;
 		}
 
 		if write {
@@ -1686,7 +1790,7 @@ function __KengineDefaultConsole(options) : __KengineDefaultPanel(options) const
 	}
 	verbose = function(msg, verbosity) {
 		if enabled {
-			if Kengine.conf.verbosity > verbosity {
+			if KENGINE_VERBOSITY > verbosity {
 				self.debug(msg);
 				log_write(msg, "DEBUG");
 			}
@@ -1769,23 +1873,38 @@ function __KengineDefaultConsole(options) : __KengineDefaultPanel(options) const
 	}
 }
 
-
-Kengine.panels.DefaultPanel = __KengineDefaultPanel;
-Kengine.panels.DefaultPanelItem = __KengineDefaultPanelItem;
-Kengine.panels.DefaultPanelItemButton = __KengineDefaultPanelItemButton;
-Kengine.panels.DefaultPanelItemInputBox = __KengineDefaultPanelItemInputBox;
-Kengine.panels.DefaultConsole = __KengineDefaultConsole;
-Kengine.panels.DefaultPanelItemGUIElement = __KengineDefaultPanelItemGUIElement;
-
-
 function ken_init_ext_panels() {
-	Kengine.panels.interact_enabled = Kengine.utils.structs.set_default(Kengine.conf.exts.panels, "interact_enabled", true);
-	Kengine.panels.draw_enabled = Kengine.utils.structs.set_default(Kengine.conf.exts.panels, "draw_enabled", true);
+	
+	/**
+	 * @name collection
+	 * @type {Kengine.Collection}
+	 * @memberof Kengine.panels
+	 * @description This collection contains all {@link Kengine.panel.Panel} objects created.
+	 */
+	Kengine.panels.collection = new __KengineCollection();
 
-	Kengine.panels.Panel = Kengine.utils.structs.set_default(Kengine.conf.exts.panels, "panel_class", Kengine.panels.DefaultPanel);
-	Kengine.panels.PanelItem = Kengine.utils.structs.set_default(Kengine.conf.exts.panels, "panel_item_class", Kengine.panels.DefaultPanelItem);
-	Kengine.panels.PanelItemButton = Kengine.utils.structs.set_default(Kengine.conf.exts.panels, "panel_item_button_class", Kengine.panels.DefaultPanelItemButton);
-	Kengine.panels.PanelItemInputBox = Kengine.utils.structs.set_default(Kengine.conf.exts.panels, "panel_item_inputbox_class", Kengine.panels.DefaultPanelItemInputBox);
-	Kengine.panels.Console = Kengine.utils.structs.set_default(Kengine.conf.exts.panels, "console_class", Kengine.panels.DefaultConsole);
-	Kengine.panels.PanelItemGUIElement = Kengine.utils.structs.set_default(Kengine.conf.exts.panels, "gui_element_class", Kengine.panels.DefaultPanelItemGUIElement);
+	Kengine.panels.interact_enabled = true;
+	Kengine.panels.draw_enabled = true;
+
+	Kengine.panels.Panel = __KenginePanelsPanel;
+	Kengine.panels.PanelItem = __KenginePanelsPanelItem;
+	Kengine.panels.PanelItemButton = __KenginePanelsPanelItemButton;
+	Kengine.panels.PanelItemInputBox = __KenginePanelsPanelItemInputBox;
+	Kengine.panels.Console = __KenginePanelsConsole;
+	Kengine.panels.PanelItemGUIElement = __KenginePanelsPanelItemGUIElement;
+
+	// Example
+	/*
+	var p = new __KenginePanelsPanel({
+		x: 200,
+		y: 200,
+		width: 300,
+		height: 300,
+		alpha: 0.6,
+	});
+	var ddiv = new __KenginePanelsPanelItemGUIElement({x: 0, y: 0, value: {
+		what: ["indeed", 1, 2, 3],
+	}});
+	p.add(ddiv);
+	*/
 }

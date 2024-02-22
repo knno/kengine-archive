@@ -1,12 +1,16 @@
 // Create a vertex buffer
+__opts = {
+	__is_private: true,
+}
+
 vertex_buffer = vertex_create_buffer();
 
 grid_width = 5;
 grid_height = 5;
 tile_size = 16;
 grid_tile_size = 16;
-tileset_width = sprite_get_width(spr_tiling);
-tileset_height = sprite_get_height(spr_tiling);
+tileset_width = sprite_get_width(spr_my_mod_outside_tileset);
+tileset_height = sprite_get_height(spr_my_mod_outside_tileset);
 
 // Create vertex format
 vertex_format_begin()
@@ -80,5 +84,5 @@ surface_reset_target();
 tileset_surface = surface_create(tileset_width, tileset_height);
 surface_set_target(tileset_surface);
 draw_clear_alpha(c_black, 0);
-draw_sprite(spr_tiling, 0, 0, 0);
+draw_sprite(spr_my_mod_outside_tileset, 0, 0, 0);
 surface_reset_target();

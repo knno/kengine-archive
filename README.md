@@ -4,7 +4,6 @@
 
 
 
-
 <!-- PROJECT LOGO -->
 
 <br />
@@ -24,14 +23,14 @@
   [![MIT License][license-shield]][license-url]
 
   <p align="center">
-    A GameMaker framework that helps with modding functions for your projects.
+    A GameMaker framework for modding support of your projects.
     <br />
     <a href="https://knno.github.io/kengine/"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://knno.github.io/kengine/issues">Report Bug</a>
+    <a href="https://github.com/knno/kengine/issues">Report Bug</a>
     ·
-    <a href="https://knno.github.io/kengine/issues">Request Feature</a>
+    <a href="https://github.com/knno/kengine/issues">Request Feature</a>
   </p>
 </div>
 
@@ -43,15 +42,17 @@
   <summary>Table of Contents</summary>
   <ol>
     <li><a href="#about-the-project">About The Project</a></li>
+      <ul>
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#what-is-kengine">What is Kengine?</a></li>
+      </ul>
     <li><a href="#getting-started">Getting Started</a>
       <ul>
-        <li><a href="#installation-for-usage">Installation for Usage</a></li>
-        <li><a href="#installation-for-development">Installation for Development</a></li>
+        <li><a href="#installation-for-use">Installation for Use</a></li>
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
@@ -66,18 +67,51 @@
 
 <!-- [![Kengine concept img][concept-img]](https://knno.github.io/kengine) -->
 
-Usually you want to make your GameMaker project, moddable.
+### Introduction
 
-Here's a few possible requirements that you might have:
+Sometimes, you want to make your GameMaker project moddable by your end-users community.
 
-* Adding and replacing assets in-game.
-* Modifying the assets dynamically by reading archive files or with code.
-* Enable mods support of your game that manipulate those assets.
-* Allow the user to enable and disable mods possibily with their mod dependencies.
+For example, here's a few possible scenarios:
+
+* Adding and replacing in-game assets.
+* Modifying the assets dynamically by reading archive files, or with code from an API.
+* Enable support for mod files of your game that would manipulate some of the assets.
+* Allow the user to enable and disable mods.
 * So on... :smile:
 
-Of course, your exact implementations and needs may be different. This is found as a base project template for GameMaker projects.
+Of course, your exact implementations and needs may be different. This is found as a base project template for those requirements.
+
 It is made in a way that can be added to existing projects, too.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### What is Kengine
+
+Kengine is a set of script files that add many possibilites into your GameMaker project. It is a singleton global in your game that you can access anytime for different uses. It comprises sub structs such as:
+
+- `utils` functions:
+  - This contains most functions that you can use in your project.
+  - It also contains other utility functions for arrays, structs, strings ...etc.
+  - See [this page](TODO:tutorial:utils-link) for more information.
+
+Kengine also finds specific extension scripts that you can have added to the project. Such scripts should contain a function `ken_init_ext_<name>` that is run when Kengine starts. Some of these extensions are internal and required to run smoothly. Here are a few:
+
+- `parser` extension:
+  - This extension contributes a way to parse external script files. It depends on [Tiny Expression Runtime](https://github.com/YAL-GameMaker/tiny-expression-runtime/) for parsing the files (included with a few modifications). Although, with some work, you can replace it with any interpreter you may already have. See [this page](TODO:tutorial:parser-link) for more information.
+
+- `mods` extension:
+  - This extension adds the ability to read external ZIP files that act as "mods". A Mod is a set of asset configuration files (called `AssetConf`) that define what assets to add or replace. See [This page](TODO:tutorial:modding-link) for more information.
+
+- `panels` extension:
+  - This extension adds a very basic GUI system called "Kengine panels". It is required for the Console to work. Otherwise, you can disable the Console completely and remove this.
+  - [Click here](TODO:tutorial:panels-link) to learn how to use Panels.
+
+- `tests` extension:
+  - This extension adds a system for doing tests inside your project. It adds a Test constructor, a Fixture and a Test Manager.
+  - Any script that starts with `ken_test_` is **called twice** in order to find its fixtures and to run the actual test.
+  - A fixture is simply an object with `setup` and `cleanup` functions that are required for the test. Mulitple tests can have the same fixtures (by the name.)
+  - To learn more about the tests system, [click here](TODO:tutorial:tests-link).
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -87,39 +121,33 @@ It is made in a way that can be added to existing projects, too.
 
 ## Getting Started
 
-### Installation for Use
+### Quick Install/Usage
 
-1. download the latest .yyps package from this repository releases.
-2. Import it in your project. Select `Extensions/Kengine` folder, and `Rooms/rm_init` if needed.
-3. Make sure that your first room, or when the rooms are started, the following script is called:
+1. Download the latest .yymps from the Releases tab of GitHub.
+2. Import the downloaded file into your project by `Tools > Import local package`.
+3. Add `obj_kengine` object to your very first room.
+4. Start using the engine in your code! See below.
+5. Done
 
-```gml
-// Call this preferrably in the first room creation code.
-ken_init();
+### Quick Upgrade
 
-```
+1. Download the latest .yymps from the Releases tab of GitHub.
+2. Backup your `KengineConfig` script in your GameMaker project to **another location and name** (if it exists)
+3. Delete the `Kengine` folder in your project.
+4. Import the downloaded file into your project by `Tools > Import local package`.
+5. Compare the values of both `KengineConfig`s scripts. It is recommended to use the newer values.
+6. Don't forget to add `obj_kengine` object to your very first room!
+7. Done
 
-This is already done in `Rooms/rm_init` that is provided.
-
-And now you can use and build on it!
-
-
-### Installation for Development
-
-1. Clone the repository
-   ```sh
-   git clone https://github.com/knno/kengine.git
-   ```
-2. Install NPM packages
-   ```sh
-   npm install
-   ```
-3. Start development of your extension or code!
-
-<!-- You can check <a href="https://knno.github.io/kengine/">this documentation section</a> for more info on this. -->
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
+> If you'd like to sync the project however with all the projects you are working on, you can use my [GmDm](https://github.com/knno/gmdm) program. Simply clone the repository into a location for GmDm to > find, and install it by adding this link to your `gmdm.yml` file in your new/exiting project(s):
+> ```yml
+> name: my project.yyp
+> imports:
+>   - Kengine
+> ```
+> 
+> This enables syncing it with all your projects and the base Kengine project. Or, you can simply refer back to installation/upgrade guide above.
+> 
 
 
 <!-- USAGE -->
@@ -127,32 +155,57 @@ And now you can use and build on it!
 ## Usage
 
 > For guides, please refer to the [Documentation](https://knno.github.io/kengine/). As there are many uses of Kengine.
-> Ranging from replacing a simple asset, to loading a whole mod.
+> Ranging from replacing a simple asset, to managing game mods.
 
 These are a few examples on how to use Kengine.
 
-### Creating a new asset type and an asset in it.
+### Simplest Asset Replacement Usage
+
+Let's assume you want to use a sprite that is replaceable or addable, for an object already in your asset resources,
+see the following code as an example.
 
 ```gml
-/// ken_customize.gml
+/// obj_player : Creation Code
 
-Kengine.conf.asset_types.my_new_asset_type = {
-  name: "foo",
-  name_plural: "foos",
-  index_range: [0,1],
-};
+// obj_player has  spr_player initially.
+// whether sprite is replaced or not, we must "refresh the sprite handle"
+
+sprite_index = Kengine.utils.get_asset("sprite", "spr_player").id;
+
+// This code updates the object's sprite to a different sprite
+// since it is added or "replaced" to the runtime of your game.
 ```
 
-This will define a `Kengine.AssetType` that can be used later. Then you can use it after Kengine is initiated.
-Now to get an asset id (the real sprite_index of the asset.)
+You must check if the asset is there, but it's not necessary **unless if it's not in the asset resources before.** because assets are indexed by default.
 
 ```gml
-var asset = Kengine.fn.utils.get_asset("sprite", "spr_ball");
-if asset {
-  return asset.id
+var spr_asset = Kengine.utils.get_asset("sprite", "new_spr_player");
+if asset != undefined {
+  sprite_index = spr_asset.id;
+} else {
+  // Keep the sprite.
 }
 ```
-This will return the correct ID regardless the asset is replaced or not. it will be resolved to correct sprite.
+
+> #### A note on custom objects
+> Did you know that you don't actually have to set the sprite_index if your object is a Kengine object (a custom asset) from a mod? Since mods can use self-referencing to sprites they have in definition. Example mod as below
+> ```yml
+> assets:
+>   sprite:
+>     - spr_new_player: ...
+>   object:
+>     - obj_new_player:
+>       sprite_index: spr_new_player
+>   ...
+> ```
+
+Now let's look at this function:
+```gml
+Kengine.utils.get_asset(asset_type, asset_name)
+```
+This will return the correct asset if it is replaced or not. it will be resolved to the correct asset. If the name is not in the index, it can return `undefined` if not found.
+
+From now on, please check the full documentation for concepts and info.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -162,41 +215,9 @@ This will return the correct ID regardless the asset is replaced or not. it will
 
 ## Roadmap
 
-- [x] Add AssetType
-- [x] Add Asset
-- [x] Add Instance wrapper
-- [ ] Improve KScripts.
-- [ ] Add Tutorials in Docs
-  - [ ] Add Level Asset
-  - [ ] How to work with mods
-- [ ] Add Additional Examples
-- [ ] Add Changelog
-- [ ] Add tests
-- [ ] Improve Mods extension
-  - [ ] Read external files
-- [ ] Improve Panels
+Check out the `Projects` tab on GitHub.
 
 See the [open issues](https://github.com/knno/kengine/issues) for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- CONTRIBUTING -->
-
-## Contributing
-
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Create your extension/code and jsdoc it
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -215,21 +236,27 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 ## Contact
 
-Kenan Masri - @kenanmasri - knno in discord!
+Kenan Masri
+Discord: `knno`
 
-Project link: [https://github.com/knno/kengine](https://github.com/knno/kengine)
-
+Project link: [https://github.com/knno/kengine](https://github.com/knno/kengines)
+Marketplace link: [https://marketplace.]
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- ACKNOWLEDGMENTS -->
 
 ## Acknowledgments
 
-* [Img Shields](https://shields.io)
-* [GameMaker - YoYoGames](https://github.com/YoYoGames)
-* [Tiny Expressions Runtime - YAL](https://github.com/YellowAfterlife)
+#### [Img Shields](https://shields.io)
+
+#### Tiny Expression Runtime by YAL
+
+Credits to [Tiny Expressions Runtime - YAL](https://github.com/YAL-GameMaker/tiny-expression-runtime/). It has been modified to be used as a custom scripts parser and for the Console panel.
+
+#### Snap by JujuAdams
+
+Credits to [Snap - JujuAdams](https://github.com/JujuAdams/SNAP/). It is used for opening mod files (yaml syntax by default) although you should be able to replace this with your own parsing code.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

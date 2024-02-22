@@ -6,6 +6,6 @@
   "isDnD": false,
   "parent": {
     "name": "Parser",
-    "path": "folders/Extensions/Kengine/Scripts/extensions/Parser.yy",
+    "path": "folders/Extensions/Kengine/Scripts/Extensions/Parser.yy",
   },
 }

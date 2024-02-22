@@ -1,0 +1,9 @@
+name: Kengine.yyp
+
+imports:
+#  - tiny-expression-runtime:
+#    - Scripts/Tiny Expression Runtime:
+#      to: Extensions/Kengine/Scripts/Extensions/Parser/Tiny Expression Runtime
+
+exports:
+  - Extensions/Kengine

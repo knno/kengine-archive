@@ -6,7 +6,6 @@
  * @param {Id.Instance} inst The instance of which rectangle to be checked.
  * @param {Real} [xoffset] The X offset to be checked, from the instance's X position. Defaults to 0.
  * @param {Real} [yoffset] The Y offset to be checked, from the instance's Y position. Defaults to 0.
- * @memberof Kengine.fn.tiles
  * @return {Bool}
  *
  */

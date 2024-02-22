@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/knno/kengine#readme",
   "scripts": {
-    "jsdoc": "npx jsdoc -u docs/tutorials . README.md -r -c docs/jsdoc.json -d docs/output",
+    "docs": "npx jsdoc -u docs/tutorials . docs/README.md -r -c docs/jsdoc.json -d docs/output",
     "prepublishOnly": "npm run jsdoc"
   },
   "dependencies": {

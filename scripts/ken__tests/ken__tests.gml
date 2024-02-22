@@ -2,24 +2,26 @@
  * @namespace tests
  * @memberof Kengine
  * @description Kengine's Tests extension
+ * 
+ * Note - Disabling copy on write behavior for arrays is required.
  *
  */
 Kengine.tests = {
     fixtures: [], // Default fixtures
     testing_tests: [], // Current active tests.
+    test_manager: undefined,
 };
 
-Kengine.utils.structs.set_default(Kengine.conf.exts, "tests", {});
 
 /**
  * @function AssertionError
  * @constructor
  * @new_name Kengine.tests.AssertionError
  * @memberof Kengine.tests
- * @description An AssertionError is thrown by a test function.
  * @param {Struct} error The main causing error struct.
  * @param {String} [message] A message for the assertion. Defaults to that of `error` param.
  * @param {String} [longMessage] A long message for the assertion. Defaults to that of `error` param.
+ * @description An AssertionError is thrown by a test function.
  * 
  * @example
  * var assertion_error = new Kengine.tests.AssertionError(
@@ -29,7 +31,7 @@ Kengine.utils.structs.set_default(Kengine.conf.exts, "tests", {});
  * )));
  * 
  */
-Kengine.tests.DefaultAssertionError = function(error, message=undefined, longMessage=undefined) constructor {
+function __KengineTestsAssertionError(error, message=undefined, longMessage=undefined) constructor {
 
     /**
      * @name error
@@ -67,11 +69,11 @@ Kengine.tests.DefaultAssertionError = function(error, message=undefined, longMes
  * @memberof Kengine.tests
  * @description A fixture is a struct that contains `name`, and `func_setup` and `func_cleanup` functions.
  * @param {String} name The name of the fixture.
- * @param {Function} func_setup The function of the fixture that setups the test.
- * @param {Function} func_cleanup The function of the fixture that cleans up the test.
+ * @param {Function} _func_setup The function of the fixture that setups the test.
+ * @param {Function} _func_cleanup The function of the fixture that cleans up the test.
  *
  */
-Kengine.tests.DefaultFixture = function(name, func_setup, func_cleanup) constructor {
+function __KengineTestsFixture(name, _func_setup, _func_cleanup) constructor {
 
     /**
      * @name name
@@ -104,7 +106,7 @@ Kengine.tests.DefaultFixture = function(name, func_setup, func_cleanup) construc
      * @description The function of the fixture that setups the test.
      *
      */
-    self.func_setup = func_setup;
+    self.func_setup = _func_setup;
 
     /**
      * @function func_cleanup
@@ -112,7 +114,7 @@ Kengine.tests.DefaultFixture = function(name, func_setup, func_cleanup) construc
      * @description The function of the fixture that cleans up the test.
      *
      */
-    self.func_cleanup = func_cleanup;
+    self.func_cleanup = _func_cleanup;
 
     /**
      * @name is_applied
@@ -126,13 +128,13 @@ Kengine.tests.DefaultFixture = function(name, func_setup, func_cleanup) construc
     /**
      * @function setup
      * @memberof Kengine.tests.Fixture
-     * @description A function that set ups the fixture data.
+     * @description A function that sets up the fixture data.
      * @param {Struct|Undefined} [args] A struct containing `{test}`.
      *
      */
     self.setup = function(args=undefined) {
         if not self.is_applied {
-            method({test_manager: args.test_manager}, self.func_setup)();
+            method({test_manager: Kengine.tests.test_manager}, self.func_setup)();
             self.is_applied = true;
             array_push(self._testing_tests, args.test);
         }
@@ -170,7 +172,7 @@ Kengine.tests.DefaultFixture = function(name, func_setup, func_cleanup) construc
  * @description A test is a simple function wrapper that requires fixtures to be applied before calling, and cleaned after its done.
  *
  */
-Kengine.tests.DefaultTest = function(name, fixtures, func, step_func=undefined) constructor {
+function __KengineTestsTest(name, fixtures, func, step_func=undefined) constructor {
     var this = self;
 
     /**
@@ -186,7 +188,7 @@ Kengine.tests.DefaultTest = function(name, fixtures, func, step_func=undefined) 
      * @name fixtures
      * @type {Array<Kengine.tests.Fixture>}
      * @memberof Kengine.tests.Test
-     * @description An array of fixtures or fixture names or structs containing `{name, func_setup, func_cleanup}`. They will be resolved upon testing.
+     * @description An array of fixtures that are resolved upon testing.
      *
      */
     self.fixtures = fixtures ?? [];
@@ -200,6 +202,8 @@ Kengine.tests.DefaultTest = function(name, fixtures, func, step_func=undefined) 
      */
     self.is_testing = false;
 
+	Kengine.utils.events.fire("tests__test__init__before", {test: this});
+
     /**
      * @name resolve_fixtures
      * @type {Function}
@@ -209,9 +213,6 @@ Kengine.tests.DefaultTest = function(name, fixtures, func, step_func=undefined) 
      * @throws {Kengine.tests.AssertionError}
      *
      */
-
-    Kengine.utils.events.fire("tests__test__init__before", {test: this});
-
     self.resolve_fixtures = method({this}, function() {
         var resolved_fixtures = [];
         array_foreach(this.fixtures, method({this, resolved_fixtures}, function(_element, _index) {
@@ -232,14 +233,14 @@ Kengine.tests.DefaultTest = function(name, fixtures, func, step_func=undefined) 
                     if is_struct(_element) {
                         try {
                             fixname = _element.name;
-                            new_fixture = new Kengine.tests.Fixture(fixname, _element.func_setup, _element.func_cleanup);
+                            new_fixture = new __KengineTestsFixture(fixname, _element.func_setup, _element.func_cleanup);
                             broken = false;
                         } catch (e) {
                             //
                         }
                     }
                     if broken {
-                        throw new Kengine.tests.AssertionError(
+                        throw new __KengineTestsAssertionError(
                             Kengine.utils.errors.create(
                                 Kengine.utils.errors.types.tests__fixture__does_not_exist,
                                 string("Test \"{0}\" fixture \"{1}\" does not exist.", this.name, fixname)
@@ -358,7 +359,7 @@ Kengine.tests.DefaultTest = function(name, fixtures, func, step_func=undefined) 
         if val1 == val2 {
             this.result.assertions++;
         } else {
-            throw new Kengine.tests.AssertionError(
+            throw new __KengineTestsAssertionError(
                 Kengine.utils.errors.create(
                     Kengine.utils.errors.types.tests__assertion__is_not,
                     string("Test \"{0}\" AssertionError: {1} is not {2}", this.name, val1, val2)
@@ -370,7 +371,7 @@ Kengine.tests.DefaultTest = function(name, fixtures, func, step_func=undefined) 
      * @name func
      * @type {Function}
      * @memberof Kengine.tests.Test
-     * @description The main provided function of the test. Defaults to the found function. If it's a function that begins with {@link Kengine.constants.TEST_FUNCTION_PREFIX},
+     * @description The main provided function of the test. Defaults to the found function. If it's a function that begins with {@link KENGINE_TEST_FUNCTION_PREFIX},
      * then it is called when initiating the test and again when the test actually takes place. You can differentiate that within the test function by the reference variable `test` which is the current test.
      * 
      * @example
@@ -391,8 +392,8 @@ Kengine.tests.DefaultTest = function(name, fixtures, func, step_func=undefined) 
 	if self.func != undefined {
         self.func = method({test: this}, self.func);
 		var n = script_get_name(self.func);
-	    if string_starts_with(n, Kengine.constants.TEST_FUNCTION_PREFIX)
-            or string_starts_with(n, "gml_Script_" + Kengine.constants.TEST_FUNCTION_PREFIX) {
+	    if string_starts_with(n, KENGINE_TEST_FUNCTION_PREFIX)
+            or string_starts_with(n, "gml_Script_" + KENGINE_TEST_FUNCTION_PREFIX) {
                 r = true;
 		}
     }
@@ -437,7 +438,7 @@ Kengine.tests.DefaultTest = function(name, fixtures, func, step_func=undefined) 
  * It finds tests and does them one by one.
  * 
  */
-Kengine.tests.DefaultTestManager = function() constructor {
+function __KengineTestsTestManager() constructor {
 	var this = self;
 
     self._console_tag = "Kengine: Tests: ";
@@ -450,12 +451,12 @@ Kengine.tests.DefaultTestManager = function() constructor {
     self.find_tests = function() {
         var fs = {};
         var founds = Kengine.asset_types.script.assets.filter(function (val) {
-            return string_starts_with(val.name, Kengine.constants.TEST_FUNCTION_PREFIX)
-                or string_starts_with(val.name, "gml_Script_" + Kengine.constants.TEST_FUNCTION_PREFIX);
+            return string_starts_with(val.name, KENGINE_TEST_FUNCTION_PREFIX)
+                or string_starts_with(val.name, "gml_Script_" + KENGINE_TEST_FUNCTION_PREFIX);
         });
         var scr;
         for (var i=0; i<array_length(founds); i++) {
-            fs[$ founds[i].name] = new Kengine.tests.Test(
+            fs[$ founds[i].name] = new __KengineTestsTest(
                 founds[i].name, undefined, founds[i].id,
             );
         }
@@ -471,7 +472,7 @@ Kengine.tests.DefaultTestManager = function() constructor {
             test_name = _at[i];
             test = this.available_tests[$ test_name];
             test.__console_msg_data = undefined;
-            if Kengine.conf.console_enabled {
+            if KENGINE_CONSOLE_ENABLED {
                 test.__console_msg_data = {
                     msg: Kengine.console.echo_ext(this._console_tag + test_name, c_dkgray),
                     fmt: this._console_tag + test_name + ": " + "%status%" + " " + "%dots%  %error%",
@@ -513,7 +514,7 @@ Kengine.tests.DefaultTestManager = function() constructor {
             }
 
             // Update console.
-            if Kengine.conf.console_enabled {
+            if KENGINE_CONSOLE_ENABLED {
                 var _st = undefined; var __st = undefined; var _c = c_dkgray;
                 __st = (report._status == "SUCCESS") ? "S" : ((report._status == "FAIL") ? "F" : "P");
                 if __st == "P" {
@@ -566,7 +567,7 @@ Kengine.tests.DefaultTestManager = function() constructor {
 function ken_test_foo1_foo() {
     if not test.is_testing {
         var fixtures = [
-			new Kengine.tests.Fixture("fixture01", function(){ show_debug_message("Fixture01 setup!")}, function(){ show_debug_message("Fixture01 cleanup!")}, ),
+			new __KengineTestsFixture("fixture01", function(){ show_debug_message("Fixture01 setup!")}, function(){ show_debug_message("Fixture01 cleanup!")}),
         ];
         return {fixtures};
     }
@@ -578,7 +579,7 @@ function ken_test_foo1_foo() {
 function ken_test_foo1_bar() {
     if not test.is_testing {
         var fixtures = [
-            new Kengine.tests.Fixture("fixture02", function(){ show_debug_message("Fixture02 setup!")}, function(){ show_debug_message("Fixture02 cleanup!")}, ),
+            new __KengineTestsFixture("fixture02", function(){ show_debug_message("Fixture02 setup!")}, function(){ show_debug_message("Fixture02 cleanup!")}),
         ];
         return {fixtures};
     }
@@ -661,16 +662,14 @@ function ken_init_ext_tests() {
 	 */
     Kengine.utils.events.define("tests__test__init__after");
 
-	Kengine.tests.Test = Kengine.utils.structs.set_default(Kengine.conf.exts.tests, "test_class", Kengine.tests.DefaultTest);
-	Kengine.tests.Fixture = Kengine.utils.structs.set_default(Kengine.conf.exts.tests, "fixture_class", Kengine.tests.DefaultFixture);
-	Kengine.tests.AssertionError = Kengine.utils.structs.set_default(Kengine.conf.exts.tests, "assertion_error_class", Kengine.tests.DefaultAssertionError);
-	Kengine.tests.TestManager = Kengine.utils.structs.set_default(Kengine.conf.exts.tests, "test_manager_class", Kengine.tests.DefaultTestManager);
+	Kengine.tests.Test = __KengineTestsTest;
+	Kengine.tests.Fixture = __KengineTestsFixture
+	Kengine.tests.AssertionError = __KengineTestsAssertionError
+	Kengine.tests.TestManager = __KengineTestsTestManager
 
     Kengine.tests.test_manager = undefined;
-    if Kengine.conf.testing {
-        Kengine.tests.test_manager = new Kengine.tests.TestManager({
-
-        });
+    if KENGINE_IS_TESTING {
+        Kengine.tests.test_manager = new Kengine.tests.TestManager();
         Kengine.tests.test_manager.find_tests();
         Kengine.tests.test_manager.test();
 

@@ -5,7 +5,7 @@
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
-    "name": "tiles",
-    "path": "folders/Extensions/Kengine/Scripts/fn/tiles.yy",
+    "name": "Tiles",
+    "path": "folders/Scripts/Tiles.yy",
   },
 }

@@ -1,5 +1,11 @@
 /// @description General Step functions
 
+#region Kengine.debug
+
+
+#endregion Kengine.debug
+
+
 #region Kengine.spinner
 Kengine.utils.ascii.__current_braille_timer++;
 if Kengine.utils.ascii.__current_braille_timer > 5 {
@@ -44,25 +50,27 @@ if Kengine.tests != undefined {
 var p;
 
 var j = 0, l = undefined, col = Kengine.panels.collection;
-for (var i=0; i<col.length(); i++;) {
-	p = col.get(i);
-	if j == 2 {
-		Kengine.panels.focused = undefined;
-		break;
+if col != undefined {
+	for (var i=0; i<col.length(); i++;) {
+		p = col.get(i);
+		if j == 2 {
+			Kengine.panels.focused = undefined;
+			break;
+		}
+		if not p.is_focused {
+			continue;
+		}
+		j += 1;
+		l = p;
 	}
-	if not p.is_focused {
-		continue;
+	if j == 1 and l != undefined {
+		Kengine.panels.focused = l;
 	}
-	j += 1;
-	l = p;
-}
-if j == 1 and l != undefined {
-	Kengine.panels.focused = l;
-}
 
 
-for (var i=0; i<col.length(); i++;) {
-	p = col.get(i);
-	if Kengine.panels.interact_enabled {if p.step != undefined p.step();}
+	for (var i=0; i<col.length(); i++;) {
+		p = col.get(i);
+		if Kengine.panels.interact_enabled {if p.step != undefined p.step();}
+	}
 }
 #endregion Kengine.panels
