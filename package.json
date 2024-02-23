@@ -1,6 +1,6 @@
 {
   "name": "kengine",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A GameMaker framework that helps with modding functions for your projects.",
   "main": "index.js",
   "repository": {
@@ -20,11 +20,12 @@
   },
   "homepage": "https://github.com/knno/kengine#readme",
   "scripts": {
-    "docs": "npx jsdoc -u docs/tutorials . docs/README.md -r -c docs/jsdoc.json -d docs/output",
-    "prepublishOnly": "npm run jsdoc"
+    "gen-docs-api": "node docs/scripts/jsdoc2md2.js --configure docs/jsdoc.json ./**/*.gml --partials docs/templates/partials"
   },
-  "dependencies": {
-    "docdash": "^2.0.1",
-    "jsdoc": "^4.0.2"
+  "devDependencies": {
+    "docsify": "^4.11.4",
+    "jsdoc": "^4.0.2",
+    "jsdoc-to-markdown": "^8.0.1",
+    "minimist": "^1.2.8"
   }
 }

@@ -6,4 +6,4 @@ imports:
 #      to: Extensions/Kengine/Scripts/Extensions/Parser/Tiny Expression Runtime
 
 exports:
-  - Extensions/Kengine
+  - Kengine

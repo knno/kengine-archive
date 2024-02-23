@@ -36,7 +36,7 @@
   "origin": 0,
   "parent": {
     "name": "Sprites",
-    "path": "folders/Extensions/Kengine/Sprites.yy",
+    "path": "folders/Kengine/Sprites.yy",
   },
   "preMultiplyAlpha": false,
   "sequence": {

@@ -1,0 +1,55 @@
+{{#if deprecated}}***Deprecated***
+
+{{/if~}}
+
+{{#if isNamespace }}
+
+{{#if description}}{{{inlineLinks description}}}
+
+{{/if}}
+
+{{else}}
+
+<!-- tabs:start -->
+
+{{#if description}}
+
+#### **Description**
+
+{{{inlineLinks description}}}
+
+{{/if}}
+
+{{>augments~}}
+{{>implements~}}
+{{>mixes~}}
+{{>default~}}
+{{>chainable~}}
+{{>overrides~}}
+{{>returns~}}
+{{>category~}}
+{{>throws~}}
+{{>fires~}}
+{{>this~}}
+{{>access~}}
+{{>readOnly~}}
+{{>requires~}}
+{{>customTags~}}
+{{>see~}}
+{{>since~}}
+{{>version~}}
+{{>authors~}}
+{{>license~}}
+{{>copyright~}}
+{{>todo~}}
+{{>params~}}
+{{>properties~}}
+
+{{#examples}}
+
+#### **Example**{{#if caption}} *({{caption}})*{{else}}{{/if}}
+{{{inlineLinks example}}}
+{{/examples}}
+<!-- tabs:end -->
+
+{{/if}}

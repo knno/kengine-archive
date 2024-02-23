@@ -6,6 +6,6 @@
   "isDnD": false,
   "parent": {
     "name": "Modman",
-    "path": "folders/Extensions/Kengine/Scripts/Extensions/Modman.yy",
+    "path": "folders/Kengine/Extensions/Modman.yy",
   },
 }

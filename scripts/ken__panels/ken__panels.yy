@@ -6,6 +6,6 @@
   "isDnD": false,
   "parent": {
     "name": "Panels",
-    "path": "folders/Extensions/Kengine/Scripts/Extensions/Panels.yy",
+    "path": "folders/Kengine/Extensions/Panels.yy",
   },
 }

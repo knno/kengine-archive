@@ -6,6 +6,6 @@
   "isDnD": false,
   "parent": {
     "name": "Kengine",
-    "path": "folders/Extensions/Kengine.yy",
+    "path": "folders/Kengine.yy",
   },
 }

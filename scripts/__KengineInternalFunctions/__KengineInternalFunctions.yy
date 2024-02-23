@@ -5,7 +5,7 @@
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
-    "name": "Kengine",
-    "path": "folders/Extensions/Kengine.yy",
+    "name": "Scripts",
+    "path": "folders/Kengine/Scripts.yy",
   },
 }

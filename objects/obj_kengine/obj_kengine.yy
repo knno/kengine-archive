@@ -13,7 +13,7 @@
   "overriddenProperties": [],
   "parent": {
     "name": "Objects",
-    "path": "folders/Extensions/Kengine/Objects.yy",
+    "path": "folders/Kengine/Objects.yy",
   },
   "parentObjectId": null,
   "persistent": true,

@@ -142,7 +142,7 @@
   "maintainGms1Font": false,
   "parent": {
     "name": "Fonts",
-    "path": "folders/Extensions/Kengine/Fonts.yy",
+    "path": "folders/Kengine/Fonts.yy",
   },
   "pointRounding": 0,
   "ranges": [
