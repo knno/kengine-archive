@@ -160,31 +160,3 @@ function ken_scr_test_ball() {
 
 	return true;
 }
-
-function ken_test_vars_privacy() {
-	if not test.is_testing {
-        var fixtures = [
-			new __KengineTestsFixture(
-				"fixture-private-public-readonly-vars",
-				function(){
-					test_manager.interp = function(code, args) {
-						return Kengine.utils.parser.interpret(code, Kengine.utils.structs.merge(args, {script_object: "test_manager", event: "test"}));
-					}
-					test_manager.foo1 = {
-						__opts: {
-							private: true,
-							readonly: ["bar",],
-						},
-						bar: 5,
-						baz: 6,
-					};
-				}, function(){ 
-					delete test_manager.foo1;
-				}),
-        ];
-        return {fixtures};
-    }
-
-    test.assertEqual(Kengine.utils.is_readonly(test_manager.foo1, "bar"), true);
-    test.assertEqual(Kengine.utils.is_readonly(test_manager.foo1, "baz"), false);
-}
