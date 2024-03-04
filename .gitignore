@@ -22,3 +22,5 @@ _*.todo
 options/
 
 .terminal.bashrc
+
+*.log

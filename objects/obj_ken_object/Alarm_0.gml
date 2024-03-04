@@ -1,2 +1,2 @@
 /// @description DO EV
-__kengine_do_ev(Kengine.utils.hashkeys._all.alarm, 0);
+__kengine_do_ev(__KengineHashkeyUtils.__all.alarm, 0);

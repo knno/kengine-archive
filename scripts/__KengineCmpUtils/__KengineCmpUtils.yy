@@ -1,0 +1,13 @@
+{
+  "$GMScript":"",
+  "%Name":"__KengineCmpUtils",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__KengineCmpUtils",
+  "parent":{
+    "name":"__KengineUtils",
+    "path":"folders/Kengine/Scripts/__KengineUtils.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

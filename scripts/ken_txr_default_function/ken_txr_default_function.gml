@@ -1,9 +1,9 @@
 function ken_txr_default_function(){
 	var scr = argument[0];
 	var _scrs = Kengine.asset_types.script.assets;
-	var scr_ind = _scrs.get_ind(scr, function(val1, val2) {
+	var scr_ind = _scrs.GetInd(scr, function(val1, val2) {
 		if ((val1 == val2.name) or (val1 == val2.real_name)) {
-			return not Kengine.utils.is_private(val2, Kengine.utils.parser.constants.default_private);
+			return not __KengineStructUtils.IsPrivate(val2, __KengineParser.__default_private);
 		}
 		return false;
 	});
@@ -12,7 +12,7 @@ function ken_txr_default_function(){
 		var scr_asset = _scrs.get(scr_ind);
 		if scr_asset != undefined {
 			var v;
-			var _run = Kengine.utils.structs.get(scr_asset, "execute") ?? scr_asset.id;
+			var _run = __KengineStructUtils.Get(scr_asset, "execute") ?? scr_asset.id;
 			switch (argument_count) {
 				case  1: return _run();
 				case  2: return _run(argument[1]);

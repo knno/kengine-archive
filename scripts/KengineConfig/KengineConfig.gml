@@ -1,7 +1,21 @@
 /// feather disable all
 
-
 #region Constants
+
+enum KENGINE_COROUTINES_STATUS {
+	IDLE,
+	RUNNING,
+	PAUSED,
+	DONE,
+	FAIL
+}
+
+enum KENGINE_STATUS_TYPE {
+	MAIN = 1,
+	COROUTINES = 2,
+	EXTENSIONS = 4
+}
+
 
 /**
  * @constant KENGINE_CUSTOM_ASSET_KIND
@@ -96,6 +110,61 @@
 #region Configs
 
 /**
+ * @constant KENGINE_MODS_FIND_MODS_FUNCTION
+ * @memberof Kengine~constants
+ * @description A reference to a function that returns mods that are found at game start.
+ * @type {function}
+ * @readonly
+ * @defaultvalue undefined
+ * 
+ */
+#macro KENGINE_MODS_FIND_MODS_FUNCTION (os_get_config() == "Debug" ? Kengine.Extensions.Mods.default_game_find_mods : undefined )
+
+/**
+ * @constant KENGINE_EVENTS_ENABLED
+ * @memberof Kengine~constants
+ * @description Whether Kengine events are enabled.
+ * @type {Bool}
+ * @readonly
+ * @defaultvalue false
+ * 
+ */
+#macro KENGINE_EVENTS_ENABLED (false)
+
+/**
+ * @constant KENGINE_AUTO_INDEX_AT_START
+ * @memberof Kengine~constants
+ * @description Whether index assets at start of kengine.
+ * @type {Bool}
+ * @readonly
+ * @defaultvalue true
+ * 
+ */
+#macro KENGINE_ASSET_TYPES_AUTO_INDEX_AT_START (true)
+
+/**
+ * @constant KENGINE_ASSET_TYPES_AUTO_INDEX_ASYNC
+ * @memberof Kengine~constants
+ * @description Whether Auto indexing should be asynchronous at game start.
+ * @type {Bool}
+ * @readonly
+ * @defaultvalue false
+ * 
+ */
+#macro KENGINE_ASSET_TYPES_AUTO_INDEX_ASYNC (true)
+
+/**
+ * @constant KENGINE_ASSET_TYPES_INDEX_CHUNK_SIZE
+ * @memberof Kengine~constants
+ * @description Auto indexing chunk size. Recommended average is 2000.
+ * @type {Real}
+ * @readonly
+ * @defaultvalue 2000
+ * 
+ */
+#macro KENGINE_ASSET_TYPES_INDEX_CHUNK_SIZE (2000)
+
+/**
  * @member KENGINE_CONSOLE_ENABLED
  * @type {Bool}
  * @memberof Kengine~constants
@@ -132,14 +201,37 @@
 #macro KENGINE_PARSER_FIELD_RULES (os_get_config() == "Debug" ? ["?", "!__"] : ["?", "!_"])
 
 /**
- * @member KENGINE_CONSOLE_LOG_FILE
+ * @member KENGINE_PARSER_DEFAULT_PRIVATE
  * @type {Bool}
  * @memberof Kengine~constants
- * @description console log file for Kengine. It is set to `"kengine.debug.log"` in Debug configuration.
+ * @description Whether parser treats everything as private by default.
  * @defaultvalue false
  * 
  */
-#macro KENGINE_CONSOLE_LOG_FILE ((GM_build_type == "run") ? string("kengine." + string_lower((os_get_config()) + ".log")) : false)
+#macro KENGINE_PARSER_DEFAULT_PRIVATE (false)
+
+/**
+ * @member KENGINE_PARSER_STATICS
+ * @type {Bool}
+ * @memberof Kengine~constants
+ * @description An array of two-elements arrays where the first is the key and the second is the value to be evaluated
+ * upon using that key as an indentifier in parsing.
+ * @defaultvalue ["Kengine", "obj_kengine.__kengine"]
+ * 
+ */
+#macro KENGINE_PARSER_STATICS [\
+	["Kengine", "obj_kengine.__kengine"], \
+]
+
+/**
+ * @member KENGINE_CONSOLE_LOG_FILE
+ * @type {Bool|String}
+ * @memberof Kengine~constants
+ * @description console log file for Kengine. It is set to `"kengine.debug.log"` in Debug configuration.
+ * 
+ */
+#macro KENGINE_CONSOLE_LOG_ENABLED (GM_build_type == "run")
+#macro KENGINE_CONSOLE_LOG_FILE (KENGINE_CONSOLE_LOG_ENABLED ? string("kengine." + string_lower((os_get_config()) + ".log")) : "")
 
 /**
  * @member KENGINE_DEBUG
@@ -149,7 +241,7 @@
  * @defaultvalue false
  * 
  */
-#macro KENGINE_DEBUG (GM_build_type == "run" and (os_get_config() == "Debug"))
+#macro KENGINE_DEBUG (GM_build_type == "run" and (os_get_config() == "Debug" || os_get_config() == "Benchmark"))
 
 /**
  * @member KENGINE_VERBOSITY
@@ -159,7 +251,7 @@
  * @defaultvalue 0
  * 
  */
-#macro KENGINE_VERBOSITY ((os_get_config() == "Debug" || os_get_config() == "Benchmark" || os_get_config() == "Test") ? 2 : 0)
+#macro KENGINE_VERBOSITY ((os_get_config() == "Debug" || os_get_config() == "Benchmark" || os_get_config() == "Test") ? 3 : 0)
 
 /**
  * @member KENGINE_BENCHMARK
@@ -182,14 +274,14 @@
 #macro KENGINE_IS_TESTING (os_get_config() == "Test")
 
 /**
- * @member KENGINE_DEFAULT_INSTANCES_LAYER_NAME
+ * @member KENGINE_DEFAULT_INSTANCES_LAYER
  * @type {String}
  * @memberof Kengine~constants
- * @description Default layer that wrapped instances of {@link KENGINE_WRAPPED_OBJECT} are created on, when layer is not provided.
- * @defaultvalue "Instances"
+ * @description Default layer that wrapped instances of {@link KENGINE_WRAPPED_OBJECT} are created on, when layer is not provided. You can use undefined to create using depth by default.
+ * @defaultvalue undefined
  * 
  */
-#macro KENGINE_DEFAULT_INSTANCES_LAYER_NAME "Instances"
+#macro KENGINE_DEFAULT_INSTANCES_LAYER undefined
 
 /**
  * @member KENGINE_WRAPPED_OBJECT
@@ -214,4 +306,23 @@
 	"sprite", "tileset", "sound", KENGINE_CUSTOM_SCRIPT_ASSETTYPE_NAME, "object", "rm",\
 ])
 
+/**
+ * @member KENGINE_EXTENSIONS_ORDER
+ * @type {Array}
+ * @memberof Kengine~constants
+ * @description Order for extensions loading. Do not modify unless you know what you are doing.
+ * Put the dependants last and put the dependencies that do not depend on others first.
+ * @defaultvalue ["parser", "mods", "panels", "tests",]
+ * 
+ */
+#macro KENGINE_EXTENSIONS_ORDER ([\
+	"parser", "mods", "panels", "tests",\
+])
+
 #endregion Configs
+
+#region Functions
+
+
+
+#endregion

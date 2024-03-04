@@ -9,7 +9,7 @@
         "plugins/markdown",
         "plugins/jsdocgml"
     ],
-    "recurseDepth": 12,
+    "recurseDepth": 2,
     "source": {
         "includePattern": "(ken_|__Kengine|Kengine).*.gml$",
         "excludePattern": ""
@@ -23,6 +23,7 @@
         ]
     },
     "opts": {
+        "recurse": true
     },
     "templates": {
         "monospaceLinks": true,

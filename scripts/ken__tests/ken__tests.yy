@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "ken__tests",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Tests",
-    "path": "folders/Kengine/Extensions/Tests.yy",
+  "$GMScript":"",
+  "%Name":"ken__tests",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ken__tests",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Demo/Scripts.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

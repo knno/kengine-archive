@@ -1,0 +1,13 @@
+{
+  "$GMScript":"",
+  "%Name":"__KengineCollection",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__KengineCollection",
+  "parent":{
+    "name":"__KengineBaseConstructors",
+    "path":"folders/Kengine/Scripts/__KengineBaseConstructors.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

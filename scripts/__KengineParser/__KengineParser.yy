@@ -1,0 +1,13 @@
+{
+  "$GMScript":"",
+  "%Name":"__KengineParser",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__KengineParser",
+  "parent":{
+    "name":"__KengineParser",
+    "path":"folders/Kengine/Scripts/__KengineBaseConstructors/__KengineParser.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

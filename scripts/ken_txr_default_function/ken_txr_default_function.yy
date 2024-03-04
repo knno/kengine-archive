@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "ken_txr_default_function",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Parser",
-    "path": "folders/Kengine/Extensions/Parser.yy",
+  "$GMScript":"",
+  "%Name":"ken_txr_default_function",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ken_txr_default_function",
+  "parent":{
+    "name":"__KengineParser",
+    "path":"folders/Kengine/Scripts/__KengineBaseConstructors/__KengineParser.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

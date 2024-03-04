@@ -40,9 +40,9 @@
 				nameLink: false,
 				loadSidebar: true,
 				loadNavbar: true,
-				subMaxLevel: 3,
+				subMaxLevel: 2,
 				relativePath: true,
-				auto2top: true,
+				auto2top: false,
 				footer: {
 					pre: '<br><hr>',
 					copy: '<span>' + config.name + ' &copy; ' + new Date().getFullYear() + '</span>',
@@ -131,6 +131,17 @@
 						});
 
 						hook.doneEach(() => {
+							// CHANGE LINKS THAT HAS A DOT IN THEM TO HYPHEN
+							const links = document.querySelectorAll('a[href]');
+							for (let link of links) {
+								if (link.href.indexOf('?id=') != -1) {
+									// Replace dots after the ?id=
+									let href = link.href;
+									let index = href.indexOf('?id=');
+									link.href = href.substring(0, index + 4) + href.substring(index + 4).replace(/\./g, '-'); // .replace(/^[Kk]engine\./, '')
+								}
+							}
+
 							// ENSURE CLICKING THE LOGO TAKES US TO THE CORRECT VERSION DOCS
 							var appNameLink = Docsify.dom.find('#home-link');
 
@@ -138,8 +149,23 @@
 								appNameLink.href = vm.config.currentNamespace;
 							}
 
+							// REMOVE DUPLICATE SIDEBAR LINKS
+							var sidebarLinks = [...document.querySelectorAll('.sidebar-nav a')];
+							const sidebarTexts = [];
+							const sidebarAddedLinks = [];
+							sidebarLinks.forEach((link) => {
+							  if (sidebarTexts.indexOf(link.text) !== -1) {
+								if (link.parentElement.parentElement.parentElement == sidebarAddedLinks[sidebarTexts.indexOf(link.text)].parentElement.parentElement.parentElement) {
+									link.remove();
+								}
+							} else {
+								sidebarTexts.push(link.text);
+								sidebarAddedLinks.push(link);
+							  }
+							});
+
 							// ENSURE ANCHOR LINKS WILL STILL SCROLL INTO VIEW AS MANY TIMES AS NEEDED
-							var sidebarLinks = document.getElementsByTagName('a');
+							sidebarLinks = document.getElementsByTagName('a');
 							for (let link of sidebarLinks) {
 								if (Docsify.util.isExternal(link.href) === false && link.id !== 'home-link') {
 									link.addEventListener('click', (e) => {
@@ -258,10 +284,11 @@
 		<script src="//unpkg.com/docsify-namespaced/dist/docsify-namespaced.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/js/docsify-themeable.min.js"></script>
 		<script src="//unpkg.com/docsify-footer-enh/dist/docsify-footer-enh.min.js"></script>
-		<script src="https://cdn.jsdelivr.net/npm/docsify-tabs@1"></script>
+		<script src="https://cdn.jsdelivr.net/npm/docsify-tabs@latest"></script>
 		<script src="//unpkg.com/@rakutentech/docsify-code-inline/dist/index.min.js"></script>
 		<script src="https://unpkg.com/prismjs@1.24.0/components/prism-gml.min.js"></script>
 		<script src="https://unpkg.com/docsify-copy-code@2"></script>
+		<script src="/docs/assets/fix-scroll.js"></script>
 		<style>
 			/* https://jhildenbiddle.github.io/docsify-themeable/#/customization */
 			:root {

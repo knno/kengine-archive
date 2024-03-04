@@ -1,0 +1,13 @@
+{
+  "$GMScript":"",
+  "%Name":"__KengineBenchmarkUtils",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__KengineBenchmarkUtils",
+  "parent":{
+    "name":"__KengineUtils",
+    "path":"folders/Kengine/Scripts/__KengineUtils.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

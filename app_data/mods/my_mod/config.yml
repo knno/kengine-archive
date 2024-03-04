@@ -1,0 +1,36 @@
+name: my_mod
+description: Mod Example
+assets:
+  sprite:
+    - name: spr_something
+
+  tileset:
+    - name: ts_my_mod_outside
+      sprite: spr_my_mod_outside_tileset
+
+  kscript:
+    - name: kscript_1
+      path: obj_my_mod_ball/create.scr
+
+  object:
+    - name: obj_my_mod_ball
+      parent: noone
+      sprite: spr_ball
+      event_scripts:
+        create: kscript_1 # obj_my_mod_ball/create.scr
+        step: obj_my_mod_ball/step.scr
+        draw: @draw_self
+
+  script:
+    - name: alaa
+      path: spr
+
+  room:
+    - name: rm_alaaa
+      path: rooms/rm_alaaa.json
+
+# Enable this mod with:
+#
+# Kengine.mods.mod_manager.enable("my_mod");
+# Kengine.utils.instance_create("obj_my_mod_ball",0,0);
+#

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"",
+  "%Name":"__KengineTestsTestManager",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__KengineTestsTestManager",
+  "parent":{
+    "name":"Tests",
+    "path":"folders/Kengine/Scripts/Extensions/Tests.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

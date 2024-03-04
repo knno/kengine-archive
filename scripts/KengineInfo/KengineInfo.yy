@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "KengineInfo",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Kengine",
-    "path": "folders/Kengine.yy",
+  "$GMScript":"",
+  "%Name":"KengineInfo",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"KengineInfo",
+  "parent":{
+    "name":"Kengine",
+    "path":"folders/Kengine.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

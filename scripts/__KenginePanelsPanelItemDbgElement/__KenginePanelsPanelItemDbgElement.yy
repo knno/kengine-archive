@@ -1,0 +1,13 @@
+{
+  "$GMScript":"",
+  "%Name":"__KenginePanelsPanelItemDbgElement",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__KenginePanelsPanelItemDbgElement",
+  "parent":{
+    "name":"Panels",
+    "path":"folders/Kengine/Scripts/Extensions/Panels.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

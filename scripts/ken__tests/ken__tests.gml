@@ -1,593 +1,87 @@
-/**
- * @namespace tests
- * @memberof Kengine
- * @description Kengine's Tests extension
- * 
- * Note - Disabling copy on write behavior for arrays is required.
- *
- */
-Kengine.tests = {
-    fixtures: [], // Default fixtures
-    testing_tests: [], // Current active tests.
-    test_manager: undefined,
-};
+#region callables
 
+function ken_scr_test_leaks(){
+	// Test Leak 1: events.
+	repeat (10000) {__KengineEventUtils.Fire("awesome", {obj: "hii"});} // NO LEAKS! :D
 
-/**
- * @function AssertionError
- * @constructor
- * @new_name Kengine.tests.AssertionError
- * @memberof Kengine.tests
- * @param {Struct} error The main causing error struct.
- * @param {String} [message] A message for the assertion. Defaults to that of `error` param.
- * @param {String} [longMessage] A long message for the assertion. Defaults to that of `error` param.
- * @description An AssertionError is thrown by a test function.
- * 
- * @example
- * var assertion_error = new Kengine.tests.AssertionError(
- *     Kengine.utils.errors.create(
- *         "myext__foo__does_not_exist",
- *         string("Foo \"{0}\" does not exist.", foo.name)
- * )));
- * 
- */
-function __KengineTestsAssertionError(error, message=undefined, longMessage=undefined) constructor {
+	// Test Leak 2: Cscripts.
+	var i = 10000;
+	while (--i>0) {__KengineParserUtils.Interpret("var dummy_var; dummy_var = string(arg);", {arg: i})}; // NO LEAKS! :D
 
-    /**
-     * @name error
-     * @type {Struct}
-     * @memberof Kengine.tests.AssertionError
-     * @description The main causing error struct.
-     * 
-     */
-    self.error = error;
-
-    /**
-     * @name message
-     * @type {String}
-     * @memberof Kengine.tests.AssertionError
-     * @description A message for the assertion. Defaults to that of `error`.
-     * 
-     */
-    self.message = message ?? error.message;
-
-    /**
-     * @name longMessage
-     * @type {String}
-     * @memberof Kengine.tests.AssertionError
-     * @description A long message for the assertion. Defaults to that of `error`.
-     *
-     */
-    self.longMessage = longMessage ?? error.longMessage;
-
+	return true;
 }
 
-/**
- * @function Fixture
- * @constructor
- * @new_name Kengine.tests.Fixture
- * @memberof Kengine.tests
- * @description A fixture is a struct that contains `name`, and `func_setup` and `func_cleanup` functions.
- * @param {String} name The name of the fixture.
- * @param {Function} _func_setup The function of the fixture that setups the test.
- * @param {Function} _func_cleanup The function of the fixture that cleans up the test.
- *
- */
-function __KengineTestsFixture(name, _func_setup, _func_cleanup) constructor {
+function ken_scr_test_custom_script(){
+	var at_cscripts = Kengine.asset_types[$ KENGINE_CUSTOM_SCRIPT_ASSETTYPE_NAME];
+	var foo_cscript = new Kengine.Asset(at_cscripts, "kscr_foo", false, 1234);
+	foo_cscript.src = "print_error(\"LOL!\");\n" + 
+		"print(arguments);\n" +
+		"print(array_get(arguments, 0));\n" +
+		"array_set(arguments, 0, 588);\n" +
+		"print(arguments[0]);\n" +
+		"arguments[0] = 59;\n" +
+		"print(array_get(arguments, 0));\n" +
+		"return 69";
+	foo_cscript.Compile();
 
-    /**
-     * @name name
-     * @type {String}
-     * @memberof Kengine.tests.Fixture
-     * @description The name of the fixture.
-     *
-     */
-    self.name = name;
-
-    var _fixtures = Kengine.tests.fixtures;
-    for (var i=0; i<array_length(_fixtures); i++) {
-        if _fixtures[i].name == name {
-            throw Kengine.utils.errors.create(Kengine.utils.errors.types.tests__fixture__exists, string("Fixture \"{0}\" already defined.", name));
-        }
-    }
-
-    /**
-     * @name _testing_tests
-     * @type {Array<Kengine.tests.Test>}
-     * @memberof Kengine.tests.Fixture
-     * @description A list of tests that are running and dependent on this fixture.
-     * 
-     */
-    self._testing_tests = [];
-
-    /**
-     * @function func_setup
-     * @memberof Kengine.tests.Fixture
-     * @description The function of the fixture that setups the test.
-     *
-     */
-    self.func_setup = _func_setup;
-
-    /**
-     * @function func_cleanup
-     * @memberof Kengine.tests.Fixture
-     * @description The function of the fixture that cleans up the test.
-     *
-     */
-    self.func_cleanup = _func_cleanup;
-
-    /**
-     * @name is_applied
-     * @type {Bool}
-     * @memberof Kengine.tests.Fixture
-     * @description Whether fixture is applied (active) or not.
-     *
-     */
-    self.is_applied = false;
-
-    /**
-     * @function setup
-     * @memberof Kengine.tests.Fixture
-     * @description A function that sets up the fixture data.
-     * @param {Struct|Undefined} [args] A struct containing `{test}`.
-     *
-     */
-    self.setup = function(args=undefined) {
-        if not self.is_applied {
-            method({test_manager: Kengine.tests.test_manager}, self.func_setup)();
-            self.is_applied = true;
-            array_push(self._testing_tests, args.test);
-        }
-    };
-
-    /**
-     * @function cleanup
-     * @memberof Kengine.tests.Fixture
-     * @description A function that cleans up the fixture data. This is done when there are no dependents tests running.
-     * @param {Struct|Undefined} [args] A struct containing `{test}`.
-     *
-     */
-    self.cleanup = function(args=undefined) {
-        if self.is_applied {
-            array_delete(self._testing_tests, array_get_index(self._testing_tests, args.test), 1);
-            if array_length(self._testing_tests) == 0 {
-	            method({test_manager: Kengine.tests.test_manager}, self.func_cleanup)();
-                self.is_applied = false;
-            }
-        }
-    };
-
-    _fixtures = Kengine.tests.fixtures; _fixtures[array_length(_fixtures)] = self;
+	return Kengine.Utils.Execute(foo_cscript, ["55", "66"]);
 }
 
-/**
- * @function Test
- * @constructor
- * @new_name Kengine.tests.Test
- * @memberof Kengine.tests
- * @param {String} name The name of the test. Defaults to found function's name.
- * @param {Array<String>|Array<Kengine.tests.Fixture>|Array<Struct>} fixtures An array of fixtures or fixture names or structs containing `{name, func_setup, func_cleanup}`. They will be resolved upon testing.
- * @param {Function} func The main function of the test. Defaults to the found function.
- * @param {Function} step_func A function to use for each step during the test. If it equals `"func"`, it is set to the same `func`. Defaults to `undefined`.
- * @description A test is a simple function wrapper that requires fixtures to be applied before calling, and cleaned after its done.
- *
- */
-function __KengineTestsTest(name, fixtures, func, step_func=undefined) constructor {
-    var this = self;
+function ken_scr_test_ball() {
 
-    /**
-     * @name name
-     * @type {String}
-     * @memberof Kengine.tests.Test
-     * @description The name of the test.
-     *
-     */
-    self.name = name;
+	Kengine.console.echo(" - Running scr_test_ball");
+	var at_objects = Kengine.asset_types.object;
 
-    /**
-     * @name fixtures
-     * @type {Array<Kengine.tests.Fixture>}
-     * @memberof Kengine.tests.Test
-     * @description An array of fixtures that are resolved upon testing.
-     *
-     */
-    self.fixtures = fixtures ?? [];
+	var ball_obj_index = at_objects.assets.GetInd("obj_ken_test_beach_ball", Kengine.Utils.Cmps.cmp_val1_val2_name);
+	Kengine.console.echo(" - Beach Ball index: " + string(ball_obj_index));
 
-    /**
-     * @name is_testing
-     * @type {Bool}
-     * @memberof Kengine.tests.Test
-     * @description Whether the test is being tested right now.
-     *
-     */
-    self.is_testing = false;
+	if ball_obj_index != -1 {
+		var ball_obj = at_objects.assets.Get(ball_obj_index);
+		Kengine.console.echo(" - Beach Ball object: " + string(ball_obj));
+		var beach_ball_asset = new Kengine.Asset(at_objects, "obj_ken_test_beach_ball", false, 5123);
 
-	Kengine.utils.events.fire("tests__test__init__before", {test: this});
+		Kengine.console.echo(" - Beach Ball Asset: " + string(beach_ball_asset));
+		ball_obj.ReplaceBy(beach_ball_asset);
+	} else {
+		Kengine.console.echo(" - Beach Ball was not created.");
+		return;
+	}
 
-    /**
-     * @name resolve_fixtures
-     * @type {Function}
-     * @memberof Kengine.tests.Test
-     * @description Resolve the `fixtures` of the test. It is called inside the {@link Kengine.tests.Test.test} function.
-     * @return {Array<Kengine.tests.Fixture>}
-     * @throws {Kengine.tests.AssertionError}
-     *
-     */
-    self.resolve_fixtures = method({this}, function() {
-        var resolved_fixtures = [];
-        array_foreach(this.fixtures, method({this, resolved_fixtures}, function(_element, _index) {
-            if !is_instanceof(_element, Kengine.tests.Fixture) {
-                var _ind = array_find_index(Kengine.tests.fixtures, method({_element}, function(_element2, _index2) {
-                    if is_string(_element) {
-                        return _element2.name == _element;
-                    } else if is_struct(_element) {
-                        return _element2.name == _element.name;
-                    }
-                }));
-                if _ind > -1 {
-                    resolved_fixtures[array_length(resolved_fixtures)] = Kengine.tests.fixtures[_ind];
-                } else {
-                    var fixname = _element;
-                    var broken = true;
-                    var new_fixture;
-                    if is_struct(_element) {
-                        try {
-                            fixname = _element.name;
-                            new_fixture = new __KengineTestsFixture(fixname, _element.func_setup, _element.func_cleanup);
-                            broken = false;
-                        } catch (e) {
-                            //
-                        }
-                    }
-                    if broken {
-                        throw new __KengineTestsAssertionError(
-                            Kengine.utils.errors.create(
-                                Kengine.utils.errors.types.tests__fixture__does_not_exist,
-                                string("Test \"{0}\" fixture \"{1}\" does not exist.", this.name, fixname)
-                        ));
-                    } else {
-                        resolved_fixtures[array_length(resolved_fixtures)] = new_fixture;
-                    }
-                }
-            } else {
-                resolved_fixtures[array_length(resolved_fixtures)] = _element;
-            }
-        }));
-        this.fixtures = resolved_fixtures;
-        return this.fixtures;
-    });
+	var new_ball = Kengine.Utils.GetAsset(at_objects, "obj_ken_test_beach_ball");
+	Kengine.console.echo(" - New Ball: " +string(new_ball));
 
-    /**
-     * @function test
-     * @memberof Kengine.tests.Test
-     * @description The entry test function. Set the `results` struct on the test object.
-     * Basically Run `func` and if there's any errors it calls `fail` otherwise it calls `success`.
-     *
-     */
-    self.test = method({this}, function() {
-        this.result = {
-            // test: this,
-            assertions: 0,
-            success: undefined,
-            error: undefined,
-            output: undefined,
-        };
+	var ball_1 = Kengine.Utils.Instance.CreateDepth(new_ball, 0, 50,50);
 
-		try {this.fixtures = this.resolve_fixtures();}
-        catch (error) {
-            this.fail(error);
-            return; // Nothing done.
-        }
-
-        for (var i=0; i<array_length(this.fixtures); i++) {
-            this.fixtures[i].setup({
-                test: this,
-				test_manager: Kengine.tests.test_manager,
-            });
-        }
-        try {
-            this.is_testing = true;
-            array_push(Kengine.tests.test_manager.testing_tests, this);
-
-            method({test_manager: Kengine.tests.test_manager, test: this}, this.func)();
-            return true;
-
-        } catch (error) {
-            this.fail(error);
-        }
-    });
-
-    self.proceed = method({this}, function() { // Async
-        if this.step_func != undefined {
-			method({test_manager: Kengine.tests.test_manager, test: this}, this.step_func)();
-        }
-        if this.result.error != undefined {
-            this.result.success = false;
-        }
-
-        if this.result.success != undefined {
-            this.finish();
-            return 2;
-        }
-	});
-
-    self.finish = method({this}, function() {
-        for (var i=0; i<array_length(this.fixtures); i++) {
-            this.fixtures[i].cleanup({
-                test: this,
-            });
-        }
-        array_delete(Kengine.tests.test_manager.testing_tests, array_get_index(Kengine.tests.test_manager.testing_tests, this), 1);
-        this.is_testing = false;
-        return true;
-    });
-
-    /**
-     * @function fail
-     * @memberof Kengine.tests.Test
-     * @param {Any} error
-     * @description Fail test. Change the test result.
-    *
-     */
-    self.fail = method({this}, function(error) {
-        this.result.success = false;
-        this.result.error = error;
-    });
-    
-    /**
-     * @function done
-     * @memberof Kengine.tests.Test
-     * @param {Any} output
-     * @description A function to be called at the end of the test script.
-     *
-     */
-    self.done = method({this}, function(output) {
-        this.result.success = true;
-        this.result.output = output;
-    });
-
-    /**
-     * @function assertEqual
-     * @memberof Kengine.tests.Test
-     * @description asserts in the test that two values are equal.
-     * @param {Any} val1 Value 1
-     * @param {Any} val2 Value 2
-     * @throws {Kengine.tests.AssertionError}
-     *
-     */
-    self.assertEqual = method({this}, function(val1, val2) {
-        if val1 == val2 {
-            this.result.assertions++;
-        } else {
-            throw new __KengineTestsAssertionError(
-                Kengine.utils.errors.create(
-                    Kengine.utils.errors.types.tests__assertion__is_not,
-                    string("Test \"{0}\" AssertionError: {1} is not {2}", this.name, val1, val2)
-            ));
-        }
-    });
-
-    /**
-     * @name func
-     * @type {Function}
-     * @memberof Kengine.tests.Test
-     * @description The main provided function of the test. Defaults to the found function. If it's a function that begins with {@link KENGINE_TEST_FUNCTION_PREFIX},
-     * then it is called when initiating the test and again when the test actually takes place. You can differentiate that within the test function by the reference variable `test` which is the current test.
-     * 
-     * @example
-     * function ken_test_foo() {
-     *     if test.is_testing {
-     *         return {fixtures: ...}
-     *     } else {
-     *         test.assertEqual(1, 1);
-     *         test.done();
-     *     };
-     * }
-     *
-     */
-    
-    var r = false;
-
-	self.func = func;
-	if self.func != undefined {
-        self.func = method({test: this}, self.func);
-		var n = script_get_name(self.func);
-	    if string_starts_with(n, KENGINE_TEST_FUNCTION_PREFIX)
-            or string_starts_with(n, "gml_Script_" + KENGINE_TEST_FUNCTION_PREFIX) {
-                r = true;
-		}
-    }
-    
-    /**
-     * @function step_func
-     * @memberof Kengine.tests.Test
-     * @description A function to use for each step during the test.
-     *
-     */
-    self.step_func = step_func;
-    if self.step_func != undefined {
-        if self.step_func == "func" {
-            self.step_func = self.func;
-        }
-        self.step_func = method({test: this}, self.step_func);
-    }
-
-
-    if r {
-        // Run once initiated to get the fixture set.
-        self.is_testing = false;
-        r = method({test: this}, self.func)();
-        if is_struct(r) {
-            self.name = Kengine.utils.structs.exists(r, "name") ? Kengine.utils.structs.get(r, "name") : self.name;
-            self.fixtures = Kengine.utils.structs.exists(r, "fixtures") ? Kengine.utils.structs.get(r, "fixtures") : self.fixtures;
-            self.func = Kengine.utils.structs.exists(r, "func") ? method({test: this}, Kengine.utils.structs.get(r, "func")) : self.func;
-            self.step_func = Kengine.utils.structs.exists(r, "step_func") ? method({test: this}, Kengine.utils.structs.get(r, "step_func")) : self.step_func;
-        } else {
-            throw Kengine.utils.errors.create(Kengine.utils.errors.types.tests__test__func_invalid_return, string("Test \"{0}\" function did not return a struct.", self.name));
-        }
-    }
-
-    Kengine.utils.events.fire("tests__test__init__after", {test: this});
+	return true;
 }
 
-/**
- * @function TestManager
- * @memberof Kengine.tests
- * @constructor
- * @description A test manager is a singleton that is created if `Kengine.tests.is_testing` is `true`.
- * It finds tests and does them one by one.
- * 
- */
-function __KengineTestsTestManager() constructor {
-	var this = self;
+#endregion callables
 
-    self._console_tag = "Kengine: Tests: ";
-    self.testing_tests = [];
-    // self.available_tests = tests;
-
-    self.reports = undefined;
-    self.step_enabled = true;
-
-    self.find_tests = function() {
-        var fs = {};
-        var founds = Kengine.asset_types.script.assets.filter(function (val) {
-            return string_starts_with(val.name, KENGINE_TEST_FUNCTION_PREFIX)
-                or string_starts_with(val.name, "gml_Script_" + KENGINE_TEST_FUNCTION_PREFIX);
-        });
-        var scr;
-        for (var i=0; i<array_length(founds); i++) {
-            fs[$ founds[i].name] = new __KengineTestsTest(
-                founds[i].name, undefined, founds[i].id,
-            );
-        }
-        self.available_tests = fs;
-        return fs;
-    }
-
-    self.test = method({this}, function() {
-        var test, test_name, _at = struct_get_names(this.available_tests);
-		array_sort(_at, true);
-        this.reports = {};
-        for (var i=0; i<array_length(_at); i++) {
-            test_name = _at[i];
-            test = this.available_tests[$ test_name];
-            test.__console_msg_data = undefined;
-            if KENGINE_CONSOLE_ENABLED {
-                test.__console_msg_data = {
-                    msg: Kengine.console.echo_ext(this._console_tag + test_name, c_dkgray),
-                    fmt: this._console_tag + test_name + ": " + "%status%" + " " + "%dots%  %error%",
-                };
-            }
-            Kengine.utils.structs.set(this.reports, test.name, {
-                _status: "SETUP",
-            });
-            test.test();
-        }
-    })
-
-    self.step = method({this}, function() {
-        var test, status, report;
-        if array_length(this.testing_tests) == 0 {
-            if this.reports != undefined { // Done test() at least once.
-                this.save_reports();
-                this.step_enabled = false;
-            }
-        }
-        for (var i=0; i<array_length(this.testing_tests); i++) {
-            test = this.testing_tests[i];
-            report = Kengine.utils.structs.get(this.reports, test.name);
-            status = method({this: test}, test.proceed)();
-            if status == 2 { // removes it already from array if 2
-                if Kengine.utils.structs.exists(test.result, "assertions") {report.assertions = test.result.assertions;};
-                if Kengine.utils.structs.exists(test.result, "success") {report.success = test.result.success;};
-                if Kengine.utils.structs.exists(test.result, "error") {report.error = test.result.error;};
-                if Kengine.utils.structs.exists(test.result, "output") {report.output = test.result.output;};
-
-                if report.success {
-                    report._status = "SUCCESS";
-                } else {
-                    report._status = "FAIL";
-                }
-
-            } else {
-                report._status = "PROGRESS";
-            }
-
-            // Update console.
-            if KENGINE_CONSOLE_ENABLED {
-                var _st = undefined; var __st = undefined; var _c = c_dkgray;
-                __st = (report._status == "SUCCESS") ? "S" : ((report._status == "FAIL") ? "F" : "P");
-                if __st == "P" {
-                    _st = Kengine.utils.ascii.get_braille_dot();
-                    _c = c_yellow;
-                } else if __st == "S" {
-                    _st = __st; //"✔"
-                    _c = c_lime;
-                } else if __st == "F" {
-                    _st = "X"; // __st // "✘"
-                    _c = c_red;
-                } else {
-                    _st = __st;
-                }
-
-                test.__console_msg_data.ind = array_find_index(Kengine.console.texts, method({test, this}, function(_element, _index){
-					return string_starts_with(_element, this._console_tag + test.name);
-				}));
-				if test.__console_msg_data.ind != -1 {
-	                test.__console_msg_data.msg = test.__console_msg_data.fmt;
-	                test.__console_msg_data.msg = string_replace_all(test.__console_msg_data.msg, "%status%", _st);
-	                test.__console_msg_data.msg = string_replace_all(test.__console_msg_data.msg, "%dots%", string_repeat(".", (Kengine.utils.structs.get(test.result, "assertions") ?? (Kengine.utils.structs.get(report, "assertions") ?? 0))));
-					test.__console_msg_data.msg = string_replace_all(test.__console_msg_data.msg, "%error%", (Kengine.utils.structs.get(test.result, "error") != undefined ? (is_string(test.result.error) ? test.result.error : (Kengine.utils.structs.get(test.result.error, "longMessage") ?? "")) : ""));
-	                Kengine.console.texts[test.__console_msg_data.ind] = test.__console_msg_data.msg;
-	                Kengine.console.texts_color[test.__console_msg_data.ind] = _c;
-				}
-            }
-        }
-    });
-
-    self.save_reports = function() {
-        var _rnames = struct_get_names(self.reports);
-        var s = $"{array_length(_rnames)} tests passed ✔";
-        var c = c_lime;
-        var fails = 0;
-        for (var i=0; i<array_length(_rnames); i++) {
-            if not self.reports[$ _rnames[i]].success {
-                c = c_red;
-                fails++;
-            }
-        }
-        if c == c_red {
-            s = $"{fails}/{array_length(_rnames)} tests failed ✘";
-        }
-
-        Kengine.console.echo_ext("Kengine: Tests: " + s, c, true, true);
-    }
-}
+#region tests
 
 function ken_test_foo1_foo() {
     if not test.is_testing {
         var fixtures = [
-			new __KengineTestsFixture("fixture01", function(){ show_debug_message("Fixture01 setup!")}, function(){ show_debug_message("Fixture01 cleanup!")}),
+			new Kengine.Extensions.Tests.Fixture("fixture01", function(){ __kengine_log("Fixture01 setup!")}, function(){ __kengine_log("Fixture01 cleanup!")}),
         ];
         return {fixtures};
     }
 
-    test.assertEqual("hi", "hi");
-    test.done();
+    test.AssertEqual("hi", "hi");
+    test.Done();
 }
 
 function ken_test_foo1_bar() {
     if not test.is_testing {
         var fixtures = [
-            new __KengineTestsFixture("fixture02", function(){ show_debug_message("Fixture02 setup!")}, function(){ show_debug_message("Fixture02 cleanup!")}),
+            new Kengine.Extensions.Tests.Fixture("fixture02", function(){ __kengine_log("Fixture02 setup!")}, function(){ __kengine_log("Fixture02 cleanup!")}),
         ];
         return {fixtures};
     }
 
-    test.assertEqual("hi", "hi");
-    test.assertEqual("hi", "hi");
-    test.done();
-    // test.done();
+    test.AssertEqual("hi", "hi");
+    test.AssertEqual("hi", "hi");
+    test.Done();
 }
 
 function ken_test_foo1_baz() {
@@ -598,82 +92,165 @@ function ken_test_foo1_baz() {
     }
 
     if test.foo1baz > 100 {
-        test.done();
+        test.Done();
     } else {
-        // test.assertEqual(3, test.foo1baz); fails the test.
+        // test.AssertEqual(3, test.foo1baz); fails the test.
         test.foo1baz ++;
         if test.foo1baz mod 10 == 1{
-            test.assertEqual(true, true);
+            test.AssertEqual(true, true);
         }
     }
 }
 
+function ken_test_balls_collide() {
+    if not test.is_testing {
+        test.timer = 0;
+        test.step_func = test.func;
+        test.fixtures = [
+            new Kengine.Extensions.Tests.Fixture("fixture-ball-object", function(){
+                // Setup
+                __kengine_log("Balls are being setup.");
+            	var at_objects = Kengine.asset_types.object;
+                var ball_asset;
+                var ball_par_asset;
 
-function ken_init_ext_tests() {
+                var ball_par_obj_index = at_objects.assets.GetInd("obj_ken_test_ball_parent", Kengine.Utils.Cmps.cmp_val1_val2_index);
+                if ball_par_obj_index == -1 {
+                    ball_par_asset = new Kengine.Asset(at_objects, "obj_ken_test_ball_parent");
+                }
 
-	/**
-	 * @member {String} tests__test__func_invalid_return
-	 * @memberof Kengine.utils.errors.types
-	 * @description Test function did not return a struct.
-	 */
-	Kengine.utils.errors.types.tests__test__func_invalid_return = "Test function did not return a struct.";
+                // Ball
+                var ball_obj_index = at_objects.assets.GetInd("obj_ken_test_ball", Kengine.Utils.Cmps.cmp_val1_val2_index);
+                if ball_obj_index == -1 {
+                    ball_asset = new Kengine.Asset(at_objects, "obj_ken_test_ball");
+                    ball_asset.parent = ball_par_asset;
+                    ball_asset.sprite = spr_ken_ball;
+                    ball_asset.event_scripts = {
+                        create: function() {
+							//wrapper.asset = Kengine.Utils.GetAsset("object", "obj_ken_test_ball");
+                            wrapper.instance.direction = choose(45, 135, 225, 315);
+                            wrapper.instance.speed = 30;
+                            wrapper.collided = false;
+                            var ff = wrapper.instance.id;
+                            __kengine_log($"A ball instance with ID: {ff} created.");
+                        },
+                        collision: function() {
+                            wrapper.instance.x = wrapper.instance.xprevious;
+                            wrapper.instance.y = wrapper.instance.yprevious;
+                            wrapper.instance.direction += 180;
+							wrapper.instance.image_blend = c_lime;
+                            wrapper.collided = true;
+                        },
+                        step: function() {
+							var inst = wrapper.instance;
+                            if inst.x > room_width {
+                                if inst.direction == 45 inst.direction = 135 else inst.direction = 225;
+                            } else if inst.x < 0 {
+                                if inst.direction == 135 inst.direction = 45 else inst.direction = 315;
+                            }
 
-	/**
-	 * @member {String} tests__fixture__does_not_exist
-	 * @memberof Kengine.utils.errors.types
-	 * @description Test fixture does not exist.
-	 */
-	Kengine.utils.errors.types.tests__fixture__does_not_exist = "Test fixture does not exist.";
+                            if inst.y > room_height {
+                                if inst.direction == 225 inst.direction = 135 else inst.direction = 45;
+                            } else if inst.y < 0 {
+                                if inst.direction == 135 inst.direction = 225 else inst.direction = 315;
+                            }
+                        },
+						draw: function() {
+							var inst = wrapper.instance;
+							with inst {
+								if sprite_exists(sprite_index) draw_self();
+							}
+						}
+                    }
+                } else {
+                    ball_asset = at_objects.assets.Get(ball_obj_index);
+                    __kengine_log("Asset already found.");
+                }
+                Kengine.Extensions.Tests.test_manager.ball_asset = ball_asset;
 
-	/**
-	 * @member {String} tests__assertion__is_not
-	 * @memberof Kengine.utils.errors.types
-	 * @description Assertion failure.
-	 */
-	Kengine.utils.errors.types.tests__assertion__is_not = "Assertion failure.";
+                // Instancing
+                Kengine.Extensions.Tests.test_manager.ball_1 = Kengine.Utils.Instance.CreateDepth(50, 50, 0, ball_asset);
+                Kengine.Extensions.Tests.test_manager.ball_2 = Kengine.Utils.Instance.CreateDepth(200, 300, 0, ball_asset);
+				// test.ball_1.instance.sprite_index = spr_ball;
+				// test.ball_2.instance.sprite_index = spr_ball;
 
-	/**
-	 * @event tests__test__init__before
-	 * @type {Array<Function>}
-	 * @description An event that fires before initializing a Kengine Test.
-	 * If you have replaced the class, you need to reimplement this event.
-	 *
-	 * Functions accept two arguments, the second is a struct: `event, {test}`.
-	 *
-	 * `event`: The event.
-	 *
-	 * `test`: The {@link Kengine.tests.Test} being constructed.
-	 *
-	 */
-    Kengine.utils.events.define("tests__test__init__before");
+                if Kengine.Utils.Instance.Exists(ball_asset) {
+                    __kengine_log("Balls are created.");
+                }
 
-    /**
-	 * @event tests__test__init__after
-	 * @type {Array<Function>}
-	 * @description An event that fires after initializing a Kengine Test.
-	 * If you have replaced the class, you need to reimplement this event.
-	 *
-	 * Functions accept two arguments, the second is a struct: `event, {test}`.
-	 *
-	 * `event`: The event.
-	 *
-	 * `test`: The {@link Kengine.tests.Test} being constructed.
-	 *
-	 */
-    Kengine.utils.events.define("tests__test__init__after");
+                // ken_with(ball_par_asset, function(inst) {
+                    // Any code.
+					// __kengine_log(inst);
+                // })
 
-	Kengine.tests.Test = __KengineTestsTest;
-	Kengine.tests.Fixture = __KengineTestsFixture
-	Kengine.tests.AssertionError = __KengineTestsAssertionError
-	Kengine.tests.TestManager = __KengineTestsTestManager
+                }, function() {
+                    Kengine.Extensions.Tests.test_manager.ball_1.Destroy();
+                    Kengine.Extensions.Tests.test_manager.ball_2.Destroy();
+                    Kengine.Extensions.Tests.test_manager.ball_asset = undefined;
+                }),
+        ];
+        return {fixtures: test.fixtures};
+    }
 
-    Kengine.tests.test_manager = undefined;
-    if KENGINE_IS_TESTING {
-        Kengine.tests.test_manager = new Kengine.tests.TestManager();
-        Kengine.tests.test_manager.find_tests();
-        Kengine.tests.test_manager.test();
-
+    if test.timer > 600 {
+		test.Fail("No collision in 10 seconds!");
     } else {
-        Kengine.tests = undefined;
+        test.timer ++;
+		if struct_exists(test_manager.ball_1, "collided") {
+	        if test_manager.ball_1.collided {
+				test.Done();
+			}
+		}
     }
 }
+
+// TODO Enable once mods are rewritten
+function __old__ken_test_mods_enabling_disabling() {
+	// TODO Enable once mods are rewritten
+	if not test.is_testing {
+		var fixtures = [
+			new Kengine.Extensions.Tests.Fixture("fixture-add-mods", function() {
+				Kengine.Extensions.Tests.test_manager.testing_mods = [];
+				Kengine.Extensions.Tests.test_manager.testing_mods[array_length(Kengine.Extensions.Tests.test_manager.testing_mods)] = new __KengineMods.Mod("Kawazaki-01");
+				Kengine.Extensions.Tests.test_manager.testing_mods[array_length(Kengine.Extensions.Tests.test_manager.testing_mods)] = new __KengineMods.Mod("Kawazaki-02");
+				Kengine.Extensions.Tests.test_manager.testing_mods[array_length(Kengine.Extensions.Tests.test_manager.testing_mods)] = new __KengineMods.Mod("Kawazaki-03", undefined, ["Kawazaki-01"]);
+				// Creating mods makes it a found mod automatically.
+				
+			}, function() {
+				var i = 3;
+				while --i > 0 {
+					__KengineMods.mod_manager.DisableMod(Kengine.Extensions.Tests.test_manager.testing_mods[i], 2);
+				}
+			}),
+		];
+		return {fixtures}
+	}
+	var mods = __KengineTests.test_manager.testing_mods;
+	test.AssertEqual(mods[0].enabled, false);
+	test.AssertEqual(mods[1].enabled, false);
+	test.AssertEqual(mods[2].enabled, false);
+	__KengineMods.mod_manager.EnableMod("Kawazaki-01");
+	test.AssertEqual(mods[0].enabled, true);
+	test.AssertEqual(mods[1].enabled, false);
+	test.AssertEqual(mods[2].enabled, false);
+	__KengineMods.mod_manager.DisableMod("Kawazaki-01");
+	test.AssertEqual(mods[0].enabled, false);
+	test.AssertEqual(mods[1].enabled, false);
+	test.AssertEqual(mods[2].enabled, false);
+	__KengineMods.mod_manager.EnableMod("Kawazaki-03", 2);
+	test.AssertEqual(mods[0].enabled, true);
+	test.AssertEqual(mods[1].enabled, false);
+	test.AssertEqual(mods[2].enabled, true);
+	__KengineMods.mod_manager.DisableMod("Kawazaki-01", 2);
+	test.AssertEqual(mods[0].enabled, false);
+	test.AssertEqual(mods[1].enabled, false);
+	test.AssertEqual(mods[2].enabled, false);
+	__KengineMods.mod_manager.EnableMod("Kawazaki-03", 1);
+	__KengineMods.mod_manager.DisableMod("Kawazaki-01", 2); // Disables dependants (03)
+	test.AssertEqual(mods[0].enabled, false);
+	test.AssertEqual(mods[1].enabled, false);
+	test.AssertEqual(mods[2].enabled, false);
+	test.Done();
+}
+
+#endregion tests

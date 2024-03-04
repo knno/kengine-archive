@@ -1,2 +1,2 @@
 /// @description DO EV
-__kengine_do_ev(Kengine.utils.hashkeys._all.draw, ev_draw_end);
+__kengine_do_ev(__KengineHashkeyUtils.__all.draw_end);

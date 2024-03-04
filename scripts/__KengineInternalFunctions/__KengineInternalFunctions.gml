@@ -14,20 +14,22 @@ function __kengine_log(_message) {
  * @memberof Kengine
  * @private
  * @param {Struct} ev 
- * @param {Real} ev_arg
- * @description takes {wrapper} as method struct.
+ * @param {Real|Undefined} [ev_arg]
+ * @description Self must have "wrapper" variable.
  * 
  */
-function __kengine_do_ev(ev, ev_arg) {
-	var scr = "";
+function __kengine_do_ev(ev, ev_arg=undefined) {
 	if not variable_instance_exists(self, "wrapper") exit;
-	Kengine.utils.structs.set_default(wrapper.asset, "event_scripts", {});
-	scr = Kengine.utils.structs.get(wrapper.asset.event_scripts, ev);
+	var scr = "";
+	var _wrapper = wrapper;
+	__KengineStructUtils.SetDefault(_wrapper.asset, "event_scripts", {});
+	scr = __KengineStructUtils.Get(_wrapper.asset.event_scripts, ev);
 	if scr != undefined {
+		var var_struct = {wrapper: _wrapper, event: ev.name, event_arg: ev_arg, script_object: wrapper,};
 		if is_instanceof(scr, Kengine.Asset) {
-			return Kengine.utils.parser.interpret_asset(scr, wrapper, {wrapper, event: ev.name, event_arg: ev_arg, script_object: wrapper,});
+			return __KengineParserUtils.__InterpretAsset(scr, _wrapper, var_struct);
 		} else if is_method(scr) {
-			return method({wrapper, event: ev.name, event_arg: ev_arg, script_object: wrapper}, scr)();
+			return method(var_struct, scr)();
 		} else if is_string(scr) {
 			switch scr {
 				case "@draw_self": draw_self(); return;
