@@ -570,7 +570,7 @@ function __KenginePanelsPanelItemInputBox(options) : __KenginePanelsPanelItem(op
 			}
 
 			// TXR map
-			var txr_a = ds_map_keys_to_array(Kengine.Utils.Parser.__Interpreter.System._function_map);
+			var txr_a = ds_map_keys_to_array(__KengineParserUtils.__Interpreter.System._function_map);
 			for (_i=0; _i<array_length(txr_a);_i++) {
 				_n = txr_a[_i];
 				if string_pos(autoc, _n) == 1 {

@@ -1,7 +1,5 @@
 function __KengineStruct(_struct=undefined, _opts=undefined) constructor {
 
-	return;
-
 	if _struct != undefined {
 		var s = struct_get_names(_struct);
 		for (var i=0; i<array_length(s); i++) {

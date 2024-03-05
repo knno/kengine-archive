@@ -6,11 +6,11 @@
  */
 function __KengineAsciiUtils() : __KengineStruct() constructor {
     static __current_braille = ""
-    static __current_braille_timer = -1
+    static __current_braille_timer = 0
     static __current_spinner = "◴"
-    static __current_spinner_timer = -1
-    static __GetBrailleDot = function() {return __current_braille;}
-    static __GetSpinner = function() {return __current_spinner;}
+    static __current_spinner_timer = 0
+    static __GetBrailleDot = function() {return __KengineAsciiUtils.__current_braille;}
+    static __GetSpinner = function() {return __KengineAsciiUtils.__current_spinner;}
 
 	static __Step = function() {
 		if __KengineAsciiUtils.__current_braille_timer != -1 {

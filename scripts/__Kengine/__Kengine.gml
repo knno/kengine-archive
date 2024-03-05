@@ -5,7 +5,7 @@
  */
 function Kengine() : __KengineStruct() constructor {
 
-	static Utils = __KengineUtils
+	static Utils = static_get(__KengineUtils);
 
 
 	static status = "NOT_STARTED";
@@ -47,6 +47,10 @@ function Kengine() : __KengineStruct() constructor {
 	 * 
 	 */
 	static initialized = false
+
+	if initialized {
+		return obj_kengine.__kengine;
+	}
 
 	/**
 	 * @name instances
@@ -195,3 +199,4 @@ function Kengine() : __KengineStruct() constructor {
 	}
 }
 Kengine();
+// variable_global_set("Kengine", static_get(Kengine));

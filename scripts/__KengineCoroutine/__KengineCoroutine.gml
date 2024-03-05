@@ -4,6 +4,7 @@
  * @new_name Kengine.Coroutine
  * @memberof Kengine
  * @description .
+ * @param {String} [name]
  * @param {Array<function>} [functions=undefined]
  * @param {function} [callback=undefined]
  * @param {function} [halt_callback=undefined]
@@ -23,7 +24,6 @@ function __KengineCoroutine(name="", functions=undefined, callback=undefined, ha
 	__functions = functions ?? [];
 
 	self.callback = callback;
-	__kengine_log($"callback for {self.name} is " + string(callback));
 	self.halt_callback = halt_callback;
 
 	status = KENGINE_COROUTINES_STATUS.IDLE;
@@ -46,11 +46,9 @@ function __KengineCoroutine(name="", functions=undefined, callback=undefined, ha
 	Immediate = function() {
 		self.current_function = 0;
 		var _donefunc = false;
-		while (array_length(self.__functions) > 0) {
-			__kengine_log("Single of " + string(self.name));
-			__RunSingle(self);
+		while (array_length(self.__functions) > self.current_function) {
+			__RunSingle();
 		}
-		__kengine_log("Complete Immediate of " + string(self.name));
 	}
 
 	Start = function() {
@@ -75,23 +73,24 @@ function __KengineCoroutine(name="", functions=undefined, callback=undefined, ha
 	IsPaused = function() { return self.status == KENGINE_COROUTINES_STATUS.PAUSED;}
 	IsDone = function() { return self.status == KENGINE_COROUTINES_STATUS.DONE;}
 
-	static __RunSingle = function(this) {
+	__marked_as_delete = false;
+
+	__RunSingle = function() {
+		var this = self;
 		var _i = this.current_function;
+		var m;
 		try {
-			__kengine_log("Coroutine"+ string(this.name) +" function: " + string(_i));
 			if is_array(this.__functions[_i]) {
 				if is_array(this.__functions[_i][1]) {
-					this.result = method_call(this.__functions[_i][0], this.__functions[_i][1]);
+					m = this.__functions[_i][0];
+					this.result = method_call(m, this.__functions[_i][1]);
 				} else {
 					this.result = this.__functions[_i][0]();
 				}
 			} else {
-				__kengine_log("Coroutine"+ string(this.name) +" function: " +string(this.__functions[_i]));
-				// this.result = this.__functions[_i]();
-				__kengine_log("Coroutine"+ string(this.name) +" function: " +string(this.__functions[_i]) + " - complete");
+				this.result = this.__functions[_i]();
 			}
 			array_push(this.results, this.result);
-			__kengine_log("Coroutine"+ string(this.name) +" function: " + string(this.result));
 		} catch (_e) {
 			if (__KengineStructUtils.Get(_e, "halt") == true) {
 				this.status = KENGINE_COROUTINES_STATUS.FAIL;
@@ -113,9 +112,8 @@ function __KengineCoroutine(name="", functions=undefined, callback=undefined, ha
 		}
 
 		if this.status == KENGINE_COROUTINES_STATUS.DONE {
-			__kengine_log($"callback for {self.name} is " + string(callback) + " is running");
 			if is_method(this.callback) {
-				method({coroutine: this}, this.callback)();
+				method({coroutine: this}, this.callback)()
 			} else if is_array(this.callback) {
 				method_call(method({coroutine: this}, this.callback[0]), this.callback[1]);
 			}
@@ -128,13 +126,14 @@ function __KengineCoroutine(name="", functions=undefined, callback=undefined, ha
 		or self.status == KENGINE_COROUTINES_STATUS.FAIL return;
 
 		if self.status == KENGINE_COROUTINES_STATUS.RUNNING {
-			__RunSingle(self);
+			__RunSingle();
 		}
 	})
 
-	Destroy = function() {
-		array_delete(Kengine.coroutines, array_get_index(Kengine.coroutines, self),1);
-	}
+	Destroy = method(self, function() {
+		self.__marked_as_delete = true
+		return true;
+	})
 
 	array_push(Kengine.coroutines, self);
 

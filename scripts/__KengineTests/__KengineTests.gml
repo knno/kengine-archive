@@ -33,25 +33,13 @@ function ken_init_ext_tests() {
 	
 	if not KENGINE_IS_TESTING return;
 
-	/**
-	 * @namespace Tests
-	 * @memberof Kengine.Extensions
-	 * @description Kengine's Tests extension
-	 * 
-	 * Note - Disabling copy on write behavior for arrays is required.
-	 *
-	 */
-	var _tests = new __KengineTests();
-	Kengine.Extensions.Add(_tests);
-
-
     #region Error types
     /**
      * @member {String} tests__test__func_invalid_return
      * @memberof Kengine.Utils.Errors.Types
      * @description Test function did not return a struct.
      */
-    Kengine.Utils.Errors.AddType("tests__test__func_invalid_return", "Test function did not return a struct.");
+	Kengine.Utils.Errors.AddType("tests__test__func_invalid_return", "Test function did not return a struct.");
 
     /**
      * @member {String} tests__fixture__does_not_exist
@@ -97,4 +85,16 @@ function ken_init_ext_tests() {
 	 */
     Kengine.Utils.Events.Define("tests__test__init__after");
     #endregion
+
+	/**
+	 * @namespace Tests
+	 * @memberof Kengine.Extensions
+	 * @description Kengine's Tests extension
+	 * 
+	 * Note - Disabling copy on write behavior for arrays is required.
+	 *
+	 */
+	var _tests = new __KengineTests();
+	Kengine.Extensions.Add(_tests);
+
 }

@@ -86,6 +86,8 @@ function __KengineUtils() constructor {
 
 	static Benchmark = static_get(__KengineBenchmarkUtils)
 
+	static Assets = static_get(__KengineAssetUtils)
+
 	/**
 	 * @function __CreateBaseObjectAsset
 	 * @memberof Kengine.Utils

@@ -21,13 +21,11 @@ function __KengineStructUtils() : __KengineStruct() constructor {
 		if !is_struct(_struct) {
             return variable_instance_exists(_struct, name);
         } else if is_string(name) {
-			show_debug_message(_struct);
-			show_debug_message(name);
-            return struct_exists(_struct, name);
+			return struct_exists(_struct, name);
         } else if is_struct(name) {
             return struct_exists(_struct, name.name);
         } else {
-            //return struct_get_from_hash(_struct, name) != undefined;
+            return struct_get_from_hash(_struct, name) != undefined;
         }
     }
 
@@ -42,14 +40,17 @@ function __KengineStructUtils() : __KengineStruct() constructor {
      */
     static Get = function(_struct, name) {
 		if is_undefined(_struct) return undefined;
-        if __KengineStructUtils.Exists(_struct, name) {
+		return _struct[$ name];
+
+        /*
+		if __KengineStructUtils.Exists(_struct, name) {
             if !is_struct(_struct) {
                 return variable_instance_get(_struct, name);
             }
-			return _struct[$ name]; // struct_get(_struct, name);
-            // return struct_get_from_hash(_struct, __KengineHashkeyUtils.hash(name));
+            return struct_get_from_hash(_struct, __KengineHashkeyUtils.hash(name));
         }
 		return undefined;
+		*/
     }
 
     /**
@@ -83,9 +84,7 @@ function __KengineStructUtils() : __KengineStruct() constructor {
         }
 		_struct[$ name] = value
 		return value;
-
-		return struct_set(_struct, name, value);
-		// struct_set_from_hash(_struct, __KengineHashkeyUtils.hash(name), value);
+		// return struct_set_from_hash(_struct, __KengineHashkeyUtils.hash(name), value);
     }
 
     /**

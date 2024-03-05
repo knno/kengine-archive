@@ -6,17 +6,17 @@ function __KengineAssetUtils() : __KengineStruct() constructor {
 
 		// Create AssetTypes.
 		var _option_names = struct_get_names(Kengine.asset_type_options);
-		__kengine_log(_option_names);
 		var _option_name;
 		var _funcs = [];
 		var _fn;
-		
-		var __AsyncAutoIndexTypeFromOptionName = function() {
+
+		static __AsyncAutoIndexTypeFromOptionName = function(option_name) {
 			/// var_struct {option_name}
 			var _option = __KengineStructUtils.Get(Kengine.asset_type_options, option_name);
 			var _assettype = __KengineAssetUtils.CreateAssetType(_option);
 			if _assettype == false {
-				_assettype = __KengineStructUtils.Get(Kengine.asset_types, option_name);
+				var _k = Kengine();
+				_assettype = __KengineStructUtils.Get(_k.asset_types, option_name);
 			}
 			if struct_exists(_option, "auto_index") {
 				if _option.auto_index {
@@ -24,32 +24,39 @@ function __KengineAssetUtils() : __KengineStruct() constructor {
 				}
 			}
 		}
-		
+
 		/**
 		 * @function __AsyncAutoIndexCallback
 		 * @memberof Kengine.Utils.Assets
 		 * @private
 		 */
-		var __AsyncAutoIndexCallback = function() {
-			coroutine.Destroy();
-			__KengineBenchmarkUtils.Mark(string("AssetTypes: Complete in {0}", __KengineBenchmarkUtils.CalcTimerDiff(2)), 1, false);
-
+		static __AsyncAutoIndexCallback = function() {
 			// When scripts are loaded we can set up the parser.
-			__KengineParser.__SetupTxr();
+			// Get scripts that start with ken_txr_fn and add them to TXR functions.
+			var txrs = Kengine.asset_types[$ "script"].assets.Filter(function(val) { return string_starts_with(val.name, "ken_txr_fn_");});
+			for (var i=0; i<array_length(txrs); i++) {
+				__KengineParserUtils.__Interpreter.System._function_add(string_replace(txrs[i].name, "ken_txr_fn_", ""), txrs[i].id, -1);
+			}
+			// Get scripts that start with ken_txr_constant_ and add them to TXR constants.
+			txrs = Kengine.asset_types[$ "script"].assets.Filter(function(val) { return string_starts_with(val.name, "ken_txr_constant_");});
+			for (var i=0; i<array_length(txrs); i++) {
+				__KengineParserUtils.__Interpreter.System._constant_add(string_replace(txrs[i].name, "ken_txr_constant_", ""), txrs[i].id, -1);
+			}
 			__KengineUtils.__CreateBaseObjectAsset();
 			__KengineUtils.__StartExtensions();
+			coroutine.Destroy();
+			return 55;
 		}
 
 
 		for (var i=0; i<array_length(_option_names); i++) {
 			_option_name = _option_names[i];
 			_fn = method({option_name: _option_name}, __AsyncAutoIndexTypeFromOptionName);
-			__kengine_log(_option_name);
-			__kengine_log(_fn);
-			array_push(_funcs, _fn)
+			array_push(_funcs, [_fn, [_option_name]])
 		}
 
 		var _coroutine = new __KengineCoroutine("assettypes-autoindex",_funcs, __AsyncAutoIndexCallback);
+
 		if (KENGINE_ASSET_TYPES_AUTO_INDEX_ASYNC) {
 			_coroutine.Start();
 		} else {
@@ -61,14 +68,10 @@ function __KengineAssetUtils() : __KengineStruct() constructor {
 	static CreateAssetType = function(asset_type_option) {
 		if array_contains(struct_get_names(Kengine.asset_types), asset_type_option.name) return false;
 
-		__kengine_log("CreateAssetType 1");
-		__KengineStructUtils.SetDefault(asset_type_option, "indexing_options", undefined);
-		__KengineStructUtils.SetDefault(asset_type_option, "var_struct", undefined);
-		__kengine_log("CreateAssetType 1.5");
+		asset_type_option.indexing_options = asset_type_option[$ "indexing_options"] ?? {}; // __KengineStructUtils.SetDefault(asset_type_option, "indexing_options", undefined);
+		asset_type_option.var_struct = asset_type_option[$ "var_struct"] ?? {}; // __KengineStructUtils.SetDefault(asset_type_option, "var_struct", undefined);
 
-		var _assettype = new __KengineAssetType(asset_type_option.name, asset_type_option.asset_kind, asset_type_option.indexing_options, asset_type_option.var_struct);
-		__kengine_log("CreateAssetType 2");
-		return _assettype;
+		return new __KengineAssetType(asset_type_option.name, asset_type_option.asset_kind, asset_type_option.indexing_options, asset_type_option.var_struct);
 	}
 
 	static IndexType = function(assettype, indexing_options) {

@@ -21,8 +21,6 @@
  */
 function __KengineAssetType(name, asset_kind=KENGINE_CUSTOM_ASSET_KIND, indexing_options=undefined, var_struct=undefined) : __KengineStruct() constructor {
 
-	__kengine_log("AssetType creating: " + string(name));
-
 
 	var this = self;
 
@@ -38,12 +36,11 @@ function __KengineAssetType(name, asset_kind=KENGINE_CUSTOM_ASSET_KIND, indexing
 	*/
 	self.indexing_options = indexing_options ?? {};
 
-	/* if struct_exists(Kengine.asset_types, name) {
-		__kengine_log("AssetType already exists!");
-		throw __KengineErrorUtils.create(__KengineErrorUtils.Types.asset_type__asset_type__exists, string("AssetType \"{0}\" already exists.", name));
-	} */
+	//if struct_exists(Kengine.asset_types, name) {
+	//	throw __KengineErrorUtils.create(__KengineErrorUtils.Types.asset_type__asset_type__exists, string("AssetType \"{0}\" already exists.", name));
+	//}
 
-	__KengineStructUtils.SetDefault(self.indexing_options, "unique_attrs", ["id", "name", "real_name",]);
+	__KengineStructUtils.SetDefault(self.indexing_options, "unique_attrs", ["id", "name", "real_name"]);
 
 	/**
 	 * @name name
@@ -63,7 +60,6 @@ function __KengineAssetType(name, asset_kind=KENGINE_CUSTOM_ASSET_KIND, indexing
 	 *
 	 */
 	self.is_addable = __KengineStructUtils.SetDefault(self.indexing_options, "is_addable", true);
-	__kengine_log("AssetType is Jesus cool....");
 
 	/**
 	 * @name is_replaceable
@@ -231,10 +227,11 @@ function __KengineAssetType(name, asset_kind=KENGINE_CUSTOM_ASSET_KIND, indexing
 			return _indexed_assets;
 		}
 
-		static __ChunkIndexAssetsCallback = function() {
-			coroutine.Destroy();
-			var _indexed_assets = __KengineArrayUtils.Concat(coroutine.results);
+		var __ChunkIndexAssetsCallback = function() {
+			var concat = __KengineArrayUtils.Concat
+			var _indexed_assets = concat(coroutine.results);
 			__KengineEventUtils.Fire("asset_type__index_assets__after", {asset_type: self, indexed_assets: _indexed_assets});
+			coroutine.Destroy();
 		}
 
 		var _this = self;
@@ -310,7 +307,7 @@ function __KengineAssetType(name, asset_kind=KENGINE_CUSTOM_ASSET_KIND, indexing
 			// If indexing halts, this means we reached a dead-end. Thus, callback is required both on halt and on successful finish.
 			var _coroutine = new __KengineCoroutine("assettype-index", _funcs, __ChunkIndexAssetsCallback, __ChunkIndexAssetsCallback);
 
-			if (false and KENGINE_ASSET_TYPES_AUTO_INDEX_ASYNC) {
+			if (KENGINE_ASSET_TYPES_AUTO_INDEX_ASYNC) {
 				self.__indexing_coroutine = _coroutine;
 				_coroutine.Start();
 				return _coroutine;

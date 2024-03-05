@@ -5,8 +5,8 @@
  * @description Return a struct of asset types definitions. This is used at the start of the game to configure asset types.
  *
  */
-function KengineAssetTypes(){
-	var asset_type_options = {
+function KengineAssetTypes() {
+	var types = {
 		/**
 		 * @name script
 		 * @type {Struct}
@@ -499,9 +499,5 @@ function KengineAssetTypes(){
 
 	}
 
-
-	struct_remove(asset_type_options, "rm");
-	struct_remove(asset_type_options, "tileset");
-
-	return asset_type_options
+	return types;
 }

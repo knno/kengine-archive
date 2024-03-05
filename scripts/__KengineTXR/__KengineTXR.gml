@@ -1139,7 +1139,7 @@ function __TxrSerializer() constructor {
 		}
 	}
 
-	/// @param buffer
+	/// @param b buffer
 	/// @return action
 	static _action_read = function(b) {
 		var t = buffer_read(b, buffer_u8);
@@ -2201,7 +2201,7 @@ function __TxrSystem() constructor {
 	/// Registers a constant
 	static _constant_add = function(_name, _value) {
 		if (is_string(_value) || is_numeric(_value) || is_undefined(_value)) {
-			_constant_map[?_name] = _value;
+			__TxrSystem._constant_map[?_name] = _value;
 		} else show_error("Expected a string or a number for constant, got " + typeof(_value), true);
 	}
 
@@ -2210,7 +2210,7 @@ function __TxrSystem() constructor {
 	/// @param {int} _argc args count
 	/// Registers a script for use as a function in TXR programs
 	static _function_add = function(_name, _script, _argc) {
-		_function_map[?_name] = [_script, _argc];
+		__TxrSystem._function_map[?_name] = [_script, _argc];
 	}
 
 	/// @param {array} _actions

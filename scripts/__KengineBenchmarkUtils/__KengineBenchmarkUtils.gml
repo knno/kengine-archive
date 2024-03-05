@@ -47,7 +47,7 @@ function __KengineBenchmarkUtils() : __KengineStruct() constructor {
                 _time_message = " - " + string(_diff/1000) + "ms";
             }
         }
-
+		__kengine_log("[Benchmark] "+string(message) + _time_message);
         Kengine.console.verbose("Kengine: Benchmark: " + string(message) + _time_message, 1);
     }
 }

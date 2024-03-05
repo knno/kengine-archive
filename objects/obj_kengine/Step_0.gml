@@ -1,10 +1,6 @@
 /// @description General Step functions
 
-__kengine_log("Step event begin");
-
 if not Kengine.initialized exit;
-
-__kengine_log("Step event continueing");
 
 #region Kengine.debug
 
@@ -12,14 +8,12 @@ __kengine_log("Step event continueing");
 
 #region Kengine.ascii
 __KengineAsciiUtils.__Step()
-__kengine_log("Step event : 1");
 #endregion Kengine.ascii
 
 #region Kengine.extensions
 var _m;
 var _exts = struct_get_names(Kengine.Extensions);
 var _ext;
-__kengine_log(string(_exts));
 for (var _i=0; _i<array_length(_exts); _i++) {
 	if _exts[_i] == "toString" continue
 	if _exts[_i] == "__opts" continue
@@ -34,17 +28,21 @@ for (var _i=0; _i<array_length(_exts); _i++) {
 #endregion Kengine.extensions
 
 #region Kengine.coroutines
-__kengine_log("Step event : 3");
 if Kengine.coroutines != undefined {
 	var _expectedFrameTime = game_get_speed(gamespeed_microseconds)/1000;
 	if (current_time - Kengine.__coroutines_last_tick > 0.9*_expectedFrameTime)
 	{
-	__kengine_log("Step event : 3.1");
 		Kengine.__coroutines_last_tick = current_time;
+		//__kengine_log($"Coroutines Count - {array_length(Kengine.coroutines)}")
 		for (var i=0; i<array_length(Kengine.coroutines); i++) {
 			if Kengine.coroutines[i] == undefined continue;
-			__kengine_log("Step event : 3.1.1");
+			//__kengine_log($"Coroutines {i} {Kengine.coroutines[i].status}")
+
 			Kengine.coroutines[i].__Step();
+			if Kengine.coroutines[i].__marked_as_delete {
+				array_delete(Kengine.coroutines, i,1);
+				continue;
+			}
 		}
 	}
 }
@@ -65,4 +63,3 @@ if room != rm_init {
 }
 
 #endregion Kengine.room
-__kengine_log("Step event ended");

@@ -6,6 +6,8 @@
  */
 function __KengineParserUtils() : __KengineStruct() constructor {
 
+	static __Interpreter = new __TXR();
+
 	/** 
 	 * @function __dot2ident
 	 * @memberof Kengine.Utils.Parser
@@ -29,14 +31,6 @@ function __KengineParserUtils() : __KengineStruct() constructor {
 	static __ident2dot = function(ident) {
 		return string_replace_all(ident, "___", ".");
 	}
-
-
-	static __CreateTXR = function() {
-		var _txr = new __TXR();
-		return _txr;
-	}
-
-	static __Interpreter = __CreateTXR();
 
 	static __InterpretValue = function(value, context=undefined) {
 		return __InterpretTxr("return " + string(value) + (string_ends_with(string_trim(value), ";") ? "" : ";"), context);
@@ -331,3 +325,4 @@ function __KengineParserUtils() : __KengineStruct() constructor {
 
 }
 __KengineParserUtils();
+

@@ -29,8 +29,8 @@ function __KengineOptions(opts) : __KengineStruct() constructor {
         self.__opts = options;
     }
     static __add = function(key, default_value=undefined) {
-        var _value = Kengine.Utils.Structs.Get(self.__opts, key);
-        Kengine.Utils.Structs.Set(self, key, _value ?? default_value);
+        var _value = __KengineStructUtils.Get(self.__opts, key);
+        __KengineStructUtils.Set(self, key, _value ?? default_value);
     }
     static __fromArray = function(array) {
         __start({});

@@ -6,4 +6,3 @@ if room == rm_init {
 		Kengine.current_room_asset.activate();
 	}
 }
-__kengine_log("Room event");

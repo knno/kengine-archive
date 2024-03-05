@@ -140,7 +140,7 @@ enum KENGINE_STATUS_TYPE {
  * @defaultvalue true
  * 
  */
-#macro KENGINE_ASSET_TYPES_AUTO_INDEX_AT_START (true)
+#macro KENGINE_ASSET_TYPES_AUTO_INDEX_AT_START true
 
 /**
  * @constant KENGINE_ASSET_TYPES_AUTO_INDEX_ASYNC
@@ -151,7 +151,7 @@ enum KENGINE_STATUS_TYPE {
  * @defaultvalue false
  * 
  */
-#macro KENGINE_ASSET_TYPES_AUTO_INDEX_ASYNC (true)
+#macro KENGINE_ASSET_TYPES_AUTO_INDEX_ASYNC true
 
 /**
  * @constant KENGINE_ASSET_TYPES_INDEX_CHUNK_SIZE

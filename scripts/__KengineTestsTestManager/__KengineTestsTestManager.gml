@@ -111,7 +111,7 @@ function __KengineTestsTestManager() constructor {
                 var _st = undefined; var __st = undefined; var _c = c_dkgray;
                 __st = (report._status == "SUCCESS") ? "S" : ((report._status == "FAIL") ? "F" : "P");
                 if __st == "P" {
-                    _st = __KengineAsciiUtils.__GetBrailleDot();
+                    _st = Kengine.Utils.Ascii.__GetBrailleDot();
                     _c = c_yellow;
                 } else if __st == "S" {
                     _st = __st; //"✔"

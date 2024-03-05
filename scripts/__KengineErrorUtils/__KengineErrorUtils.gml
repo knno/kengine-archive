@@ -42,7 +42,7 @@ function __KengineErrorUtils() : __KengineStruct() constructor {
     }
 
 	static AddType = function(key, _message) {
-		self.Types[$ key] = _message
+		__KengineErrorUtils.Types[$ key] = _message
 	}
 
     /**
