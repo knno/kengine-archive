@@ -1,16 +1,19 @@
-<!-- a name="Kengine.Utils.Easing"></a -->
-
 # Easing  :id=kengine-utils-easing
 
 [Kengine.Utils.Easing](Kengine.Utils.Easing) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine easing utilitiy functions
 
 
-<!-- a name="Kengine.Utils.Easing.ease_in"></a -->
+<!-- tabs:end -->
 
-## ease_in  :id=kengine-utils-easing-ease_in
+## EaseIn  :id=kengine-utils-easing-easein
 
-`Kengine.Utils.Easing.ease_in(value, start, change, duration)` ⇒ <code>Real</code>
+`Kengine.Utils.Easing.EaseIn(value, start, change, duration)` ⇒ <code>Real</code>
 <!-- tabs:start -->
 
 
@@ -37,16 +40,13 @@ Take a value and apply ease-in transition on, starting from <code>_start</code> 
 ##### **Example**
 
 ```gml
-// Step event
-_x2 = ease_in(_x1, 0, 2, 60); // _x2 is from 0 to 2 in 60 steps eased-in.
+// Step event_x2 = ease_in(_x1, 0, 2, 60); // _x2 is from 0 to 2 in 60 steps eased-in.
 ```
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Easing.ease_inout"></a -->
+## EaseInOut  :id=kengine-utils-easing-easeinout
 
-## ease_inout  :id=kengine-utils-easing-ease_inout
-
-`Kengine.Utils.Easing.ease_inout(value, start, change, duration)` ⇒ <code>Real</code>
+`Kengine.Utils.Easing.EaseInOut(value, start, change, duration)` ⇒ <code>Real</code>
 <!-- tabs:start -->
 
 
@@ -73,16 +73,13 @@ Take a value and apply ease-in-out transition on, starting from <code>_start</co
 ##### **Example**
 
 ```gml
-// Step event
-_x2 = ease_inout(_x1, 0, 2, 60); // _x2 is from 0 to 2 in 60 steps eased-in-out.
+// Step event_x2 = ease_inout(_x1, 0, 2, 60); // _x2 is from 0 to 2 in 60 steps eased-in-out.
 ```
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Easing.ease_out"></a -->
+## EaseOut  :id=kengine-utils-easing-easeout
 
-## ease_out  :id=kengine-utils-easing-ease_out
-
-`Kengine.Utils.Easing.ease_out(value, start, change, duration)` ⇒ <code>Real</code>
+`Kengine.Utils.Easing.EaseOut(value, start, change, duration)` ⇒ <code>Real</code>
 <!-- tabs:start -->
 
 
@@ -109,8 +106,7 @@ Take a value and apply ease-out transition on, starting from <code>_start</code>
 ##### **Example**
 
 ```gml
-// Step event
-_x2 = ease_out(_x1, 0, 2, 60); // _x2 is from 0 to 2 in 60 steps eased-out.
+// Step event_x2 = ease_out(_x1, 0, 2, 60); // _x2 is from 0 to 2 in 60 steps eased-out.
 ```
 <!-- tabs:end -->
 

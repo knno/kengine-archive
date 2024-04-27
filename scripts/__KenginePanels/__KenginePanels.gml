@@ -6,6 +6,12 @@ function __KenginePanels() : __KengineStruct() constructor {
     static draw_enabled = true;
     static __input_histories = [];
 
+	static __scrollbar_timer = 0
+	static __scrollbar_drag = -1
+	static __scrollbar_mxprev = -1
+	static __scrollbar_myprev = -1
+	static __scrollbar_current = undefined
+
     static panels = new __KengineCollection();
 
     static PanelOptions = __KenginePanelsPanelOptions;
@@ -14,6 +20,7 @@ function __KenginePanels() : __KengineStruct() constructor {
     static PanelItem = __KenginePanelsPanelItem;
     static PanelItemInputBox = __KenginePanelsPanelItemInputBox;
     static Console = __KenginePanelsConsole;
+	static Scrollbar = __KenginePanelsScrollbar;
 
 	static DrawGui = function() {
 		var _p;
@@ -30,29 +37,52 @@ function __KenginePanels() : __KengineStruct() constructor {
 		var panels = __KenginePanels.panels;
 		if panels != undefined {
 			var _p;
-			var _j = 0, _l = undefined;
-			for (var _i=0; _i<panels.Length(); _i++) {
-				_p = panels.Get(_i);
-				if _j == 2 {
-					__KenginePanels.focused_panel = undefined;
-					break;
-				}
-				if not _p.is_focused {
-					continue;
-				}
-				_j += 1;
-				_l = _p;
-			}
-			if _j == 1 and _l != undefined {
-				__KenginePanels.focused_panel = _l;
-			}
-
+			var _j = undefined, _l = undefined;
 
 			for (var _i=0; _i<panels.Length(); _i++) {
 				_p = panels.Get(_i);
+				if _p = Kengine.console continue;
+
 				if __KenginePanels.interact_enabled {if _p.Step != undefined _p.Step();}
+				if _p.focus_enabled and _p.__is_focused _j = _p;
 			}
+			Kengine.console.Step();
+
+			if __KenginePanels.focused_panel != undefined {
+				if not __KenginePanels.focused_panel.focus_enabled {
+					__KenginePanels.focused_panel = undefined;
+				}
+			}
+
+			if _j == undefined __KenginePanels.focused_panel = undefined;
 		}
+		
+		if Kengine.status == "READY" {
+			/*if Kengine.watcher == undefined {
+				var parElement = new __KenginePanelsPanelItemDbgElement("div");
+				var status = new __KenginePanelsPanelItemDbgElement("span", Kengine.status);
+				status.color = c_aqua;
+				var _br = new __KenginePanelsPanelItemDbgElement("br", "\n")
+				var item = new __KenginePanelsPanelItemDbgElement("div", {
+					//Extensions: Kengine.Extensions,
+					//Utils: Kengine.Utils,
+					instances: Kengine.instances.__all,
+					asset_types: struct_get_names(Kengine.asset_types),
+				});
+				array_push(parElement.children, status, _br, item);
+				Kengine.watcher = new Kengine.Extensions.Panels.Panel({
+					title: "Watcher",
+					x: 0,
+					y: 0,
+					height: 350,
+					width: 300,
+					children: [parElement]
+				});
+				Kengine.watcher.add = function(watch) {
+				}
+			}*/
+		}
+
 	}
 }
 
@@ -66,9 +96,9 @@ function ken_init_ext_panels() {
     var _panels = new __KenginePanels();
 
 
-	__StartConsole = function() {
+	var __StartConsole = function() {
 		var _console_options = {
-			alpha: 0.8,
+			alpha: 0.8, focus_enabled: false,
 		}
 		_console_options.log_file = KENGINE_CONSOLE_LOG_FILE
 		_console_options.log_enabled = KENGINE_CONSOLE_LOG_ENABLED
@@ -79,8 +109,9 @@ function ken_init_ext_panels() {
 			readonly: false, active: true, visible: true, value: "",
 			valign: fa_top, autoc_enabled: true, history_enabled: true,
 			background: _console.box_colors[0], alpha: _console.alpha,
+			focus_enabled: false,
 		})
-		_console.Add(_inputbox);
+		_console.__Add(_inputbox);
 		_console.inputbox = _inputbox;
 		return _console;
 	}
@@ -125,5 +156,5 @@ function ken_init_ext_panels() {
 		}
 	}
 
-    return _panels;
+	Kengine.Extensions.Add(_panels);
 }

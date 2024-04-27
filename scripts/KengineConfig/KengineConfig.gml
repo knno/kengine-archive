@@ -16,6 +16,11 @@ enum KENGINE_STATUS_TYPE {
 	EXTENSIONS = 4
 }
 
+enum KENGINE_PANELS_SCROLLBAR_TYPE {
+	HORIZONTAL,
+	VERTICAL,
+}
+
 
 /**
  * @constant KENGINE_CUSTOM_ASSET_KIND
@@ -113,12 +118,12 @@ enum KENGINE_STATUS_TYPE {
  * @constant KENGINE_MODS_FIND_MODS_FUNCTION
  * @memberof Kengine~constants
  * @description A reference to a function that returns mods that are found at game start.
- * @type {function}
+ * @type {function|String}
  * @readonly
- * @defaultvalue undefined
+ * @defaultvalue "DefaultGameFindMods"
  * 
  */
-#macro KENGINE_MODS_FIND_MODS_FUNCTION (os_get_config() == "Debug" ? Kengine.Extensions.Mods.default_game_find_mods : undefined )
+#macro KENGINE_MODS_FIND_MODS_FUNCTION "DefaultGameFindMods"
 
 /**
  * @constant KENGINE_EVENTS_ENABLED
@@ -126,21 +131,21 @@ enum KENGINE_STATUS_TYPE {
  * @description Whether Kengine events are enabled.
  * @type {Bool}
  * @readonly
- * @defaultvalue false
+ * @defaultvalue true
  * 
  */
-#macro KENGINE_EVENTS_ENABLED (false)
+#macro KENGINE_EVENTS_ENABLED (true)
 
 /**
  * @constant KENGINE_AUTO_INDEX_AT_START
  * @memberof Kengine~constants
- * @description Whether index assets at start of kengine.
+ * @description Whether index assets at start of Kengine.
  * @type {Bool}
  * @readonly
  * @defaultvalue true
  * 
  */
-#macro KENGINE_ASSET_TYPES_AUTO_INDEX_AT_START true
+#macro KENGINE_ASSET_TYPES_AUTO_INDEX_AT_START (true)
 
 /**
  * @constant KENGINE_ASSET_TYPES_AUTO_INDEX_ASYNC
@@ -151,18 +156,18 @@ enum KENGINE_STATUS_TYPE {
  * @defaultvalue false
  * 
  */
-#macro KENGINE_ASSET_TYPES_AUTO_INDEX_ASYNC true
+#macro KENGINE_ASSET_TYPES_AUTO_INDEX_ASYNC (true)
 
 /**
  * @constant KENGINE_ASSET_TYPES_INDEX_CHUNK_SIZE
  * @memberof Kengine~constants
- * @description Auto indexing chunk size. Recommended average is 2000.
+ * @description Auto indexing chunk size for async. Recommended average is 10-200.
  * @type {Real}
  * @readonly
- * @defaultvalue 2000
+ * @defaultvalue 10
  * 
  */
-#macro KENGINE_ASSET_TYPES_INDEX_CHUNK_SIZE (2000)
+#macro KENGINE_ASSET_TYPES_INDEX_CHUNK_SIZE (10)
 
 /**
  * @member KENGINE_CONSOLE_ENABLED
@@ -172,7 +177,7 @@ enum KENGINE_STATUS_TYPE {
  * @defaultvalue false
  * 
  */
-#macro KENGINE_CONSOLE_ENABLED true
+#macro KENGINE_CONSOLE_ENABLED (true)
 
 /**
  * @member KENGINE_CONSOLE_ALLOW_PRIVATE
@@ -182,7 +187,7 @@ enum KENGINE_STATUS_TYPE {
  * @defaultvalue false
  * 
  */
-#macro KENGINE_CONSOLE_ALLOW_PRIVATE false
+#macro KENGINE_CONSOLE_ALLOW_PRIVATE (false)
 
 /**
  * @member KENGINE_PARSER_FIELD_RULES
@@ -257,7 +262,7 @@ enum KENGINE_STATUS_TYPE {
  * @member KENGINE_BENCHMARK
  * @type {Bool}
  * @memberof Kengine~constants
- * @description Whether benchmarking mode is on for kengine. This logs debug information for timing. It is set to true in Benchmark configuration
+ * @description Whether benchmarking mode is on for Kengine. This logs debug information for timing. It is set to true in Benchmark configuration
  * @defaultvalue false
  * 
  */
@@ -267,11 +272,11 @@ enum KENGINE_STATUS_TYPE {
  * @member KENGINE_IS_TESTING
  * @type {Bool}
  * @memberof Kengine~constants
- * @description Whether benchmarking mode is on for kengine. This logs debug information for timing. It is set to true in Benchmark configuration
- * @defaultvalue false
+ * @description Whether testing mode is on for Kengine. This logs debug information for timing. It is set to true in Benchmark configuration
+ * @defaultvalue Kengine.is_testing
  * 
  */
-#macro KENGINE_IS_TESTING (os_get_config() == "Test")
+#macro KENGINE_IS_TESTING (Kengine.is_testing || os_get_config() == "Test")
 
 /**
  * @member KENGINE_DEFAULT_INSTANCES_LAYER

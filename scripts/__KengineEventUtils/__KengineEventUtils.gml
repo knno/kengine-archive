@@ -15,9 +15,7 @@ function __KengineEventUtils() : __KengineStruct() constructor {
      *
      */
     static Define = function(event, listeners=[]) {
-        if !__KengineStructUtils.Exists(__all, event) {
-            __KengineStructUtils.Set(__all, event, []);
-        }
+		__KengineEventUtils.__all[$ event] ??= listeners;
     }
 
     /**
@@ -30,7 +28,7 @@ function __KengineEventUtils() : __KengineStruct() constructor {
      *
      */
     static AddListener = function(event, listener) {
-        var _all_events = static_get(__all);
+        var _all_events = __KengineEventUtils.__all;
         if __KengineStructUtils.Exists(_all_events, event) {
             var event_arr = __KengineStructUtils.Get(_all_events, event);
             if is_array(listener) {
@@ -57,7 +55,7 @@ function __KengineEventUtils() : __KengineStruct() constructor {
      *
      */
     static RemoveListener = function (event, listener, _all=false) {
-        var _all_events = static_get(__all);
+        var _all_events = __KengineEventUtils.__all;
         if __KengineStructUtils.Exists(_all_events, event) {
             var event_arr = __KengineStructUtils.Get(_all_events, event);
             if is_array(listener) {
@@ -84,7 +82,7 @@ function __KengineEventUtils() : __KengineStruct() constructor {
      */
     static Fire = function(event, args=undefined) {
         if (not (KENGINE_EVENTS_ENABLED)) {return}
-        var _all_events = static_get(__all);
+        var _all_events = __KengineEventUtils.__all;
         var event_arr = __KengineStructUtils.Get(_all_events, event);
         if event_arr == undefined return false;
 
@@ -313,5 +311,6 @@ function __KengineEventUtils() : __KengineStruct() constructor {
         static asset__index__after = []
 
     }
+	__all = new __all();
+
 }
-__KengineEventUtils();

@@ -81,4 +81,4 @@ function __KengineInputUtils() : __KengineStruct() constructor {
 		}	
 	}
 }
-__KengineInputUtils();
+//__KengineInputUtils();

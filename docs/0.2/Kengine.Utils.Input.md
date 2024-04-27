@@ -1,12 +1,15 @@
-<!-- a name="Kengine.Utils.Input"></a -->
-
 # Input  :id=kengine-utils-input
 
 [Kengine.Utils.Input](Kengine.Utils.Input) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine input utilitiy functions
 
 
-<!-- a name="Kengine.Utils.Input.ken_keyboard_check_released"></a -->
+<!-- tabs:end -->
 
 ## ken_keyboard_check_released  :id=kengine-utils-input-ken_keyboard_check_released
 
@@ -26,8 +29,6 @@ Return whether key is released.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Input.keyboard_check"></a -->
-
 ## keyboard_check  :id=kengine-utils-input-keyboard_check
 
 `Kengine.Utils.Input.keyboard_check(key)` ⇒ <code>Bool</code>
@@ -46,8 +47,6 @@ Return whether key is being held down.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Input.keyboard_check_pressed"></a -->
-
 ## keyboard_check_pressed  :id=kengine-utils-input-keyboard_check_pressed
 
 `Kengine.Utils.Input.keyboard_check_pressed(key)` ⇒ <code>Bool</code>
@@ -65,8 +64,6 @@ Return whether key is pressed.
 | key | <code>Struct</code> \| <code>Real</code> | 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Utils.Input.keyboard_clear"></a -->
 
 ## keyboard_clear  :id=kengine-utils-input-keyboard_clear
 

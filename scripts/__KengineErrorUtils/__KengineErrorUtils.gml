@@ -17,7 +17,7 @@ function __KengineErrorUtils() : __KengineStruct() constructor {
      * 
      */
     static Create = function(error_type="unknown", longMessage="", useLong=false) {
-        var _types = static_get(__KengineErrorUtils.Types);
+        var _types = __KengineErrorUtils.Types;
         if not __KengineStructUtils.Exists(_types, error_type) {
             var names = struct_get_names(_types);
             for (var i = 0; i < array_length(names); i++) {
@@ -33,7 +33,7 @@ function __KengineErrorUtils() : __KengineStruct() constructor {
             }
         }
         return {
-            error_source: "kengine",
+            error_source: "Kengine",
             error_type: error_type,
             stacktrace: debug_get_callstack(),
             message: useLong ? longMessage : __KengineStructUtils.Get(_types, error_type),
@@ -114,6 +114,13 @@ function __KengineErrorUtils() : __KengineStruct() constructor {
         static asset__cannot_replace = "Cannot replace Asset."
 
         /**
+         * @member {String} asset__invalid
+         * @memberof Kengine.Utils.Errors.Types
+         * @description Asset is invalid.
+         */
+        static asset__invalid = "Asset is invalid."
+
+        /**
          * @member {String } asset__asset_type__cannot_add
          * @memberof Kengine.Utils.Errors.Types
          * @description Cannot add Asset (AssetType is not addable).
@@ -153,5 +160,6 @@ function __KengineErrorUtils() : __KengineStruct() constructor {
          */
         static script_exec__script__does_not_exist = "Cannot execute script (non-existent script)."
     }
+	Types = new Types();
 }
-__KengineErrorUtils();
+//__KengineErrorUtils();

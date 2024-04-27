@@ -191,27 +191,27 @@ function __KengineStructUtils() : __KengineStruct() constructor {
 							if __KengineStructUtils.IsPrivate(_object) == false {
 								continue;
 							}
-							halt = __KengineParserUtils.__Interpreter.System._sfmt("Cannot access private members of (%).", string(_object));
+							halt = __KengineParserUtils.interpreter.System._sfmt("Cannot access private members of (%).", string(_object));
 							break;
 
 						case "!?": // allow only is private
 							if __KengineStructUtils.IsPrivate(_object) == true {
 								continue;
 							}
-							halt = __KengineParserUtils.__Interpreter.System._sfmt("Cannot access members of (%).", string(_object));
+							halt = __KengineParserUtils.interpreter.System._sfmt("Cannot access members of (%).", string(_object));
 							break;
 
 						default:
 							if string_starts_with(rules[j], "!") {
 								r = string_copy(rules[j], 2, string_length(rules[j]) - 1);
 								if string_starts_with(member_name, r) {
-									halt = __KengineParserUtils.__Interpreter.System._sfmt("Cannot access private members of (%).", string(_object));
+									halt = __KengineParserUtils.interpreter.System._sfmt("Cannot access private members of (%).", string(_object));
 									break;
 								}
 							} else {
 								r = rules[j];
 								if not string_starts_with(member_name, r) {
-									halt = __KengineParserUtils.__Interpreter.System._sfmt("Cannot access private members of (%).", string(_object));
+									halt = __KengineParserUtils.interpreter.System._sfmt("Cannot access private members of (%).", string(_object));
 									break;
 								}
 							}
@@ -400,7 +400,7 @@ function __KengineStructUtils() : __KengineStruct() constructor {
 
 	/**
 	 * @function SetReadonly
-	 * @memberof Kengine.Struct
+	 * @memberof Kengine.Utils.Struct
 	 * @description Set whether `object` or its member is readonly or not. (`.__opts.readonly`)
 	 * @param {Any} _object
 	 * @param {String|Undefined} [member_name=undefined] The member if you want to set its access readonliness.
@@ -444,5 +444,15 @@ function __KengineStructUtils() : __KengineStruct() constructor {
 		}
 	}
 
+	/**
+	 * @function SetStatic
+	 * @memberof Kengine.Utils.Struct
+	 * @description Set the static of a struct, to a struct.
+	 * @param {Struct} struct The struct reference to set.
+	 * @param {Struct} struct2 The struct to set as the struct.
+	 */
+	 static SetStatic = function(struct, struct2) {
+		 
+	 }
 }
-__KengineStructUtils();
+//__KengineStructUtils();

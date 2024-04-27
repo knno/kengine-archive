@@ -1,12 +1,15 @@
-<!-- a name="Kengine.Utils.Instance"></a -->
-
 # Instance  :id=kengine-utils-instance
 
 [Kengine.Utils.Instance](Kengine.Utils.Instance) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 Kengine Instance Utils.
 
 
-<!-- a name="Kengine.Utils.Instance.Exists"></a -->
+<!-- tabs:end -->
 
 ## Exists  :id=kengine-utils-instance-exists
 
@@ -20,8 +23,6 @@ Kengine Instance Utils.
 | value | <code>Kengine.Instance</code> \| <code>Kengine.Asset</code> \| <code>Id.Instance</code> \| <code>Asset.GMObject</code> | 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Utils.Instance.IsAncestor"></a -->
 
 ## IsAncestor  :id=kengine-utils-instance-isancestor
 
@@ -41,8 +42,6 @@ Checks whether object-type Asset is ancestor of another object-type Asset.
 | parent | <code>Kengine.Asset</code> | <p>The parent</p> |
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Utils.Instance.CreateLayer"></a -->
 
 ## CreateLayer  :id=kengine-utils-instance-createlayer
 
@@ -67,8 +66,6 @@ Create a Kengine <code>Instance</code> and adds it to the [instances](Kengine?id
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Instance.CreateDepth"></a -->
-
 ## CreateDepth  :id=kengine-utils-instance-createdepth
 
 `Kengine.Utils.Instance.CreateDepth(x, y, [depth], [asset], [var_struct])` ⇒ <code>Kengine.Instance</code>
@@ -91,8 +88,6 @@ Create a Kengine <code>Instance</code> and adds it to the [instances](Kengine?id
 | [var_struct] | <code>Struct</code> |  | <p>An initial struct of variables to set for the real instance.</p> |
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Utils.Instance.With"></a -->
 
 ## With  :id=kengine-utils-instance-with
 

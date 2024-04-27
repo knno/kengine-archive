@@ -1,0 +1,13 @@
+{
+  "$GMScript":"",
+  "%Name":"__KenginePanelsScrollbar",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__KenginePanelsScrollbar",
+  "parent":{
+    "name":"Panels",
+    "path":"folders/Kengine/Scripts/Extensions/Panels.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

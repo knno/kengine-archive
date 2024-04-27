@@ -1,9 +1,7 @@
-/// @description General Step functions
-
 if not Kengine.initialized exit;
 
 #region Kengine.debug
-
+instances = Kengine.instances;
 #endregion Kengine.debug
 
 #region Kengine.ascii
@@ -12,12 +10,10 @@ __KengineAsciiUtils.__Step()
 
 #region Kengine.extensions
 var _m;
-var _exts = struct_get_names(Kengine.Extensions);
+var _exts = Kengine.Extensions.GetAll();
 var _ext;
 for (var _i=0; _i<array_length(_exts); _i++) {
-	if _exts[_i] == "toString" continue
-	if _exts[_i] == "__opts" continue
-	_ext = __KengineStructUtils.Get(Kengine.Extensions, _exts[_i]);
+	_ext = _exts[_i];
 	_m = __KengineStructUtils.Get(_ext, "Step")
 	if not is_method(_m) _m = __KengineStructUtils.Get(_ext, "_Step")
 	if not is_method(_m) _m = __KengineStructUtils.Get(_ext, "__Step")
@@ -33,11 +29,8 @@ if Kengine.coroutines != undefined {
 	if (current_time - Kengine.__coroutines_last_tick > 0.9*_expectedFrameTime)
 	{
 		Kengine.__coroutines_last_tick = current_time;
-		//__kengine_log($"Coroutines Count - {array_length(Kengine.coroutines)}")
 		for (var i=0; i<array_length(Kengine.coroutines); i++) {
 			if Kengine.coroutines[i] == undefined continue;
-			//__kengine_log($"Coroutines {i} {Kengine.coroutines[i].status}")
-
 			Kengine.coroutines[i].__Step();
 			if Kengine.coroutines[i].__marked_as_delete {
 				array_delete(Kengine.coroutines, i,1);
@@ -51,15 +44,11 @@ if Kengine.coroutines != undefined {
 
 #region Kengine.room
 
-if room != rm_init {
-	if (Kengine.current_room_asset == undefined) {
-		Kengine.current_room_asset = __KengineUtils.GetAsset("rm", room_get_name(room));
-		if (Kengine.current_room_asset != undefined) {
-			Kengine.current_room_asset.activate();
-		}
+if (Kengine.current_room_asset == undefined) {
+	Kengine.current_room_asset = __KengineUtils.GetAsset("rm", room_get_name(room));
+	if (Kengine.current_room_asset != undefined) {
+		Kengine.current_room_asset.Activate();
 	}
-} else {
-	
 }
 
 #endregion Kengine.room

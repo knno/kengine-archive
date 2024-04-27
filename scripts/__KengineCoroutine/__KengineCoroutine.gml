@@ -79,36 +79,54 @@ function __KengineCoroutine(name="", functions=undefined, callback=undefined, ha
 		var this = self;
 		var _i = this.current_function;
 		var m;
-		try {
-			if is_array(this.__functions[_i]) {
-				if is_array(this.__functions[_i][1]) {
-					m = this.__functions[_i][0];
-					this.result = method_call(m, this.__functions[_i][1]);
+		if array_length(this.__functions) > 0 and _i < array_length(this.__functions) {
+			try {
+				if is_array(this.__functions[_i]) {
+					if is_array(this.__functions[_i][1]) {
+						m = this.__functions[_i][0];
+						this.result = method_call(m, this.__functions[_i][1]);
+					} else {
+						this.result = this.__functions[_i][0]();
+					}
 				} else {
-					this.result = this.__functions[_i][0]();
+					this.result = this.__functions[_i]();
 				}
-			} else {
-				this.result = this.__functions[_i]();
-			}
-			array_push(this.results, this.result);
-		} catch (_e) {
-			if (__KengineStructUtils.Get(_e, "halt") == true) {
-				this.status = KENGINE_COROUTINES_STATUS.FAIL;
-				this.exception = _e;
-				if is_method(this.halt_callback) {
-					method({coroutine: this}, this.halt_callback)();
-				} else if is_array(this.halt_callback) {
-					method_call(method({coroutine: this}, this.halt_callback[0]), this.halt_callback[1]);
+				array_push(this.results, this.result);
+			} catch (_e) {
+				if (__KengineStructUtils.Get(_e, "halt") == true) {
+					this.status = KENGINE_COROUTINES_STATUS.FAIL;
+					this.exception = _e;
+					if is_method(this.halt_callback) {
+						method({coroutine: this}, this.halt_callback)();
+					} else if is_array(this.halt_callback) {
+						method_call(method({coroutine: this}, this.halt_callback[0]), this.halt_callback[1]);
+					}
+					return;
+				} else {
+					throw _e;
 				}
-				return;
-			} else {
-				throw _e;
 			}
 		}
 
 		this.current_function ++
 		if this.current_function >= array_length(this.__functions) {
-			this.status = KENGINE_COROUTINES_STATUS.DONE;
+			var children = array_filter(Kengine.coroutines, method({this}, function(c) {
+				return string_starts_with(c.name, this.name) and c.name != this.name;
+			}));
+			if array_length(children) > 0 {
+				var _all_done = true;
+				for (var _j=0; _j<array_length(children); _j++) {
+					if children[_j].status != KENGINE_COROUTINES_STATUS.DONE {
+						_all_done = false;
+						break;
+					}
+				}
+				if _all_done {
+					this.status = KENGINE_COROUTINES_STATUS.DONE;
+				}
+			} else {
+				this.status = KENGINE_COROUTINES_STATUS.DONE;
+			}
 		}
 
 		if this.status == KENGINE_COROUTINES_STATUS.DONE {

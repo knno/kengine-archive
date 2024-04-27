@@ -175,4 +175,4 @@ function __KengineDataUtils() : __KengineStruct() constructor {
     }
 
 }
-__KengineDataUtils();
+//__KengineDataUtils();

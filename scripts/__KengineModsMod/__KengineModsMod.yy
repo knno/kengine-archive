@@ -1,0 +1,13 @@
+{
+  "$GMScript":"",
+  "%Name":"__KengineModsMod",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__KengineModsMod",
+  "parent":{
+    "name":"Mods",
+    "path":"folders/Kengine/Scripts/Extensions/Mods.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

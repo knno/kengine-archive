@@ -75,4 +75,4 @@ function __KengineArrayUtils() : __KengineStruct() constructor {
         return _a;
     }
 }
-__KengineArrayUtils();
+//__KengineArrayUtils();

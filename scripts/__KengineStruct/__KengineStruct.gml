@@ -1,3 +1,8 @@
+/**
+ * @name Struct
+ * @memberof Kengine
+ *
+ */
 function __KengineStruct(_struct=undefined, _opts=undefined) constructor {
 
 	if _struct != undefined {
@@ -13,7 +18,6 @@ function __KengineStruct(_struct=undefined, _opts=undefined) constructor {
 		str: "<Kengine.Struct>",
 	}
 
-
 	if _struct == undefined and _opts == undefined return;
 
 	if _opts != undefined {	
@@ -23,4 +27,3 @@ function __KengineStruct(_struct=undefined, _opts=undefined) constructor {
 	}
 
 }
-__KengineStruct();

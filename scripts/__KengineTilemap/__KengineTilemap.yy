@@ -1,0 +1,13 @@
+{
+  "$GMScript":"",
+  "%Name":"__KengineTilemap",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__KengineTilemap",
+  "parent":{
+    "name":"__KengineBaseConstructors",
+    "path":"folders/Kengine/Scripts/__KengineBaseConstructors.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

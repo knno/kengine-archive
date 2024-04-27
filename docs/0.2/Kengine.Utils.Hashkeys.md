@@ -1,12 +1,15 @@
-<!-- a name="Kengine.Utils.Hashkeys"></a -->
-
 # Hashkeys  :id=kengine-utils-hashkeys
 
 [Kengine.Utils.Hashkeys](Kengine.Utils.Hashkeys) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine hashkeys utilitiy functions
 
 
-<!-- a name="Kengine.Utils.Hashkeys.__all"></a -->
+<!-- tabs:end -->
 
 ## __all  :id=kengine-utils-hashkeys-__all
 
@@ -20,8 +23,6 @@ A struct that contains name and hash structs for structs.
 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Utils.Hashkeys.add"></a -->
 
 ## add  :id=kengine-utils-hashkeys-add
 
@@ -41,8 +42,6 @@ Add a hash to _hashkeys.
 | name | <code>String</code> | <p>The name.</p> |
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Utils.Hashkeys.hash"></a -->
 
 ## hash  :id=kengine-utils-hashkeys-hash
 

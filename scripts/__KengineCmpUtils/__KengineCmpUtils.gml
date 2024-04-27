@@ -165,4 +165,4 @@ function __KengineCmpUtils() : __KengineStruct() constructor {
 	}
 
 }
-__KengineCmpUtils();
+//__KengineCmpUtils();

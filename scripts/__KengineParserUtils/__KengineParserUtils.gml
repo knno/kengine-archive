@@ -6,7 +6,7 @@
  */
 function __KengineParserUtils() : __KengineStruct() constructor {
 
-	static __Interpreter = new __TXR();
+	static interpreter = new __TXR();
 
 	/** 
 	 * @function __dot2ident
@@ -33,7 +33,9 @@ function __KengineParserUtils() : __KengineStruct() constructor {
 	}
 
 	static __InterpretValue = function(value, context=undefined) {
-		return __InterpretTxr("return " + string(value) + (string_ends_with(string_trim(value), ";") ? "" : ";"), context);
+		var _pre;
+		if string_count("=", value) > 0 { _pre=""; } else { _pre="return "; }
+		return __InterpretTxr(_pre + string(value) + (string_ends_with(string_trim(value), ";") ? "" : ";"), context);
 	}
 
 	/**
@@ -233,7 +235,7 @@ function __KengineParserUtils() : __KengineStruct() constructor {
 	 *
 	 */
 	static __InterpretTxr = function(src_or_pg, context=undefined) {
-		static _txr = __KengineParserUtils.__Interpreter;
+		static _txr = __KengineParserUtils.interpreter;
 
 		var _compiled;
 		if is_string(src_or_pg) {
@@ -264,10 +266,9 @@ function __KengineParserUtils() : __KengineStruct() constructor {
 	}
 
 	/**
-	 * @function __InterpretAsset
+	 * @function InterpretAsset
 	 * @memberof Kengine.Utils.Parser
 	 * @description Interprets a script asset.
-	 * @private
 	 * @param {String|Kengine.Asset} asset Asset or name of the asset.
 	 * @param {Any} this `this` arg in the asset runtime script.
 	 * @param {Struct} [dict] An extra context in the asset runtime script.
@@ -275,7 +276,7 @@ function __KengineParserUtils() : __KengineStruct() constructor {
 	 * @return {Any}
 	 *
 	 */
-	static __InterpretAsset = function(asset, this=undefined, dict=undefined, args=undefined) {
+	static InterpretAsset = function(asset, this=undefined, dict=undefined, args=undefined) {
 		var _scr = asset;
 		dict = dict ?? {};
 		args = args ?? [];
@@ -324,5 +325,3 @@ function __KengineParserUtils() : __KengineStruct() constructor {
 	}
 
 }
-__KengineParserUtils();
-

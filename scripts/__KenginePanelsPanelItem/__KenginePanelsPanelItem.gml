@@ -46,7 +46,7 @@ function __KenginePanelsPanelItem(options=undefined) constructor {
 	height = undefined
     __KengineOptions.__Apply(options, self);
 
-	width = width ?? (parent != undefined ? parent.width : __default_width)
+	width = width ?? __default_width
 	width = height ?? __default_height
 	font = font ?? font_ken_panels
 	color = color ?? (parent != undefined ? (__KengineStructUtils.Exists(parent, "color") ? parent.color : __default_color ) : __default_color)

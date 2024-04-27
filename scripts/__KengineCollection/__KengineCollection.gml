@@ -8,7 +8,7 @@
  * When removing a value from the collection, the index of the value would be reused.
  *
  */
-function __KengineCollection(array=undefined, defaultcmp=undefined) constructor {
+function __KengineCollection(array=undefined, defaultcmp=undefined) : __KengineStruct() constructor {
 
 	__all = array ?? [];
 	__cmp = defaultcmp ?? __KengineCmpUtils.cmp_val1_val2;
@@ -133,7 +133,7 @@ function __KengineCollection(array=undefined, defaultcmp=undefined) constructor 
 	Length = function() {
 		return array_length(__all);
 	}
-	 
+
 	/**
 	 * @function Filter
 	 * @memberof Kengine.Collection
@@ -151,16 +151,16 @@ function __KengineCollection(array=undefined, defaultcmp=undefined) constructor 
 		}
 		return _a;
 	}
-	  
-	 /**
-	  * @function FilterSelf
-	  * @memberof Kengine.Collection
-	  * @description Return a filtered copy of self from the collection values.
-	  * @param {Function} func A `Function` that takes `value`. Return `true` to take.
-	  * @param {Bool} [return_array=false]
-	  * @return {Kengine.Collection}
-	  *
-	  */
+
+	/**
+	 * @function FilterSelf
+	 * @memberof Kengine.Collection
+	 * @description Return a filtered copy of self from the collection values.
+	 * @param {Function} func A `Function` that takes `value`. Return `true` to take.
+	 * @param {Bool} [return_array=false]
+	 * @return {Kengine.Collection}
+	 *
+	 */
 	FilterSelf = function(func) {
 		return new __KengineCollection(Filter(func));
 	}

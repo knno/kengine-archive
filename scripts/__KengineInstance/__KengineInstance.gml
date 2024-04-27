@@ -34,7 +34,7 @@ function __KengineInstance(object=undefined, asset=undefined) : __KengineStruct(
 
     var _x, _y, _var_struct, _i;
     var _oi = object;
-    var _create = false;
+    var _create = object==undefined;
 
     /**
      * @name instance
@@ -53,14 +53,16 @@ function __KengineInstance(object=undefined, asset=undefined) : __KengineStruct(
 	    if _asset != -1 {
 	        _asset = Kengine.asset_types.object.assets.Get(_asset);
 	    } else {
-	        throw __KengineErrorUtils.Create(__KengineErrorUtils.Types.instance__asset__does_not_exist, string("Cannot create instance with non-existent Asset \"{0}\".", _asset));
+	        throw Kengine.Utils.Errors.Create("instance__asset__does_not_exist", string("Cannot create instance with non-existent Asset \"{0}\".", _asset));
 	    }
+	} else if is_instanceof(_asset, Kengine.Asset) {
+		//
 	} else if asset_get_type(_asset) == asset_object and object_exists(_asset) {
 	    _asset =  Kengine.asset_types.object.assets.GetInd(_asset, __KengineCmpUtils.cmp_val1_val2_id);
 		if _asset != -1 {
 			_asset = Kengine.asset_types.object.assets.Get(_asset);
 		} else {
-	        throw __KengineErrorUtils.Create(__KengineErrorUtils.Types.instance__asset__does_not_exist, string("Cannot create instance with non-existent Asset \"{0}\".", _asset));
+	        throw Kengine.Utils.Errors.Create("instance__asset__does_not_exist", string("Cannot create instance with non-existent Asset \"{0}\".", _asset));
 		}
 	} else if is_undefined(_asset) {
 		if not is_undefined(object) {
@@ -99,14 +101,16 @@ function __KengineInstance(object=undefined, asset=undefined) : __KengineStruct(
 
         if typeof(asset) == "string" {
             asset =  Kengine.asset_types.object.assets.GetInd(asset, __KengineCmpUtils.cmp_val1_val2_name);
-        } else if asset_get_type(asset) == asset_object {
+        } else if is_instanceof(asset, Kengine.Asset) {
+			//
+		} else if asset_get_type(asset) == asset_object {
             asset =  Kengine.asset_types.object.assets.GetInd(asset, __KengineCmpUtils.cmp_val1_val2_id);
         }
         if is_real(asset) {
             if asset != -1 {
                 asset = Kengine.asset_types.object.assets.Get(asset);
             } else {
-                throw __KengineErrorUtils.create(__KengineErrorUtils.Types.instance__asset__does_not_exist, string("Cannot create instance with non-existent Asset \"{0}\".", asset));
+                throw Kengine.Utils.Errors.Create("instance__asset__does_not_exist", string("Cannot create instance with non-existent Asset \"{0}\".", asset));
             }
         } else if is_undefined(asset) {
 			

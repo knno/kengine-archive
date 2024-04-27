@@ -77,8 +77,21 @@ function __KengineHashkeyUtils() : __KengineStruct() constructor  {
         game_end: {name: "game_end", hash: variable_get_hash("game_end")},
         room_start: {name: "room_start", hash: variable_get_hash("room_start")},
         room_end: {name: "room_end", hash: variable_get_hash("room_end")},
-		rm: {name: "rm", hash: variable_get_hash("rm")},
-        // So on...
+        async_audio_playback: {name: "async_audio_playback", hash: variable_get_hash("async_audio_playback")},
+        async_audio_playback_ended: {name: "async_audio_playback_ended", hash: variable_get_hash("async_audio_playback_ended")},
+        async_audio_recording: {name: "async_audio_recording", hash: variable_get_hash("async_audio_recording")},
+        async_dialog: {name: "async_dialog", hash: variable_get_hash("async_dialog")},
+        async_push_notification: {name: "async_push_notification", hash: variable_get_hash("async_push_notification")},
+        async_save_load: {name: "async_save_load", hash: variable_get_hash("async_save_load")},
+        async_social: {name: "async_social", hash: variable_get_hash("async_social")},
+        async_system_event: {name: "async_system_event", hash: variable_get_hash("async_system_event")},
+        async_web: {name: "async_web", hash: variable_get_hash("async_web")},
+        async_web_cloud: {name: "async_web_cloud", hash: variable_get_hash("async_web_cloud")},
+        async_web_iap: {name: "async_web_iap", hash: variable_get_hash("async_web_iap")},
+        async_web_image_load: {name: "async_web_image_load", hash: variable_get_hash("async_web_image_load")},
+        async_web_networking: {name: "async_web_networking", hash: variable_get_hash("async_web_networking")},
+        async_web_steam: {name: "async_web_steam", hash: variable_get_hash("async_web_steam")},
+		// So on...
     }
 }
-__KengineHashkeyUtils();
+//__KengineHashkeyUtils();

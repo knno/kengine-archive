@@ -1,12 +1,15 @@
-<!-- a name="Kengine"></a -->
-
 # Kengine  :id=kengine
 
 [Kengine](Kengine) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 The Kengine namespace.
 
 
-<!-- a name="Kengine.instances"></a -->
+<!-- tabs:end -->
 
 ## instances  :id=kengine-instances
 
@@ -21,8 +24,6 @@ This collection contains all created [Instance](Kengine?id=kengine.instance).
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Extensions"></a -->
-
 ## Extensions  :id=kengine-extensions
 
 [Kengine.Extensions](Kengine?id=kengine.extensions) <code>Struct</code>
@@ -36,24 +37,115 @@ A key value struct of name to Kengine extension.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Extensions.Mods"></a -->
-
-### Mods  :id=kengine-extensions-mods
-
-[Kengine.Extensions.Mods](Kengine.Extensions.Mods) <code>object</code>
-Kengine's Mods extension
-
-
-<!-- a name="Kengine.Extensions.Tests"></a -->
-
 ### Tests  :id=kengine-extensions-tests
 
 [Kengine.Extensions.Tests](Kengine.Extensions.Tests) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 Kengine's Tests extension</p>
 <p>Note - Disabling copy on write behavior for arrays is required.
 
 
-<!-- a name="Kengine.coroutines"></a -->
+<!-- tabs:end -->
+
+### Mods  :id=kengine-extensions-mods
+
+[Kengine.Extensions.Mods](Kengine.Extensions.Mods) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
+Kengine's Mods extension
+
+
+<!-- tabs:end -->
+
+### Add  :id=kengine-extensions-add
+
+`Kengine.Extensions.Add(ext)` ⇒ <code>Struct</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
+Add a struct to Kengine extensions.</p>
+<blockquote>
+<p>if your extension returns a struct, then it is added automatically and no need to call this method.
+</blockquote>
+
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| ext | <code>Struct</code> | <p>The extension struct to add.</p> |
+
+<!-- tabs:end -->
+
+### Get  :id=kengine-extensions-get
+
+`Kengine.Extensions.Get(name)` ⇒ <code>Struct</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
+Return a Kengine extension by name.
+
+
+
+| Param | Type |
+| --- | --- |
+| name | <code>String</code> | 
+
+<!-- tabs:end -->
+
+### Exists  :id=kengine-extensions-exists
+
+`Kengine.Extensions.Exists(name)` ⇒ <code>Bool</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
+Return whether a Kengine extension exists by name.
+
+
+
+| Param | Type |
+| --- | --- |
+| name | <code>String</code> | 
+
+<!-- tabs:end -->
+
+### GetAllNames  :id=kengine-extensions-getallnames
+
+`Kengine.Extensions.GetAllNames()` ⇒ <code>Array.&lt;String&gt;</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
+Get all Extensions.
+
+
+<!-- tabs:end -->
+
+### GetAll  :id=kengine-extensions-getall
+
+`Kengine.Extensions.GetAll()` ⇒ <code>Array.&lt;Struct&gt;</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
+Get all Extensions.
+
+
+<!-- tabs:end -->
 
 ## coroutines  :id=kengine-coroutines
 
@@ -68,8 +160,6 @@ An array of [Coroutine](Kengine?id=kengine.coroutine) currently processing.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.current_room_asset"></a -->
-
 ## current_room_asset  :id=kengine-current_room_asset
 
 [Kengine.current_room_asset](Kengine?id=kengine.current_room_asset) [<code>Asset</code>](Kengine?id=kengine.asset) \| <code>Undefined</code>
@@ -82,8 +172,6 @@ The Room-type [Asset](Kengine?id=kengine.asset) currently active as room.
 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.asset_types"></a -->
 
 ## asset_types  :id=kengine-asset_types
 
@@ -98,8 +186,6 @@ The asset types struct of Kengine.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.__uids"></a -->
-
 ## __uids  :id=kengine-__uids
 
 [Kengine.__uids](Kengine?id=kengine.__uids) <code>Real</code>
@@ -112,8 +198,6 @@ The current UID reached for the Kengine's UID generator.
 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.main_object"></a -->
 
 ## main_object  :id=kengine-main_object
 
@@ -128,143 +212,226 @@ The main Kengine singleton object. Referenced by <code>Kengine.main_object</code
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils"></a -->
-
 ## Utils  :id=kengine-utils
 
 Kengine.Utils <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 Kengine Utils library.
 
 
-<!-- a name="Kengine.Utils.Arrays"></a -->
+<!-- tabs:end -->
 
 ### Arrays  :id=kengine-utils-arrays
 
 [Kengine.Utils.Arrays](Kengine.Utils.Arrays) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine arrays utilitiy functions
 
 
-<!-- a name="Kengine.Utils.Ascii"></a -->
+<!-- tabs:end -->
 
 ### Ascii  :id=kengine-utils-ascii
 
 [Kengine.Utils.Ascii](Kengine.Utils.Ascii) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine ascii utilitiy functions
 
 
-<!-- a name="Kengine.Utils.Benchmark"></a -->
+<!-- tabs:end -->
 
 ### Benchmark  :id=kengine-utils-benchmark
 
 [Kengine.Utils.Benchmark](Kengine.Utils.Benchmark) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine benchmark utilitiy functions
 
 
-<!-- a name="Kengine.Utils.Cmps"></a -->
+<!-- tabs:end -->
 
 ### Cmps  :id=kengine-utils-cmps
 
 [Kengine.Utils.Cmps](Kengine.Utils.Cmps) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine comparing functions.
 
 
-<!-- a name="Kengine.Utils.Coroutine"></a -->
+<!-- tabs:end -->
 
 ### Coroutine  :id=kengine-utils-coroutine
 
 [Kengine.Utils.Coroutine](Kengine.Utils.Coroutine) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine coroutine utilitiy functions
 
 
-<!-- a name="Kengine.Utils.Data"></a -->
+<!-- tabs:end -->
 
 ### Data  :id=kengine-utils-data
 
 [Kengine.Utils.Data](Kengine.Utils.Data) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine data utilitiy functions
 
 
-<!-- a name="Kengine.Utils.Easing"></a -->
+<!-- tabs:end -->
 
 ### Easing  :id=kengine-utils-easing
 
 [Kengine.Utils.Easing](Kengine.Utils.Easing) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine easing utilitiy functions
 
 
-<!-- a name="Kengine.Utils.Errors"></a -->
+<!-- tabs:end -->
 
 ### Errors  :id=kengine-utils-errors
 
 [Kengine.Utils.Errors](Kengine.Utils.Errors) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine errors utilitiy functions
 
 
-<!-- a name="Kengine.Utils.Events"></a -->
+<!-- tabs:end -->
 
 ### Events  :id=kengine-utils-events
 
 [Kengine.Utils.Events](Kengine.Utils.Events) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine events utilitiy functions
 
 
-<!-- a name="Kengine.Utils.Extensions"></a -->
+<!-- tabs:end -->
 
 ### Extensions  :id=kengine-utils-extensions
 
 [Kengine.Utils.Extensions](Kengine.Utils.Extensions) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine extensions utilitiy functions
 
 
-<!-- a name="Kengine.Utils.Hashkeys"></a -->
+<!-- tabs:end -->
 
 ### Hashkeys  :id=kengine-utils-hashkeys
 
 [Kengine.Utils.Hashkeys](Kengine.Utils.Hashkeys) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine hashkeys utilitiy functions
 
 
-<!-- a name="Kengine.Utils.Input"></a -->
+<!-- tabs:end -->
 
 ### Input  :id=kengine-utils-input
 
 [Kengine.Utils.Input](Kengine.Utils.Input) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine input utilitiy functions
 
 
-<!-- a name="Kengine.Utils.Instance"></a -->
+<!-- tabs:end -->
 
 ### Instance  :id=kengine-utils-instance
 
 [Kengine.Utils.Instance](Kengine.Utils.Instance) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 Kengine Instance Utils.
 
 
-<!-- a name="Kengine.Utils.Parser"></a -->
+<!-- tabs:end -->
 
 ### Parser  :id=kengine-utils-parser
 
 [Kengine.Utils.Parser](Kengine.Utils.Parser) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine parser utilitiy functions
 
 
-<!-- a name="Kengine.Utils.Strings"></a -->
+<!-- tabs:end -->
 
 ### Strings  :id=kengine-utils-strings
 
 [Kengine.Utils.Strings](Kengine.Utils.Strings) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine strings utilitiy functions
 
 
-<!-- a name="Kengine.Utils.Structs"></a -->
+<!-- tabs:end -->
 
 ### Structs  :id=kengine-utils-structs
 
 [Kengine.Utils.Structs](Kengine.Utils.Structs) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine structs utilitiy functions
 
 
-<!-- a name="Kengine.Utils.GetAsset"></a -->
+<!-- tabs:end -->
 
 ### GetAsset  :id=kengine-utils-getasset
 
@@ -286,8 +453,6 @@ Retrieve an [Asset](Kengine?id=kengine.asset) from an AssetType (if loaded).
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Execute"></a -->
-
 ### Execute  :id=kengine-utils-execute
 
 `Kengine.Utils.Execute(scr, [args])` ⇒ <code>Any</code>
@@ -308,8 +473,6 @@ A replacement for execute_script. Executes the script or method or a script-type
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.initialized"></a -->
-
 ## initialized  :id=kengine-initialized
 
 [Kengine.initialized](Kengine?id=kengine.initialized) <code>Bool</code>
@@ -323,8 +486,6 @@ Whether Kengine has been initiated or not.
 
 **Read only**: true  
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Asset"></a -->
 
 ## Asset  :id=kengine-asset
 
@@ -359,8 +520,6 @@ An asset that represents sprites, objects, rooms, and can be any other customly 
 ```
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Asset.index"></a -->
-
 ### index  :id=kengine-asset-index
 
 [Kengine.Asset.index](Kengine?id=kengine.asset.index) <code>Real</code>
@@ -373,8 +532,6 @@ The index of the asset in the asset type collection.
 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Asset.type"></a -->
 
 ### type  :id=kengine-asset-type
 
@@ -389,8 +546,6 @@ The type of the asset.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Asset.name"></a -->
-
 ### name  :id=kengine-asset-name
 
 [Kengine.Asset.name](Kengine?id=kengine.asset.name) <code>String</code>
@@ -403,8 +558,6 @@ The name of the asset.
 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Asset.id"></a -->
 
 ### id  :id=kengine-asset-id
 
@@ -419,8 +572,6 @@ The real ID of the asset.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Asset.__original_name"></a -->
-
 ### __original_name  :id=kengine-asset-__original_name
 
 [Kengine.Asset.__original_name](Kengine?id=kengine.asset.__original_name) <code>String</code>
@@ -433,8 +584,6 @@ The same as <code>name</code> of the asset object, This is not necessarily the r
 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Asset.__is_renamed"></a -->
 
 ### __is_renamed  :id=kengine-asset-__is_renamed
 
@@ -449,8 +598,6 @@ Whether this asset has been renamed. The original name is at [__original_name](K
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Asset.is_yyp"></a -->
-
 ### is_yyp  :id=kengine-asset-is_yyp
 
 [Kengine.Asset.is_yyp](Kengine?id=kengine.asset.is_yyp) <code>Bool</code>
@@ -463,8 +610,6 @@ Whether this asset's <code>id</code> is the real ID of a <code>YYAsset</code>.
 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Asset.real_name"></a -->
 
 ### real_name  :id=kengine-asset-real_name
 
@@ -479,8 +624,6 @@ The real name of the asset (For YYAssets compatibility).
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Asset.tags"></a -->
-
 ### tags  :id=kengine-asset-tags
 
 [Kengine.Asset.tags](Kengine?id=kengine.asset.tags) [<code>Collection</code>](Kengine?id=kengine.collection) \| <code>Undefined</code>
@@ -493,8 +636,6 @@ A Kengine.Collection of the tags associated with the asset.
 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Asset.GetReplacement"></a -->
 
 ### GetReplacement  :id=kengine-asset-getreplacement
 
@@ -509,8 +650,6 @@ A Kengine.Collection of the tags associated with the asset.
 | [replaces_max] | <code>Real</code> | <code>-2</code> | 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.AssetType"></a -->
 
 ## AssetType  :id=kengine-assettype
 
@@ -539,8 +678,6 @@ An asset type is a group of assets, such as rooms or custom levels. It can be a 
 ```
 <!-- tabs:end -->
 
-<!-- a name="Kengine.AssetType.name"></a -->
-
 ### name  :id=kengine-assettype-name
 
 [Kengine.AssetType.name](Kengine?id=kengine.assettype.name) <code>String</code>
@@ -553,8 +690,6 @@ The name property of the AssetType. Can be provided in creation options. Require
 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.AssetType.is_addable"></a -->
 
 ### is_addable  :id=kengine-assettype-is_addable
 
@@ -570,8 +705,6 @@ Whether assets can be added to this asset type in general. Can be provided in cr
 **Default**: <code>true</code>  
 <!-- tabs:end -->
 
-<!-- a name="Kengine.AssetType.is_replaceable"></a -->
-
 ### is_replaceable  :id=kengine-assettype-is_replaceable
 
 [Kengine.AssetType.is_replaceable](Kengine?id=kengine.assettype.is_replaceable) <code>Bool</code>
@@ -586,8 +719,6 @@ Whether assets can be added to this asset type in general. Can be provided in cr
 **Default**: <code>true</code>  
 <!-- tabs:end -->
 
-<!-- a name="Kengine.AssetType.asset_kind"></a -->
-
 ### asset_kind  :id=kengine-assettype-asset_kind
 
 [Kengine.AssetType.asset_kind](Kengine?id=kengine.assettype.asset_kind) <code>String</code> \| <code>Constant.AssetType</code> \| <code>Any</code>
@@ -601,8 +732,6 @@ The <code>asset_kind</code> property of the AssetType. Can be provided in creati
 
 **Default**: <code>KENGINE_CUSTOM_ASSET_KIND</code>  
 <!-- tabs:end -->
-
-<!-- a name="Kengine.AssetType.rename_rules"></a -->
 
 ### rename_rules  :id=kengine-assettype-rename_rules
 
@@ -621,8 +750,6 @@ A set of rules to rename assets.</p>
 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.AssetType.index_asset_filter"></a -->
 
 ### index_asset_filter  :id=kengine-assettype-index_asset_filter
 
@@ -643,8 +770,6 @@ A function that returns <code>true</code> if the provided asset should be indexe
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.AssetType.assets"></a -->
-
 ### assets  :id=kengine-assettype-assets
 
 [Kengine.AssetType.assets](Kengine?id=kengine.assettype.assets) [<code>Collection</code>](Kengine?id=kengine.collection)
@@ -663,8 +788,6 @@ The AssetType's collection.
 Kengine.asset_types[my_type.name].assets == my_type.assets // Return true
 ```
 <!-- tabs:end -->
-
-<!-- a name="Kengine.AssetType.GetAssetReplacement"></a -->
 
 ### GetAssetReplacement  :id=kengine-assettype-getassetreplacement
 
@@ -693,8 +816,6 @@ my_asset1 = my_asset_type.GetAssetReplacement("spr_character01", 0, "index"); //
 ```
 <!-- tabs:end -->
 
-<!-- a name="Kengine.AssetType.IndexAssets"></a -->
-
 ### IndexAssets  :id=kengine-assettype-indexassets
 
 `Kengine.AssetType.IndexAssets([indexing_options])` ⇒ <code>Bool</code>
@@ -714,8 +835,6 @@ The asset indexing functions (IndexAssets, index_asset) prepare and adds all the
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.AssetType.IndexAsset"></a -->
-
 ### IndexAsset  :id=kengine-assettype-indexasset
 
 `Kengine.AssetType.IndexAsset(asset)` ⇒ <code>Array.&lt;Any&gt;</code>
@@ -734,8 +853,6 @@ The asset indexing functions (IndexAssets, index_asset) prepare and adds all the
 | asset | [<code>Asset</code>](Kengine?id=kengine.asset) | <p>The asset to index.</p> |
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.AssetType.IndexingOptions"></a -->
 
 ### IndexingOptions  :id=kengine-assettype-indexingoptions
 
@@ -758,8 +875,6 @@ AssetType indexing options struct.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Collection"></a -->
-
 ## Collection  :id=kengine-collection
 
 `Kengine.Collection([array], [defaultcmp])`
@@ -780,8 +895,6 @@ When removing a value from the collection, the index of the value would be reuse
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Collection.GetAll"></a -->
-
 ### GetAll  :id=kengine-collection-getall
 
 `Kengine.Collection.GetAll()` ⇒ <code>Array.&lt;Any&gt;</code> \| <code>Any</code> \| <code>Undefined</code>
@@ -794,8 +907,6 @@ Return all values inside the collection.
 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Collection.Get"></a -->
 
 ### Get  :id=kengine-collection-get
 
@@ -815,8 +926,6 @@ Return value searched by collection index.
 | ind | <code>Real</code> | <p>The index of the value in the collection.</p> |
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Collection.GetInd"></a -->
 
 ### GetInd  :id=kengine-collection-getind
 
@@ -838,8 +947,6 @@ Return index of the value in the collection.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Collection.Exists"></a -->
-
 ### Exists  :id=kengine-collection-exists
 
 `Kengine.Collection.Exists(val, [cmp])` ⇒ <code>Bool</code>
@@ -860,8 +967,6 @@ Return whether value is already in the collection.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Collection.Add"></a -->
-
 ### Add  :id=kengine-collection-add
 
 `Kengine.Collection.Add(val)` ⇒ <code>Real</code>
@@ -880,8 +985,6 @@ Add the value to the collection.
 | val | <code>Any</code> | <p>The value to be added to the collection.</p> |
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Collection.AddOnce"></a -->
 
 ### AddOnce  :id=kengine-collection-addonce
 
@@ -903,8 +1006,6 @@ Add the value to the collection, only if it does not exist already.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Collection.Remove"></a -->
-
 ### Remove  :id=kengine-collection-remove
 
 `Kengine.Collection.Remove(val, [cmp])` ⇒ <code>Any</code>
@@ -925,8 +1026,6 @@ Remove the value from the collection.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Collection.RemoveInd"></a -->
-
 ### RemoveInd  :id=kengine-collection-removeind
 
 `Kengine.Collection.RemoveInd(ind)`
@@ -945,8 +1044,6 @@ Remove a looked-up value by the provided index from the collection.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Collection.Length"></a -->
-
 ### Length  :id=kengine-collection-length
 
 `Kengine.Collection.Length()` ⇒ <code>Real</code>
@@ -960,8 +1057,6 @@ Return length of the values in the collection.
 
 **Returns**: <code>Real</code> - The length of the values in the collection.  
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Collection.Filter"></a -->
 
 ### Filter  :id=kengine-collection-filter
 
@@ -980,8 +1075,6 @@ Return a filtered array from the collection values.
 | func | <code>function</code> | <p>A <code>Function</code> that takes <code>value</code>. Return <code>true</code> to take.</p> |
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Collection.FilterSelf"></a -->
 
 ### FilterSelf  :id=kengine-collection-filterself
 
@@ -1002,11 +1095,9 @@ Return a filtered copy of self from the collection values.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Coroutine"></a -->
-
 ## Coroutine  :id=kengine-coroutine
 
-`Kengine.Coroutine([functions], [callback], [halt_callback])`
+`Kengine.Coroutine([name], [functions], [callback], [halt_callback])`
 <!-- tabs:start -->
 
 
@@ -1018,13 +1109,12 @@ Return a filtered copy of self from the collection values.
 
 | Param | Type |
 | --- | --- |
+| [name] | <code>String</code> | 
 | [functions] | <code>Array.&lt;function()&gt;</code> | 
 | [callback] | <code>function</code> | 
 | [halt_callback] | <code>function</code> | 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Instance"></a -->
 
 ## Instance  :id=kengine-instance
 
@@ -1060,8 +1150,6 @@ Note - It is recommended to use [Kengine.Utils.Instance.CreateLayer](Kengine.Uti
 ```
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Instance.instance"></a -->
-
 ### instance  :id=kengine-instance-instance
 
 [Kengine.Instance.instance](Kengine?id=kengine.instance.instance) <code>Id.Instance</code>
@@ -1074,8 +1162,6 @@ The instance this wrapper is wrapping. <code>noone</code>, <code>obj_ken_object<
 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Instance.asset"></a -->
 
 ### asset  :id=kengine-instance-asset
 
@@ -1090,8 +1176,6 @@ The asset provided to create this wrapper. Similar to <code>object_index</code>.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Instance.is_wrapper"></a -->
-
 ### is_wrapper  :id=kengine-instance-is_wrapper
 
 [Kengine.Instance.is_wrapper](Kengine?id=kengine.instance.is_wrapper) <code>Bool</code>
@@ -1105,8 +1189,6 @@ Whether this is a wrapper or not, by default it is <code>true</code>.
 
 **Default**: <code>true</code>  
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Instance.Create"></a -->
 
 ### Create  :id=kengine-instance-create
 
@@ -1125,8 +1207,6 @@ Whether this is a wrapper or not, by default it is <code>true</code>.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Instance.Destroy"></a -->
-
 ### Destroy  :id=kengine-instance-destroy
 
 `Kengine.Instance.Destroy()`
@@ -1140,11 +1220,9 @@ Destroy the real instance and remove this from the [instances](Kengine?id=kengin
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.KengineAssetTypes"></a -->
-
 ## KengineAssetTypes  :id=kengine-kengineassettypes
 
-`Kengine.KengineAssetTypes()` ⇒ <code>Struct</code>
+`Kengine.KengineAssetTypes()` ⇒ <code>Struct</code> \| <code>Struct</code>
 <!-- tabs:start -->
 
 

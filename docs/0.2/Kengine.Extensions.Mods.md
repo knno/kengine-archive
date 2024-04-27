@@ -1,12 +1,15 @@
-<!-- a name="Kengine.Extensions.Mods"></a -->
-
 # Mods  :id=kengine-extensions-mods
 
 [Kengine.Extensions.Mods](Kengine.Extensions.Mods) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 Kengine's Mods extension
 
 
-<!-- a name="Kengine.Extensions.Mods.AssetConf"></a -->
+<!-- tabs:end -->
 
 ## AssetConf  :id=kengine-extensions-mods-assetconf
 
@@ -26,8 +29,6 @@ An AssetConf is a configuration object for an asset to be applied or unapplied. 
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Extensions.Mods.AssetConf.conf"></a -->
-
 ### conf  :id=kengine-extensions-mods-assetconf-conf
 
 [Kengine.Extensions.Mods.AssetConf.conf](Kengine.Extensions.Mods?id=kengine.extensions.mods.assetconf.conf) <code>Struct</code>
@@ -42,8 +43,6 @@ The internal confs of this AssetConf.</p>
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Extensions.Mods.AssetConf.is_applied"></a -->
-
 ### is_applied  :id=kengine-extensions-mods-assetconf-is_applied
 
 [Kengine.Extensions.Mods.AssetConf.is_applied](Kengine.Extensions.Mods?id=kengine.extensions.mods.assetconf.is_applied) <code>Bool</code>
@@ -56,8 +55,6 @@ Whether the assetconf is applied by a specific mod. Defaults to <code>false</cod
 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Extensions.Mods.AssetConf.target"></a -->
 
 ### target  :id=kengine-extensions-mods-assetconf-target
 
@@ -73,8 +70,6 @@ The target asset of this asset conf. It can be the same as <code>self.asset</cod
 **See**: [Kengine.Asset.__replaces](Kengine?id=kengine.asset.__replaces)  
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Extensions.Mods.AssetConf.source_mod"></a -->
-
 ### source_mod  :id=kengine-extensions-mods-assetconf-source_mod
 
 [Kengine.Extensions.Mods.AssetConf.source_mod](Kengine.Extensions.Mods?id=kengine.extensions.mods.assetconf.source_mod) [<code>Mod</code>](Kengine.Extensions.Mods?id=kengine.extensions.mods.mod) \| <code>Undefined</code>
@@ -87,8 +82,6 @@ The mod emitting this assetconf.
 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Extensions.Mods.AssetConf.Apply"></a -->
 
 ### Apply  :id=kengine-extensions-mods-assetconf-apply
 
@@ -103,8 +96,6 @@ The mod emitting this assetconf.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Extensions.Mods.AssetConf.Unapply"></a -->
-
 ### Unapply  :id=kengine-extensions-mods-assetconf-unapply
 
 `Kengine.Extensions.Mods.AssetConf.Unapply()`
@@ -117,8 +108,6 @@ The mod emitting this assetconf.
 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Extensions.Mods.Mod"></a -->
 
 ## Mod  :id=kengine-extensions-mods-mod
 
@@ -143,8 +132,6 @@ Newely added <code>Kengine.Asset</code>s can either be simply just added or repl
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Extensions.Mods.Mod.source_path"></a -->
-
 ### source_path  :id=kengine-extensions-mods-mod-source_path
 
 [Kengine.Extensions.Mods.Mod.source_path](Kengine.Extensions.Mods?id=kengine.extensions.mods.mod.source_path) <code>String</code>
@@ -159,8 +146,6 @@ The source_path property of the Mod.
 **Default**: <code>&quot;&lt;unknown source_path&gt;&quot;</code>  
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Extensions.Mods.Mod.name"></a -->
-
 ### name  :id=kengine-extensions-mods-mod-name
 
 [Kengine.Extensions.Mods.Mod.name](Kengine.Extensions.Mods?id=kengine.extensions.mods.mod.name) <code>String</code>
@@ -173,8 +158,6 @@ The <code>name</code> provided when creating the <code>Mod</code>.
 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Extensions.Mods.Mod.options"></a -->
 
 ### options  :id=kengine-extensions-mods-mod-options
 
@@ -190,8 +173,6 @@ The <code>description</code> property of the <code>Mod</code>.
 **Default**: <code>undefined</code>  
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Extensions.Mods.Mod.dependencies"></a -->
-
 ### dependencies  :id=kengine-extensions-mods-mod-dependencies
 
 [Kengine.Extensions.Mods.Mod.dependencies](Kengine.Extensions.Mods?id=kengine.extensions.mods.mod.dependencies) [<code>Array.&lt;Mod&gt;</code>](Kengine.Extensions.Mods?id=kengine.extensions.mods.mod)
@@ -205,8 +186,6 @@ Mod dependencies.
 
 **Default**: <code>[]</code>  
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Extensions.Mods.Mod.asset_confs"></a -->
 
 ### asset_confs  :id=kengine-extensions-mods-mod-asset_confs
 
@@ -222,8 +201,6 @@ The <code>asset_confs</code> property of the Mod. Set by the mod manager when it
 **Default**: <code>{}</code>  
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Extensions.Mods.Mod.enabled"></a -->
-
 ### enabled  :id=kengine-extensions-mods-mod-enabled
 
 [Kengine.Extensions.Mods.Mod.enabled](Kengine.Extensions.Mods?id=kengine.extensions.mods.mod.enabled) <code>Bool</code>
@@ -238,8 +215,6 @@ Whether Mod is enabled or not.
 **Default**: <code>false</code>  
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Extensions.Mods.Mod.source"></a -->
-
 ### source  :id=kengine-extensions-mods-mod-source
 
 [Kengine.Extensions.Mods.Mod.source](Kengine.Extensions.Mods?id=kengine.extensions.mods.mod.source) <code>String</code> \| <code>Undefined</code> \| <code>Kengine.Extensions.Mods.ModSource</code>
@@ -249,8 +224,6 @@ Whether Mod is enabled or not.
 **Default**: <code>&quot;&lt;unknown&gt;&quot;</code>  
 **Descripton**: The source of this mod.  
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Extensions.Mods.Mod.GetAllAssetConfs"></a -->
 
 ### GetAllAssetConfs  :id=kengine-extensions-mods-mod-getallassetconfs
 
@@ -265,8 +238,6 @@ Return all the mod's asset confs.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Extensions.Mods.Mod.Enable"></a -->
-
 ### Enable  :id=kengine-extensions-mods-mod-enable
 
 `Kengine.Extensions.Mods.Mod.Enable()`
@@ -279,8 +250,6 @@ Enable the mod. Applying its <code>asset_confs</code>.
 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Extensions.Mods.Mod.Disable"></a -->
 
 ### Disable  :id=kengine-extensions-mods-mod-disable
 
@@ -295,8 +264,6 @@ Disable the mod. Unapplying its <code>asset_confs</code>.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Extensions.Mods.Mod.ResolveDependencies"></a -->
-
 ### ResolveDependencies  :id=kengine-extensions-mods-mod-resolvedependencies
 
 `Kengine.Extensions.Mods.Mod.ResolveDependencies()`
@@ -309,8 +276,6 @@ Resolve dependencies. If there are <code>string</code> values as dependencies, i
 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Extensions.Mods.Mod.Update"></a -->
 
 ### Update  :id=kengine-extensions-mods-mod-update
 
@@ -325,8 +290,6 @@ Resolve or update mod's assetconfs from the mod's source.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Extensions.Mods.ModManager"></a -->
-
 ## ModManager  :id=kengine-extensions-mods-modmanager
 
 `Kengine.Extensions.Mods.ModManager()`
@@ -339,8 +302,6 @@ A mod manager is a singleton object that manages [Mod](Kengine.Extensions.Mods?i
 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Extensions.Mods.ModManager.mods"></a -->
 
 ### mods  :id=kengine-extensions-mods-modmanager-mods
 
@@ -355,8 +316,6 @@ Collection of <code>Mod</code> objects that are found by [Kengine.Extensions.Mod
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Extensions.Mods.ModManager.find_mods"></a -->
-
 ### find_mods  :id=kengine-extensions-mods-modmanager-find_mods
 
 `Kengine.Extensions.Mods.ModManager.find_mods()` ⇒ <code>Collection</code> \| [<code>Array.&lt;Mod&gt;</code>](Kengine.Extensions.Mods?id=kengine.extensions.mods.mod)
@@ -369,8 +328,6 @@ A function to search for mods. It uses <code>find_mods_func</code>.
 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Extensions.Mods.ModManager.ReloadMods"></a -->
 
 ### ReloadMods  :id=kengine-extensions-mods-modmanager-reloadmods
 
@@ -389,8 +346,6 @@ A function to reload mods.
 | [discover] | <code>Bool</code> | <code>false</code> | <p>Whether to discover new mods or not.</p> |
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Extensions.Mods.ModManager.EnableMod"></a -->
 
 ### EnableMod  :id=kengine-extensions-mods-modmanager-enablemod
 
@@ -415,8 +370,6 @@ Enable a Mod. If forced, enable its dependencies.</p>
 | [force] | <code>Real</code> | <code>0</code> | <p>Whether to enable the mod forcefully by enabling its dependencies.</p> |
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Extensions.Mods.ModManager.DisableMod"></a -->
 
 ### DisableMod  :id=kengine-extensions-mods-modmanager-disablemod
 

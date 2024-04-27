@@ -1,12 +1,15 @@
-<!-- a name="Kengine.Utils.Strings"></a -->
-
 # Strings  :id=kengine-utils-strings
 
 [Kengine.Utils.Strings](Kengine.Utils.Strings) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine strings utilitiy functions
 
 
-<!-- a name="Kengine.Utils.Strings.PosDirection"></a -->
+<!-- tabs:end -->
 
 ## PosDirection  :id=kengine-utils-strings-posdirection
 

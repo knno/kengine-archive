@@ -54,4 +54,3 @@ function __KengineOptions(opts) : __KengineStruct() constructor {
         __fromStruct(opts);
     }
 }
-__KengineOptions();

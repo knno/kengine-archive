@@ -1,12 +1,15 @@
-<!-- a name="Kengine.Utils.Arrays"></a -->
-
 # Arrays  :id=kengine-utils-arrays
 
 [Kengine.Utils.Arrays](Kengine.Utils.Arrays) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine arrays utilitiy functions
 
 
-<!-- a name="Kengine.Utils.Arrays.DeleteValue"></a -->
+<!-- tabs:end -->
 
 ## DeleteValue  :id=kengine-utils-arrays-deletevalue
 
@@ -29,8 +32,6 @@ Delete value from an array.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Arrays.MinMax"></a -->
-
 ## MinMax  :id=kengine-utils-arrays-minmax
 
 `Kengine.Utils.Arrays.MinMax(arr)` ⇒ <code>Array.&lt;Any&gt;</code>
@@ -49,8 +50,6 @@ Return the minimum and maximum numbers in an array
 | arr | <code>Array</code> | <p>The input array</p> |
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Utils.Arrays.Concat"></a -->
 
 ## Concat  :id=kengine-utils-arrays-concat
 

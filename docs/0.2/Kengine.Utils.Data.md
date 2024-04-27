@@ -1,12 +1,15 @@
-<!-- a name="Kengine.Utils.Data"></a -->
-
 # Data  :id=kengine-utils-data
 
 [Kengine.Utils.Data](Kengine.Utils.Data) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine data utilitiy functions
 
 
-<!-- a name="Kengine.Utils.Data.ValuesMap"></a -->
+<!-- tabs:end -->
 
 ## ValuesMap  :id=kengine-utils-data-valuesmap
 
@@ -30,8 +33,6 @@ The returned value from the func is the new value. It accepts argument <code>val
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Data.ToBoolean"></a -->
-
 ## ToBoolean  :id=kengine-utils-data-toboolean
 
 `Kengine.Utils.Data.ToBoolean(value)` ⇒ <code>Bool</code>
@@ -50,8 +51,6 @@ Convert a value to a boolean. such as &quot;ON&quot;, 1, 0, or &quot;false&quot;
 | value | <code>Any</code> | <p>The value to be converted.</p> |
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Utils.Data.IniReadBool"></a -->
 
 ## IniReadBool  :id=kengine-utils-data-inireadbool
 
@@ -73,8 +72,6 @@ Read a key from opened INI and converts it to a boolean value.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Data.IsBoolable"></a -->
-
 ## IsBoolable  :id=kengine-utils-data-isboolable
 
 `Kengine.Utils.Data.IsBoolable(value)` ⇒ <code>Bool</code>
@@ -93,8 +90,6 @@ Return whether a value can be a boolean. such as &quot;ON&quot;, 1, or &quot;tru
 | value | <code>Any</code> | <p>The value to be checked as boolean.</p> |
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Utils.Data.GetFontCharRange"></a -->
 
 ## GetFontCharRange  :id=kengine-utils-data-getfontcharrange
 

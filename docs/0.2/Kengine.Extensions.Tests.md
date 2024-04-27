@@ -1,13 +1,16 @@
-<!-- a name="Kengine.Extensions.Tests"></a -->
-
 # Tests  :id=kengine-extensions-tests
 
 [Kengine.Extensions.Tests](Kengine.Extensions.Tests) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 Kengine's Tests extension</p>
 <p>Note - Disabling copy on write behavior for arrays is required.
 
 
-<!-- a name="Kengine.Extensions.Tests.AssertionError"></a -->
+<!-- tabs:end -->
 
 ## AssertionError  :id=kengine-extensions-tests-assertionerror
 
@@ -35,8 +38,6 @@ var assertion_error = new Kengine.Extensions.Tests.AssertionError(    Kengine.U
 ```
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Extensions.Tests.AssertionError.error"></a -->
-
 ### error  :id=kengine-extensions-tests-assertionerror-error
 
 [Kengine.Extensions.Tests.AssertionError.error](Kengine.Extensions.Tests?id=kengine.extensions.tests.assertionerror.error) <code>Struct</code>
@@ -49,8 +50,6 @@ The main causing error struct.
 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Extensions.Tests.AssertionError.message"></a -->
 
 ### message  :id=kengine-extensions-tests-assertionerror-message
 
@@ -65,8 +64,6 @@ A message for the assertion. Defaults to that of <code>error</code>.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Extensions.Tests.AssertionError.longMessage"></a -->
-
 ### longMessage  :id=kengine-extensions-tests-assertionerror-longmessage
 
 [Kengine.Extensions.Tests.AssertionError.longMessage](Kengine.Extensions.Tests?id=kengine.extensions.tests.assertionerror.longmessage) <code>String</code>
@@ -79,8 +76,6 @@ A long message for the assertion. Defaults to that of <code>error</code>.
 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Extensions.Tests.Fixture"></a -->
 
 ## Fixture  :id=kengine-extensions-tests-fixture
 
@@ -102,8 +97,6 @@ A fixture is a struct that contains <code>name</code>, and <code>func_setup</cod
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Extensions.Tests.Fixture.name"></a -->
-
 ### name  :id=kengine-extensions-tests-fixture-name
 
 [Kengine.Extensions.Tests.Fixture.name](Kengine.Extensions.Tests?id=kengine.extensions.tests.fixture.name) <code>String</code>
@@ -116,8 +109,6 @@ The name of the fixture.
 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Extensions.Tests.Fixture._testing_tests"></a -->
 
 ### _testing_tests  :id=kengine-extensions-tests-fixture-_testing_tests
 
@@ -132,8 +123,6 @@ A list of tests that are running and dependent on this fixture.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Extensions.Tests.Fixture.is_applied"></a -->
-
 ### is_applied  :id=kengine-extensions-tests-fixture-is_applied
 
 [Kengine.Extensions.Tests.Fixture.is_applied](Kengine.Extensions.Tests?id=kengine.extensions.tests.fixture.is_applied) <code>Bool</code>
@@ -146,8 +135,6 @@ Whether fixture is applied (active) or not.
 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Extensions.Tests.Fixture.func_setup"></a -->
 
 ### func_setup  :id=kengine-extensions-tests-fixture-func_setup
 
@@ -162,8 +149,6 @@ The function of the fixture that setups the test.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Extensions.Tests.Fixture.func_cleanup"></a -->
-
 ### func_cleanup  :id=kengine-extensions-tests-fixture-func_cleanup
 
 `Kengine.Extensions.Tests.Fixture.func_cleanup()`
@@ -176,8 +161,6 @@ The function of the fixture that cleans up the test.
 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Extensions.Tests.Fixture.setup"></a -->
 
 ### setup  :id=kengine-extensions-tests-fixture-setup
 
@@ -197,8 +180,6 @@ A function that sets up the fixture data.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Extensions.Tests.Fixture.cleanup"></a -->
-
 ### cleanup  :id=kengine-extensions-tests-fixture-cleanup
 
 `Kengine.Extensions.Tests.Fixture.cleanup([args])`
@@ -216,8 +197,6 @@ A function that cleans up the fixture data. This is done when there are no depen
 | [args] | <code>Struct</code> \| <code>Undefined</code> | <p>A struct containing <code>{test}</code>.</p> |
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Extensions.Tests.Test"></a -->
 
 ## Test  :id=kengine-extensions-tests-test
 
@@ -240,8 +219,6 @@ A test is a simple function wrapper that requires fixtures to be applied before 
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Extensions.Tests.Test.name"></a -->
-
 ### name  :id=kengine-extensions-tests-test-name
 
 [Kengine.Extensions.Tests.Test.name](Kengine.Extensions.Tests?id=kengine.extensions.tests.test.name) <code>String</code>
@@ -254,8 +231,6 @@ The name of the test.
 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Extensions.Tests.Test.fixtures"></a -->
 
 ### fixtures  :id=kengine-extensions-tests-test-fixtures
 
@@ -270,8 +245,6 @@ An array of fixtures that are resolved upon testing.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Extensions.Tests.Test.is_testing"></a -->
-
 ### is_testing  :id=kengine-extensions-tests-test-is_testing
 
 [Kengine.Extensions.Tests.Test.is_testing](Kengine.Extensions.Tests?id=kengine.extensions.tests.test.is_testing) <code>Bool</code>
@@ -284,8 +257,6 @@ Whether the test is being tested right now.
 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Extensions.Tests.Test.ResolveFixtures"></a -->
 
 ### ResolveFixtures  :id=kengine-extensions-tests-test-resolvefixtures
 
@@ -303,8 +274,6 @@ Resolve the <code>fixtures</code> of the test. It is called inside the [Kengine.
 - [<code>AssertionError</code>](Kengine.Extensions.Tests?id=kengine.extensions.tests.assertionerror) 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Extensions.Tests.Test.func"></a -->
 
 ### func  :id=kengine-extensions-tests-test-func
 
@@ -326,8 +295,6 @@ function ken_test_foo() {    if test.is_testing {        return {fixtures: ...
 ```
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Extensions.Tests.Test.Test"></a -->
-
 ### Test  :id=kengine-extensions-tests-test-test
 
 `Kengine.Extensions.Tests.Test.Test()`
@@ -341,8 +308,6 @@ Basically Run <code>func</code> and if there's any errors it calls <code>fail</c
 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Extensions.Tests.Test.Fail"></a -->
 
 ### Fail  :id=kengine-extensions-tests-test-fail
 
@@ -362,8 +327,6 @@ Fail test. Change the test result.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Extensions.Tests.Test.Done"></a -->
-
 ### Done  :id=kengine-extensions-tests-test-done
 
 `Kengine.Extensions.Tests.Test.Done(output)`
@@ -381,8 +344,6 @@ A function to be called at the end of the test script.
 | output | <code>Any</code> | 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Extensions.Tests.Test.AssertEqual"></a -->
 
 ### AssertEqual  :id=kengine-extensions-tests-test-assertequal
 
@@ -407,8 +368,6 @@ asserts in the test that two values are equal.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Extensions.Tests.Test.step_func"></a -->
-
 ### step_func  :id=kengine-extensions-tests-test-step_func
 
 `Kengine.Extensions.Tests.Test.step_func()`
@@ -421,8 +380,6 @@ A function to use for each step during the test.
 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Extensions.Tests.TestManager"></a -->
 
 ## TestManager  :id=kengine-extensions-tests-testmanager
 

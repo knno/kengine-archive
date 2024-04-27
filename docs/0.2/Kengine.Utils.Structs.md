@@ -1,12 +1,15 @@
-<!-- a name="Kengine.Utils.Structs"></a -->
-
 # Structs  :id=kengine-utils-structs
 
 [Kengine.Utils.Structs](Kengine.Utils.Structs) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine structs utilitiy functions
 
 
-<!-- a name="Kengine.Utils.Structs.Exists"></a -->
+<!-- tabs:end -->
 
 ## Exists  :id=kengine-utils-structs-exists
 
@@ -28,8 +31,6 @@ Check whether a struct member exists.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Structs.Get"></a -->
-
 ## Get  :id=kengine-utils-structs-get
 
 `Kengine.Utils.Structs.Get(_struct, name)` ⇒ <code>Any</code>
@@ -49,8 +50,6 @@ Get a struct member.
 | name | <code>String</code> \| <code>Real</code> \| <code>Struct</code> | <p>The hash key to use. If it's a struct, uses &quot;hash&quot; attr.</p> |
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Utils.Structs.SetDefault"></a -->
 
 ## SetDefault  :id=kengine-utils-structs-setdefault
 
@@ -73,8 +72,6 @@ Set a struct member with a default value if it's undefined, otherwise it keeps t
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Structs.Set"></a -->
-
 ## Set  :id=kengine-utils-structs-set
 
 `Kengine.Utils.Structs.Set(_struct, name)`
@@ -93,8 +90,6 @@ Set a struct member.
 | name | <code>String</code> \| <code>Struct</code> | <p>The name or hash key.</p> |
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Utils.Structs.Merge"></a -->
 
 ## Merge  :id=kengine-utils-structs-merge
 
@@ -117,8 +112,6 @@ Merge struct2 to struct1 recursively.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Structs.DotSet"></a -->
-
 ## DotSet  :id=kengine-utils-structs-dotset
 
 `Kengine.Utils.Structs.DotSet(_struct, key, val)`
@@ -138,8 +131,6 @@ Set a struct member using dot notation.
 | val | <code>String</code> | <p>The value.</p> |
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Utils.Structs.DotGet"></a -->
 
 ## DotGet  :id=kengine-utils-structs-dotget
 
@@ -161,8 +152,6 @@ Get a struct member using dot notation.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Structs.IsPublic"></a -->
-
 ## IsPublic  :id=kengine-utils-structs-ispublic
 
 `Kengine.Utils.Structs.IsPublic(_object, [member_name], [default_val])` ⇒ <code>Bool</code>
@@ -182,8 +171,6 @@ Return whether <code>object</code> or its member is public or not. By reading th
 | [default_val] | <code>Any</code> |  |
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Utils.Structs.IsPrivate"></a -->
 
 ## IsPrivate  :id=kengine-utils-structs-isprivate
 
@@ -206,8 +193,6 @@ Return whether <code>object</code> or its member is private or not. (<code>.__op
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Structs.SetPrivate"></a -->
-
 ## SetPrivate  :id=kengine-utils-structs-setprivate
 
 `Kengine.Utils.Structs.SetPrivate(_object, [member_name], [private])`
@@ -227,8 +212,6 @@ Set <code>object</code> or its member is private or not. (<code>.__opts.private<
 | [private] | <code>Bool</code> | <code>true</code> | <p>Whether it is private or not.</p> |
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Utils.Structs.IsReadonly"></a -->
 
 ## IsReadonly  :id=kengine-utils-structs-isreadonly
 

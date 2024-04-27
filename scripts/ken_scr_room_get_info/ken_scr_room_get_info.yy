@@ -1,0 +1,13 @@
+{
+  "$GMScript":"",
+  "%Name":"ken_scr_room_get_info",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ken_scr_room_get_info",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Demo/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

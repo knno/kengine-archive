@@ -156,7 +156,7 @@ function __KengineAssetType(name, asset_kind=KENGINE_CUSTOM_ASSET_KIND, indexing
 	 * @function IndexAssets
 	 * @memberof Kengine.AssetType
 	 * @param {Struct} [indexing_options=undefined]
-	 * @description The asset indexing functions (IndexAssets, index_asset) prepare and adds all the assets of this type, or only prepares and adds the provided {@link Kengine.Asset} to the {@link kengine.Collection}, returning whether operation was successful.
+	 * @description The asset indexing functions (IndexAssets, index_asset) prepare and adds all the assets of this type, or only prepares and adds the provided {@link Kengine.Asset} to the {@link Kengine.Collection}, returning whether operation was successful.
 	 * @return {Bool} Whether successful indexing occured or not.
 	 * 
 	 */
@@ -185,7 +185,7 @@ function __KengineAssetType(name, asset_kind=KENGINE_CUSTOM_ASSET_KIND, indexing
 
 			static __SingleAssetCheckExclude = function(name, exclude_prefixes) {
 				var _skip = false;
-				for (_j=0; _j<array_length(exclude_prefixes); _j++) {
+				for (var _j=0; _j<array_length(exclude_prefixes); _j++) {
 					if name == exclude_prefixes[_j] {
 						_skip = true;
 						break;
@@ -199,7 +199,7 @@ function __KengineAssetType(name, asset_kind=KENGINE_CUSTOM_ASSET_KIND, indexing
 			}
 
 			static __SingleAssetCreate = function(type, name, asset_id) {
-				var _ass = new __KengineAsset(type, name, true, asset_id); // Indexing a YYAsset.
+				var _ass = new __KengineAsset(type, name, true, asset_id, undefined, false);
 				return _ass;
 			}
 
@@ -277,12 +277,12 @@ function __KengineAssetType(name, asset_kind=KENGINE_CUSTOM_ASSET_KIND, indexing
 				_range[1] = _index_range[1];
 				_chunks = array_create(1, _range);
 			} else {
-				_chunk_count = ceil((_index_range[1] - _index_range[0] + 1) / chunk_size);
+				_chunk_count = ceil((_index_range[1] - _index_range[0]) / chunk_size);
 				_chunks = array_create(_chunk_count);
 				_range = array_create(2);
 				for (var _i=0; _i<_chunk_count; _i++) {
 					_range[0] = _index_range[0] + _i * chunk_size;
-					_range[1] = min(_index_range[1], _range[0] + chunk_size - 1);
+					_range[1] = min(_index_range[1], _range[0] + chunk_size);
 					_chunks[_i] = variable_clone(_range);
 				}
 			}
@@ -305,7 +305,7 @@ function __KengineAssetType(name, asset_kind=KENGINE_CUSTOM_ASSET_KIND, indexing
 			}
 
 			// If indexing halts, this means we reached a dead-end. Thus, callback is required both on halt and on successful finish.
-			var _coroutine = new __KengineCoroutine("assettype-index", _funcs, __ChunkIndexAssetsCallback, __ChunkIndexAssetsCallback);
+			var _coroutine = new __KengineCoroutine("assettype.autoindex."+string(self.name), _funcs, __ChunkIndexAssetsCallback, __ChunkIndexAssetsCallback);
 
 			if (KENGINE_ASSET_TYPES_AUTO_INDEX_ASYNC) {
 				self.__indexing_coroutine = _coroutine;
@@ -324,7 +324,7 @@ function __KengineAssetType(name, asset_kind=KENGINE_CUSTOM_ASSET_KIND, indexing
 	/**
 	 * @function IndexAsset
 	 * @memberof Kengine.AssetType
-	 * @description The asset indexing functions (IndexAssets, index_asset) prepare and adds all the assets of this type, or only prepares and adds the provided {@link Kengine.Asset} to the {@link kengine.Collection}, returning whether operation was successful.
+	 * @description The asset indexing functions (IndexAssets, index_asset) prepare and adds all the assets of this type, or only prepares and adds the provided {@link Kengine.Asset} to the {@link Kengine.Collection}, returning whether operation was successful.
 	 * @param {Kengine.Asset} asset The asset to index.
 	 * @return {Array<Any>} A two-value array containing whether the asset was added or not, and the index of the asset or -1.
 	 * 
@@ -368,6 +368,7 @@ function __KengineAssetType(name, asset_kind=KENGINE_CUSTOM_ASSET_KIND, indexing
 				}
 				if (_accepted) {
 					_ind = self.assets.AddOnce(asset, _cmp);
+					asset.index = _ind;
 				}
 			} else {
 				_accepted = true;
@@ -376,6 +377,7 @@ function __KengineAssetType(name, asset_kind=KENGINE_CUSTOM_ASSET_KIND, indexing
 				}
 				if (_accepted) {
 					_ind = self.assets.AddOnce(asset, __KengineCmpUtils.cmp_unique_id_name);
+					asset.index = _ind;
 				}
 			}
 

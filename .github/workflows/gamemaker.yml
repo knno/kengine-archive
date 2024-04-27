@@ -1,0 +1,162 @@
+name: CI
+
+on:
+  push:
+    paths-ignore:
+      - "**.md"
+    tags:
+      - "*"
+  workflow_dispatch:
+    inputs:
+      runtime:
+        description: 'Target runtime'
+        required: false
+      runner:
+        description: 'Runner'
+        required: false
+        default: 'windows-latest'
+  workflow_call:
+    inputs:
+      runtime:
+        description: 'Target runtime'
+        required: false
+        type: string
+      runner:
+        description: 'Runner'
+        required: false
+        default: 'windows-latest'
+        type: string
+permissions:
+  contents: write
+
+env:
+  MATRIX_STRING: '[\"windows-latest\",\"ubuntu-latest\"]'
+  PROJECT_NAME: 'Kengine'
+
+jobs:
+  runner:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+    - if: ${{ inputs.runner }}
+      run: echo "MATRIX_STRING=[\\\"${{ github.event.inputs.runner }}\\\"]" >> $GITHUB_ENV
+    - id: set-matrix
+      run: echo "matrix=${{ env.MATRIX_STRING }}" >> $GITHUB_OUTPUT
+
+  test:
+    needs: runner
+    runs-on: ${{ matrix.os }}
+    # runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ${{ fromJSON(needs.runner.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - name: Get the version from the yyp file for Linux
+        if: runner.os == 'Linux'
+        run: |
+          echo "YYP_VERSION=$(grep -oP '(?<=IDEVersion":")(\d+\.\d+\.\d+\.\d+)(?=")' ${{ github.workspace }}/${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.yyp)" >> $GITHUB_ENV
+      - name: Get the version from the yyp file for Windows
+        if: runner.os == 'Windows'
+        run: |
+          $yypVersion = Select-String -Path "${env:GITHUB_WORKSPACE}\${{ env.PROJECT_NAME }}\${{ env.PROJECT_NAME }}.yyp" -Pattern 'IDEVersion":"(\d+\.\d+\.\d+\.\d+)' -AllMatches | ForEach-Object { $_.Matches.Groups[1].Value }
+          "YYP_VERSION=$yypVersion" | Out-File -Append -FilePath $env:GITHUB_ENV 
+      - uses: FedericoCarboni/setup-ffmpeg@v3
+        if: runner.os == 'Linux'
+      - name: Create the settings file
+        if: runner.os == 'Linux'
+        run: |
+          echo '{"machine.Platform Settings.Android.Keystore.filename": "${{ github.workspace }}/ascx.keystore", "machine.Platform Settings.Android.Keystore.keystore_password": "${{ secrets.KEYSTORE_PASSWORD }}", "machine.Platform Settings.Android.Keystore.keystore_alias_password": "${{ secrets.KEYSTORE_PASSWORD }}", "machine.Platform Settings.Android.Keystore.alias": "${{ secrets.KEYSTORE_USERNAME }}"}' > local_settings.json
+      - name: Set Up Android tools (Linux only)
+        if: runner.os == 'Linux'
+        run: |
+          ${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin/sdkmanager \
+          --sdk_root=$ANDROID_SDK_ROOT \
+          "platform-tools"
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ${{ github.workspace }}/bootstrapper
+            ${{ github.workspace }}/runtimes
+          key: ${{ runner.os }}-${{ env.YYP_VERSION }}-${{ inputs.runtime }}
+      - name: use Igor Setup
+        uses: bscotch/igor-setup@main
+        with:
+          access-key: ${{ secrets.YY_ACCESS_KEY }}
+          target-yyp: ${{ github.workspace }}/${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.yyp
+          local-settings-override-file: ${{ github.workspace }}/local_settings.json
+          runtime: ${{ inputs.runtime }}
+        id: igor
+      - name: Read settings-dir and echo the json content
+        run: |
+          echo "UserDir: ${{ steps.igor.outputs.settings-dir }}"
+          # Read the json content
+          cat ${{ steps.igor.outputs.settings-dir }}
+      - name: use Igor build
+        uses: bscotch/igor-build@main
+        id: build
+        timeout-minutes: 30
+        with:
+          yyp-path: ${{ github.workspace }}/${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.yyp
+          user-dir: ${{ steps.igor.outputs.user-dir }}
+      - name: upload-build
+        uses: actions/upload-artifact@v4
+        with:
+          name: igor-build-${{ matrix.os }}
+          path: ${{ steps.build.outputs.out-dir }}
+      - if: runner.os == 'Windows'
+        name: Run Olympus test
+        timeout-minutes: 30
+        shell: pwsh
+        working-directory: ${{ steps.build.outputs.out-dir }}
+        run: |
+          $baseName = "${{ env.PROJECT_NAME }}"
+          Expand-Archive -Path ${{ steps.build.outputs.out-dir }}/$baseName.zip -Destination ${{ steps.build.outputs.out-dir }}
+          $saveDataDir = Join-Path $env:LOCALAPPDATA $baseName
+
+          $executableName = "${{ env.PROJECT_NAME }}"
+          $exeDir = Resolve-Path "$executableName.exe"
+          if (-not (Test-Path $exeDir)) {
+              throw "$exeDir does not exist"
+          }
+
+          $logFile = "runLog.txt"
+          if ((Test-Path $logFile)) {
+            Remove-Item $logFile -Force
+          }
+          New-Item -Path $logFile -ItemType File -Force
+          $logFile = Resolve-Path $logFile
+
+          Write-Host "Running $exeDir"
+          $process = Start-Process -FilePath $exeDir -ArgumentList "--run-tests","-output","$logFile","-debugoutput","$logFile" -PassThru -NoNewWindow
+
+          if ((Test-Path $saveDataDir)) {
+            Remove-Item $saveDataDir -Recurse -Force
+          }
+
+          $process.WaitForExit()
+          $reader = [System.IO.StreamReader]::new($logFile)
+          try {
+              while (-not $reader.EndOfStream) {
+                $line = $reader.ReadLine()
+                # Process the line
+                Write-Output $line
+              }
+          }
+          finally {
+              $reader.Close()
+          }
+
+          $success = $LASTEXITCODE
+
+          if ($success) {
+              Write-Host "Success!"
+              exit 0
+          } else {
+              Write-Host "Failure!"
+              exit 1
+          }

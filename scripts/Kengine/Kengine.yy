@@ -1,0 +1,13 @@
+{
+  "$GMScript":"",
+  "%Name":"Kengine",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Kengine",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Kengine/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

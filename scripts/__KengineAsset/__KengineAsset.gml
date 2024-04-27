@@ -8,7 +8,6 @@
  * @param {Real|Asset} [real_id=undefined] The real ID of this Asset. This id should be the same as the index of the `YYAsset` if it represents one. Otherwise it is automatically assigned.
  * @param {String} [real_name=undefined] The real name of this Asset. This name should be the same as the name of the `YYAsset` if it represents one. Otherwise you can assign any name.
  * @param {Bool} [auto_index=true] Whether to index the asset or not. Defaults to `true`.
- * @todo Fix documentation
  * @example
  * // This example creates a new room asset, that is indexed automatically, and adds "MyTag" to its tags.
  *
@@ -98,6 +97,15 @@ function __KengineAsset(type, name, is_yyp=false, real_id=undefined, real_name=u
 	 *
 	 */
 	self.id = real_id;
+
+	/**
+	 * @name index
+	 * @type {Real|Undefined}
+	 * @memberof Kengine.Asset
+	 * @description The index of the asset.
+	 *
+	 */
+	self.index = undefined;
 
 	/**
 	 * @name __original_name
@@ -218,7 +226,9 @@ function __KengineAsset(type, name, is_yyp=false, real_id=undefined, real_name=u
 	}
 	self.real_name = (self.real_name != "") ? self.real_name : self.name;
 
-	self.toString = function() {return string("<Asset {0} ({1}) (id/uid: {2}/{3})>", self.name, self.type.name, self.id, self.uid);}
+	self.toString = function() {
+		return string("<Asset {0} ({1}) (id/uid: {2}/{3})>", self.name, self.type.name, self.id, self.uid);
+	}
 
 	/**c
 	 * @function ReplaceBy
@@ -229,6 +239,7 @@ function __KengineAsset(type, name, is_yyp=false, real_id=undefined, real_name=u
 	 */
 	ReplaceBy = function(replacer_asset) {
 		if self.type.is_replaceable {
+			if self.tags == undefined self.tags = new __KengineCollection();
 			if self.tags.GetInd(KENGINE_ASSET_TAG_FIXED) != -1 {
 				throw __KengineErrorUtils.create(__KengineErrorUtils.Types.asset__cannot_replace, string("Cannot replace Asset \"{0}\".", self.name));
 			}

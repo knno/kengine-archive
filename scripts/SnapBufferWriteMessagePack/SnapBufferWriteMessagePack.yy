@@ -1,0 +1,13 @@
+{
+  "$GMScript":"",
+  "%Name":"SnapBufferWriteMessagePack",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"SnapBufferWriteMessagePack",
+  "parent":{
+    "name":"MessagePack",
+    "path":"folders/Extensions/SNAP/MessagePack.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -82,6 +82,9 @@ function __KengineInstanceUtils() : __KengineStruct() constructor {
 		} else {
 			var_struct = {depth}
 		}
+		if is_string(asset) {
+			asset = Kengine.Utils.GetAsset("object", asset);
+		}
 		return __KengineInstance.Create(x,y,undefined,asset,var_struct);
 	}
 
@@ -163,4 +166,4 @@ function __KengineInstanceUtils() : __KengineStruct() constructor {
 	}
 
 }
-__KengineInstanceUtils();
+//__KengineInstanceUtils();

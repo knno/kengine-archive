@@ -1,20 +1,28 @@
-<!-- a name="Kengine.Utils"></a -->
-
 # Utils  :id=kengine-utils
 
 Kengine.Utils <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 Kengine Utils library.
 
 
-<!-- a name="Kengine.Utils.Arrays"></a -->
+<!-- tabs:end -->
 
 ## Arrays  :id=kengine-utils-arrays
 
 [Kengine.Utils.Arrays](Kengine.Utils.Arrays) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine arrays utilitiy functions
 
 
-<!-- a name="Kengine.Utils.Arrays.DeleteValue"></a -->
+<!-- tabs:end -->
 
 ### DeleteValue  :id=kengine-utils-arrays-deletevalue
 
@@ -37,8 +45,6 @@ Delete value from an array.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Arrays.MinMax"></a -->
-
 ### MinMax  :id=kengine-utils-arrays-minmax
 
 `Kengine.Utils.Arrays.MinMax(arr)` ⇒ <code>Array.&lt;Any&gt;</code>
@@ -58,8 +64,6 @@ Return the minimum and maximum numbers in an array
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Arrays.Concat"></a -->
-
 ### Concat  :id=kengine-utils-arrays-concat
 
 `Kengine.Utils.Arrays.Concat(arrays)` ⇒ <code>Array.&lt;Any&gt;</code>
@@ -78,47 +82,70 @@ Return arrays' values as a single array.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Ascii"></a -->
-
 ## Ascii  :id=kengine-utils-ascii
 
 [Kengine.Utils.Ascii](Kengine.Utils.Ascii) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine ascii utilitiy functions
 
 
-<!-- a name="Kengine.Utils.Benchmark"></a -->
+<!-- tabs:end -->
 
 ## Benchmark  :id=kengine-utils-benchmark
 
 [Kengine.Utils.Benchmark](Kengine.Utils.Benchmark) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine benchmark utilitiy functions
 
 
-<!-- a name="Kengine.Utils.Cmps"></a -->
+<!-- tabs:end -->
 
 ## Cmps  :id=kengine-utils-cmps
 
 [Kengine.Utils.Cmps](Kengine.Utils.Cmps) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine comparing functions.
 
 
-<!-- a name="Kengine.Utils.Coroutine"></a -->
+<!-- tabs:end -->
 
 ## Coroutine  :id=kengine-utils-coroutine
 
 [Kengine.Utils.Coroutine](Kengine.Utils.Coroutine) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine coroutine utilitiy functions
 
 
-<!-- a name="Kengine.Utils.Data"></a -->
+<!-- tabs:end -->
 
 ## Data  :id=kengine-utils-data
 
 [Kengine.Utils.Data](Kengine.Utils.Data) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine data utilitiy functions
 
 
-<!-- a name="Kengine.Utils.Data.ValuesMap"></a -->
+<!-- tabs:end -->
 
 ### ValuesMap  :id=kengine-utils-data-valuesmap
 
@@ -142,8 +169,6 @@ The returned value from the func is the new value. It accepts argument <code>val
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Data.ToBoolean"></a -->
-
 ### ToBoolean  :id=kengine-utils-data-toboolean
 
 `Kengine.Utils.Data.ToBoolean(value)` ⇒ <code>Bool</code>
@@ -162,8 +187,6 @@ Convert a value to a boolean. such as &quot;ON&quot;, 1, 0, or &quot;false&quot;
 | value | <code>Any</code> | <p>The value to be converted.</p> |
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Utils.Data.IniReadBool"></a -->
 
 ### IniReadBool  :id=kengine-utils-data-inireadbool
 
@@ -185,8 +208,6 @@ Read a key from opened INI and converts it to a boolean value.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Data.IsBoolable"></a -->
-
 ### IsBoolable  :id=kengine-utils-data-isboolable
 
 `Kengine.Utils.Data.IsBoolable(value)` ⇒ <code>Bool</code>
@@ -205,8 +226,6 @@ Return whether a value can be a boolean. such as &quot;ON&quot;, 1, or &quot;tru
 | value | <code>Any</code> | <p>The value to be checked as boolean.</p> |
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Utils.Data.GetFontCharRange"></a -->
 
 ### GetFontCharRange  :id=kengine-utils-data-getfontcharrange
 
@@ -227,19 +246,22 @@ Return array of min, max for the characters in the provided string. Useful for c
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Easing"></a -->
-
 ## Easing  :id=kengine-utils-easing
 
 [Kengine.Utils.Easing](Kengine.Utils.Easing) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine easing utilitiy functions
 
 
-<!-- a name="Kengine.Utils.Easing.ease_in"></a -->
+<!-- tabs:end -->
 
-### ease_in  :id=kengine-utils-easing-ease_in
+### EaseIn  :id=kengine-utils-easing-easein
 
-`Kengine.Utils.Easing.ease_in(value, start, change, duration)` ⇒ <code>Real</code>
+`Kengine.Utils.Easing.EaseIn(value, start, change, duration)` ⇒ <code>Real</code>
 <!-- tabs:start -->
 
 
@@ -266,16 +288,13 @@ Take a value and apply ease-in transition on, starting from <code>_start</code> 
 ##### **Example**
 
 ```gml
-// Step event
-_x2 = ease_in(_x1, 0, 2, 60); // _x2 is from 0 to 2 in 60 steps eased-in.
+// Step event_x2 = ease_in(_x1, 0, 2, 60); // _x2 is from 0 to 2 in 60 steps eased-in.
 ```
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Easing.ease_inout"></a -->
+### EaseInOut  :id=kengine-utils-easing-easeinout
 
-### ease_inout  :id=kengine-utils-easing-ease_inout
-
-`Kengine.Utils.Easing.ease_inout(value, start, change, duration)` ⇒ <code>Real</code>
+`Kengine.Utils.Easing.EaseInOut(value, start, change, duration)` ⇒ <code>Real</code>
 <!-- tabs:start -->
 
 
@@ -302,16 +321,13 @@ Take a value and apply ease-in-out transition on, starting from <code>_start</co
 ##### **Example**
 
 ```gml
-// Step event
-_x2 = ease_inout(_x1, 0, 2, 60); // _x2 is from 0 to 2 in 60 steps eased-in-out.
+// Step event_x2 = ease_inout(_x1, 0, 2, 60); // _x2 is from 0 to 2 in 60 steps eased-in-out.
 ```
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Easing.ease_out"></a -->
+### EaseOut  :id=kengine-utils-easing-easeout
 
-### ease_out  :id=kengine-utils-easing-ease_out
-
-`Kengine.Utils.Easing.ease_out(value, start, change, duration)` ⇒ <code>Real</code>
+`Kengine.Utils.Easing.EaseOut(value, start, change, duration)` ⇒ <code>Real</code>
 <!-- tabs:start -->
 
 
@@ -338,20 +354,22 @@ Take a value and apply ease-out transition on, starting from <code>_start</code>
 ##### **Example**
 
 ```gml
-// Step event
-_x2 = ease_out(_x1, 0, 2, 60); // _x2 is from 0 to 2 in 60 steps eased-out.
+// Step event_x2 = ease_out(_x1, 0, 2, 60); // _x2 is from 0 to 2 in 60 steps eased-out.
 ```
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Utils.Errors"></a -->
 
 ## Errors  :id=kengine-utils-errors
 
 [Kengine.Utils.Errors](Kengine.Utils.Errors) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine errors utilitiy functions
 
 
-<!-- a name="Kengine.Utils.Errors.Types"></a -->
+<!-- tabs:end -->
 
 ### Types  :id=kengine-utils-errors-types
 
@@ -365,8 +383,6 @@ Preset error types. These errors are extendable through Kengine extensions.
 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Utils.Errors.Create"></a -->
 
 ### Create  :id=kengine-utils-errors-create
 
@@ -388,15 +404,18 @@ Create an error struct that is thrown.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Events"></a -->
-
 ## Events  :id=kengine-utils-events
 
 [Kengine.Utils.Events](Kengine.Utils.Events) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine events utilitiy functions
 
 
-<!-- a name="Kengine.Utils.Events.__all"></a -->
+<!-- tabs:end -->
 
 ### __all  :id=kengine-utils-events-__all
 
@@ -410,8 +429,6 @@ A struct that contains Kengine events as keys and an array of functions (listene
 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Utils.Events.Define"></a -->
 
 ### Define  :id=kengine-utils-events-define
 
@@ -432,8 +449,6 @@ Define an event.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Events.AddListener"></a -->
-
 ### AddListener  :id=kengine-utils-events-addlistener
 
 `Kengine.Utils.Events.AddListener(event, listener)` ⇒ <code>Bool</code>
@@ -453,8 +468,6 @@ Add an event listener (function) or more to the events.
 | listener | <code>function</code> \| <code>Array.&lt;function()&gt;</code> | <p>The event listener function(s)</p> |
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Utils.Events.RemoveListener"></a -->
 
 ### RemoveListener  :id=kengine-utils-events-removelistener
 
@@ -477,8 +490,6 @@ Remove an event listener (function) or more from the events.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Events.Fire"></a -->
-
 ### Fire  :id=kengine-utils-events-fire
 
 `Kengine.Utils.Events.Fire(event, args)` ⇒ <code>Bool</code> \| <code>Undefined</code>
@@ -499,23 +510,31 @@ Fire an event with arguments.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Extensions"></a -->
-
 ## Extensions  :id=kengine-utils-extensions
 
 [Kengine.Utils.Extensions](Kengine.Utils.Extensions) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine extensions utilitiy functions
 
 
-<!-- a name="Kengine.Utils.Hashkeys"></a -->
+<!-- tabs:end -->
 
 ## Hashkeys  :id=kengine-utils-hashkeys
 
 [Kengine.Utils.Hashkeys](Kengine.Utils.Hashkeys) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine hashkeys utilitiy functions
 
 
-<!-- a name="Kengine.Utils.Hashkeys.__all"></a -->
+<!-- tabs:end -->
 
 ### __all  :id=kengine-utils-hashkeys-__all
 
@@ -529,8 +548,6 @@ A struct that contains name and hash structs for structs.
 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Utils.Hashkeys.add"></a -->
 
 ### add  :id=kengine-utils-hashkeys-add
 
@@ -551,8 +568,6 @@ Add a hash to _hashkeys.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Hashkeys.hash"></a -->
-
 ### hash  :id=kengine-utils-hashkeys-hash
 
 `Kengine.Utils.Hashkeys.hash(name)` ⇒ <code>Any</code>
@@ -572,15 +587,18 @@ Convert hashkey or string or hash to just hash.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Input"></a -->
-
 ## Input  :id=kengine-utils-input
 
 [Kengine.Utils.Input](Kengine.Utils.Input) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine input utilitiy functions
 
 
-<!-- a name="Kengine.Utils.Input.ken_keyboard_check_released"></a -->
+<!-- tabs:end -->
 
 ### ken_keyboard_check_released  :id=kengine-utils-input-ken_keyboard_check_released
 
@@ -600,8 +618,6 @@ Return whether key is released.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Input.keyboard_check"></a -->
-
 ### keyboard_check  :id=kengine-utils-input-keyboard_check
 
 `Kengine.Utils.Input.keyboard_check(key)` ⇒ <code>Bool</code>
@@ -619,8 +635,6 @@ Return whether key is being held down.
 | key | <code>Struct</code> \| <code>Real</code> | 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Utils.Input.keyboard_check_pressed"></a -->
 
 ### keyboard_check_pressed  :id=kengine-utils-input-keyboard_check_pressed
 
@@ -640,8 +654,6 @@ Return whether key is pressed.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Input.keyboard_clear"></a -->
-
 ### keyboard_clear  :id=kengine-utils-input-keyboard_clear
 
 `Kengine.Utils.Input.keyboard_clear(key)` ⇒ <code>Bool</code> \| <code>Undefined</code>
@@ -660,15 +672,18 @@ Clear keyboard key state.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Instance"></a -->
-
 ## Instance  :id=kengine-utils-instance
 
 [Kengine.Utils.Instance](Kengine.Utils.Instance) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 Kengine Instance Utils.
 
 
-<!-- a name="Kengine.Utils.Instance.Exists"></a -->
+<!-- tabs:end -->
 
 ### Exists  :id=kengine-utils-instance-exists
 
@@ -682,8 +697,6 @@ Kengine Instance Utils.
 | value | <code>Kengine.Instance</code> \| <code>Kengine.Asset</code> \| <code>Id.Instance</code> \| <code>Asset.GMObject</code> | 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Utils.Instance.IsAncestor"></a -->
 
 ### IsAncestor  :id=kengine-utils-instance-isancestor
 
@@ -703,8 +716,6 @@ Checks whether object-type Asset is ancestor of another object-type Asset.
 | parent | <code>Kengine.Asset</code> | <p>The parent</p> |
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Utils.Instance.CreateLayer"></a -->
 
 ### CreateLayer  :id=kengine-utils-instance-createlayer
 
@@ -729,8 +740,6 @@ Create a Kengine <code>Instance</code> and adds it to the [instances](Kengine?id
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Instance.CreateDepth"></a -->
-
 ### CreateDepth  :id=kengine-utils-instance-createdepth
 
 `Kengine.Utils.Instance.CreateDepth(x, y, [depth], [asset], [var_struct])` ⇒ <code>Kengine.Instance</code>
@@ -754,8 +763,6 @@ Create a Kengine <code>Instance</code> and adds it to the [instances](Kengine?id
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Instance.With"></a -->
-
 ### With  :id=kengine-utils-instance-with
 
 `Kengine.Utils.Instance.With(expr_or_cmp, func)`
@@ -775,23 +782,31 @@ A replacement for with statement. Calls the func with all instances in the expr_
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Parser"></a -->
-
 ## Parser  :id=kengine-utils-parser
 
 [Kengine.Utils.Parser](Kengine.Utils.Parser) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine parser utilitiy functions
 
 
-<!-- a name="Kengine.Utils.Strings"></a -->
+<!-- tabs:end -->
 
 ## Strings  :id=kengine-utils-strings
 
 [Kengine.Utils.Strings](Kengine.Utils.Strings) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine strings utilitiy functions
 
 
-<!-- a name="Kengine.Utils.Strings.PosDirection"></a -->
+<!-- tabs:end -->
 
 ### PosDirection  :id=kengine-utils-strings-posdirection
 
@@ -815,15 +830,18 @@ Find position of the next string that is after sep, starting from pos, in direct
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Structs"></a -->
-
 ## Structs  :id=kengine-utils-structs
 
 [Kengine.Utils.Structs](Kengine.Utils.Structs) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine structs utilitiy functions
 
 
-<!-- a name="Kengine.Utils.Structs.Exists"></a -->
+<!-- tabs:end -->
 
 ### Exists  :id=kengine-utils-structs-exists
 
@@ -845,8 +863,6 @@ Check whether a struct member exists.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Structs.Get"></a -->
-
 ### Get  :id=kengine-utils-structs-get
 
 `Kengine.Utils.Structs.Get(_struct, name)` ⇒ <code>Any</code>
@@ -866,8 +882,6 @@ Get a struct member.
 | name | <code>String</code> \| <code>Real</code> \| <code>Struct</code> | <p>The hash key to use. If it's a struct, uses &quot;hash&quot; attr.</p> |
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Utils.Structs.SetDefault"></a -->
 
 ### SetDefault  :id=kengine-utils-structs-setdefault
 
@@ -890,8 +904,6 @@ Set a struct member with a default value if it's undefined, otherwise it keeps t
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Structs.Set"></a -->
-
 ### Set  :id=kengine-utils-structs-set
 
 `Kengine.Utils.Structs.Set(_struct, name)`
@@ -910,8 +922,6 @@ Set a struct member.
 | name | <code>String</code> \| <code>Struct</code> | <p>The name or hash key.</p> |
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Utils.Structs.Merge"></a -->
 
 ### Merge  :id=kengine-utils-structs-merge
 
@@ -934,8 +944,6 @@ Merge struct2 to struct1 recursively.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Structs.DotSet"></a -->
-
 ### DotSet  :id=kengine-utils-structs-dotset
 
 `Kengine.Utils.Structs.DotSet(_struct, key, val)`
@@ -955,8 +963,6 @@ Set a struct member using dot notation.
 | val | <code>String</code> | <p>The value.</p> |
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Utils.Structs.DotGet"></a -->
 
 ### DotGet  :id=kengine-utils-structs-dotget
 
@@ -978,8 +984,6 @@ Get a struct member using dot notation.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Structs.IsPublic"></a -->
-
 ### IsPublic  :id=kengine-utils-structs-ispublic
 
 `Kengine.Utils.Structs.IsPublic(_object, [member_name], [default_val])` ⇒ <code>Bool</code>
@@ -999,8 +1003,6 @@ Return whether <code>object</code> or its member is public or not. By reading th
 | [default_val] | <code>Any</code> |  |
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Utils.Structs.IsPrivate"></a -->
 
 ### IsPrivate  :id=kengine-utils-structs-isprivate
 
@@ -1023,8 +1025,6 @@ Return whether <code>object</code> or its member is private or not. (<code>.__op
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Structs.SetPrivate"></a -->
-
 ### SetPrivate  :id=kengine-utils-structs-setprivate
 
 `Kengine.Utils.Structs.SetPrivate(_object, [member_name], [private])`
@@ -1044,8 +1044,6 @@ Set <code>object</code> or its member is private or not. (<code>.__opts.private<
 | [private] | <code>Bool</code> | <code>true</code> | <p>Whether it is private or not.</p> |
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Utils.Structs.IsReadonly"></a -->
 
 ### IsReadonly  :id=kengine-utils-structs-isreadonly
 
@@ -1068,8 +1066,6 @@ Return whether <code>object</code> or its member is readonly or not. (<code>.__o
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.GetAsset"></a -->
-
 ## GetAsset  :id=kengine-utils-getasset
 
 `Kengine.Utils.GetAsset(asset_type, id_or_name)` ⇒ <code>Kengine.Asset</code> \| <code>Undefined</code>
@@ -1089,8 +1085,6 @@ Retrieve an [Kengine.Asset](Kengine?id=kengine.asset) from an AssetType (if load
 | id_or_name | <code>Real</code> \| <code>String</code> | <p>The real ID or name of the asset.</p> |
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Utils.Execute"></a -->
 
 ## Execute  :id=kengine-utils-execute
 

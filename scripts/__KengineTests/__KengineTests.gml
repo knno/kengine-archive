@@ -1,14 +1,15 @@
 function __KengineTests() : __KengineStruct() constructor {
 
 	static name= "Tests"
-	static __started = false;
 	static fixtures = [] // Default fixtures
+	static __started = false;
 	static __testing_tests = [] // Current active tests.
 
 	static Step = function(extension) {
-		var _ext = static_get(extension);
+		var _ext = extension; // static_get(extension);
 		if (not _ext.__started) {
 			_ext.__started = true;
+			_ext.status = "READY";
 		    _ext.test_manager.FindTests();
 			_ext.test_manager.Test();
 		}
@@ -26,7 +27,7 @@ function __KengineTests() : __KengineStruct() constructor {
     static AssertionError = __KengineTestsAssertionError
     static TestManager = __KengineTestsTestManager
 }
-__KengineTests();
+//__KengineTests();
 
 
 function ken_init_ext_tests() {
@@ -84,6 +85,26 @@ function ken_init_ext_tests() {
 	 *
 	 */
     Kengine.Utils.Events.Define("tests__test__init__after");
+
+    /**
+	 * @event tests__tests_complete
+	 * @type {Array<Function>}
+	 * @description An event that fires after all Kengine tests are compelete.
+	 *
+	 * Functions accept two arguments, the second is a struct: `event, {status, fails, total, reports}`.
+	 *
+	 * `event`: The event.
+	 *
+	 * `status`: Either "SUCCESS" or "FAILURE"
+	 *
+	 * `reports`: A struct (by test name) of the reports of the tests. {success, assertions, error, output}. each can be undefined.
+	 *
+	 * `fails`: Number of failed tests.
+	 *
+	 * `total`: Total number of tests.
+	 *
+	 */
+    Kengine.Utils.Events.Define("tests__tests_complete");
     #endregion
 
 	/**

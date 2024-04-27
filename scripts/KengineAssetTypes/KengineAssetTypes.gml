@@ -1,12 +1,34 @@
 /**
+ * @function KengineMapper
+ * @constructor
+ * @param {String} attribute The attribute to map
+ * @param {function} func The function to run
+ */
+function KengineMapper(attribute, func) constructor {
+	self.attribute = attribute;
+	self.func = func;
+
+	Resolve = function(assetconf) {
+		show_debug_message(assetconf);
+		assetconf.conf.__opts.original_attributes[$ self.attribute] = assetconf.conf[$ self.attribute];
+		assetconf.conf[$ self.attribute] = self.func(variable_clone(assetconf.conf[$ self.attribute]), assetconf);
+	}
+
+	Unresolve = function(assetconf) {
+		assetconf.conf[$ self.attribute] = assetconf.conf.__opts.original_attributes[$ self.attribute];
+	}
+}
+
+/**
  * @function KengineAssetTypes
  * @type {Struct}
  * @memberof Kengine
  * @description Return a struct of asset types definitions. This is used at the start of the game to configure asset types.
+ * @return {Struct}
  *
  */
-function KengineAssetTypes() {
-	var types = {
+function KengineAssetTypes() {	
+	static schema = {
 		/**
 		 * @name script
 		 * @type {Struct}
@@ -18,7 +40,7 @@ function KengineAssetTypes() {
 			name: "script", // The name to call this asset type.
 			asset_kind: asset_script, // This should be provided if representing a YYAsset. Required for indexing.
 			indexing_options: {
-				exclude_prefixes: ["__", "ken__", "anon_", "anon@", "__Kengine"], // Prefixes to exclude when indexing assets.
+				exclude_prefixes: ["ken__", "anon_", "anon@", "__Kengine"], // Prefixes to exclude when indexing assets.
 				/**
 				 * When indexing, assets get the name from the real name (at runtime) of the asset.
 				 * This name attribute can be renamed here. and the real name is kept.
@@ -37,7 +59,7 @@ function KengineAssetTypes() {
 						when_successful: function() {
 							// "this" refers to the script asset. We set it as public since it will be available to the end users
 							// Presuming that using this prefix in the name means so.
-							__KengineStructUtils.SetPrivate(this, false);
+							Kengine.Utils.Structs.SetPrivate(this, false);
 						},
 					},
 					// Rename rule 2: Same as above, just remove ken_scr_
@@ -46,7 +68,7 @@ function KengineAssetTypes() {
 						search: "ken_scr_",
 						replace_by: "",
 						when_successful: function() {
-							__KengineStructUtils.SetPrivate(this, false);
+							Kengine.Utils.Structs.SetPrivate(this, false);
 						},
 					},
 				],
@@ -85,7 +107,7 @@ function KengineAssetTypes() {
 		 * @type {Struct}
 		 * @memberof Kengine.asset_type_options
 		 * @description An {@link Kengine.AssetType} definition that represents assets of type sprite in the YYP and sprite-type assets.
-		 * Set it to `undefined` to disable the sprite asset type functionality.
+		 *
 		 */
 		sprite: {
 			name: "sprite",
@@ -104,8 +126,7 @@ function KengineAssetTypes() {
 		 * @type {Struct}
 		 * @memberof Kengine.asset_type_options
 		 * @description An {@link Kengine.AssetType} definition that represents assets of type tileset in the YYP.
-		 * 
-		 * Set it to `undefined` to disable the tileset asset type functionality.
+		 *
 		 */
 		tileset: {
 			name: "tileset",
@@ -116,20 +137,64 @@ function KengineAssetTypes() {
 				unique_attrs: [], // Allow anything when adding assets.
 			},
 			var_struct: {
-				assets_conf_resolve: function (asset, conf, assetconf) {
-					var vs = struct_get_names(conf);
-					for (var i=0; i<array_length(vs); i++) {
-						if vs[i] == "sprite" {
-							conf.__sprite = conf.sprite;
-							conf.sprite = Kengine.Utils.GetAsset("sprite", conf.sprite);
-							if is_string(conf.sprite) or is_undefined(conf.sprite) {
-								throw Kengine.Utils.Errors.Create(Kengine.Utils.Errors.Types.mods__asset_conf__no_resolve, string("AssetConf \"{0}\" property {1}=\"{2}\" not found.", assetconf, "sprite", conf.sprite), true);
-							}
+				asset_conf_mapping: function(assetconf) {
+					var asset = assetconf.asset;
+					var conf = assetconf.conf;
+
+					// Sprite
+					var _spr = Kengine.Utils.Structs.Get(conf, "sprite");
+					if is_undefined(_spr) {
+						throw Kengine.Utils.Errors.Create(Kengine.Utils.Errors.Types.mods__asset_conf__no_resolve, string("AssetConf \"{0}\" property {1} not found.", assetconf, "sprite"), true);
+					}
+					var v = Kengine.Utils.GetAsset("sprite", conf.sprite);
+					if is_string(v) or is_undefined(v) {
+						throw Kengine.Utils.Errors.Create(Kengine.Utils.Errors.Types.mods__asset_conf__no_resolve, string("AssetConf \"{0}\" property {1}=\"{2}\" not found.", assetconf, "sprite", value), true);
+					}
+					asset.sprite = v;
+
+					// Tileset
+					var _tile_count = Kengine.Utils.Structs.Get(conf, "tile_count");
+					if is_undefined(_tile_count) {
+						throw Kengine.Utils.Errors.Create(Kengine.Utils.Errors.Types.mods__asset_conf__no_resolve, string("AssetConf \"{0}\" property {1} not found.", assetconf, "tile_count"), true);
+					}
+					asset.tile_count = _tile_count;
+
+					// Animations
+					var _frame_count = Kengine.Utils.Structs.Get(conf, "frame_count");
+					if _frame_count == undefined {
+						_frame_count = 1;
+					}
+					asset.frame_count = _frame_count;
+
+					var _frames = Kengine.Utils.Structs.Get(conf, "frames");
+
+					if !is_undefined(_frame_count) and !is_undefined(_frames) {
+						var v = buffer_create(4*_tile_count*_frame_count, buffer_fixed, 4);
+						for (var _i=0; _i<array_length(_frames); _i++) {
+							buffer_write(v, buffer_u32, _frames[_i]);
 						}
+						asset.frames_buffer = v;
+					} else { 
+						var v = buffer_create(4*_tile_count, buffer_fixed, 4);
+						for (var _i=0; _i<array_length(_tile_count); _i++) {
+							buffer_write(v, buffer_u32, _i);
+						}
+						asset.frames_buffer = v;
 					}
 				},
-			},
 
+				assets_var_struct: {
+					GetTexture: function() { // {this}
+						if sprite_exists(this.sprite.id) {
+							return sprite_get_texture(this.sprite.id, 0);
+						}
+						return -1;
+					},
+					GetFrameIndex: function(tile_index, frame) { // {this}
+						return buffer_peek(this.frames_buffer, 4*tile_index*this.frame_count + 4*frame, buffer_u32);
+					},
+				}
+			},
 			auto_index: true,
 		},
 
@@ -145,7 +210,7 @@ function KengineAssetTypes() {
 			asset_kind: asset_sound, // This should be provided if representing a YYAsset.
 			indexing_options: {	
 				index_range: [0,9999],
-				exclude_prefixes: ["__", "ken__", "txr_", "anon_",],
+				exclude_prefixes: ["__", "ken__", "anon_",],
 			},
 
 			auto_index: true,
@@ -168,66 +233,66 @@ function KengineAssetTypes() {
 
 			},
 			var_struct: {
-				assets_conf_resolve: function (asset, conf, assetconf) {
-					var vs = struct_get_names(conf);
-					for (var i=0; i<array_length(vs); i++) {
-						// Resolve parent
-						if vs[i] == "parent" {
-							conf.__parent = conf.parent;
-							if conf.parent == "noone" {
-								conf.parent = noone;
+				// An asset_conf_mapping function is what maps the configuration from an assetconf, to the asset being applied to.
+				asset_conf_mapping: [
+					new KengineMapper("parent", function(value, assetconf) {
+						if value == "noone" {
+							return noone;
+						}
+						var v = Kengine.Utils.GetAsset("object", value);
+						if is_string(v) or is_undefined(v) {
+							throw Kengine.Utils.Errors.Create(Kengine.Utils.Errors.Types.mods__asset_conf__no_resolve, string("AssetConf \"{0}\" property {1}=\"{2}\" not found.", assetconf, "parent", value), true);
+						}
+						return v;
+					}),
+					new KengineMapper("sprite", function(value, assetconf) {
+						var v = Kengine.Utils.GetAsset("sprite", value);
+						if is_string(v) or is_undefined(v) {
+							throw Kengine.Utils.Errors.Create(Kengine.Utils.Errors.Types.mods__asset_conf__no_resolve, string("AssetConf \"{0}\" property {1}=\"{2}\" not found.", assetconf, "sprite", value), true);
+						}
+						return v;
+					}),
+					new KengineMapper("event_scripts", function(value, assetconf) {
+						var _is_error = false;
+						var evs = struct_get_names(value);
+						var _ev_custom_script;
+						var _ev_custom_script_text;
+						for (var j=0; j<array_length(evs); j++) {
+							if string_starts_with(value[$ evs[j]], "@") {
+								// keep as is
 								continue;
 							}
-							conf.parent = Kengine.Utils.GetAsset("object", conf.parent);
-							if is_string(conf.parent) or is_undefined(conf.parent) {
-								throw __KengineErrorUtils.Create(__KengineErrorUtils.Types.mods__asset_conf__no_resolve, string("AssetConf \"{0}\" property {1}=\"{2}\" not found.", assetconf, "parent", conf.parent), true);
-							}
-						} else if vs[i] == "sprite" {
-							conf.__sprite = conf.sprite;
-							conf.sprite = Kengine.Utils.GetAsset("sprite", conf.sprite);
-							if is_string(conf.sprite) or is_undefined(conf.sprite) {
-								throw __KengineErrorUtils.Create(__KengineErrorUtils.Types.mods__asset_conf__no_resolve, string("AssetConf \"{0}\" property {1}=\"{2}\" not found.", assetconf, "sprite", conf.sprite), true);
-							}
-						} else if vs[i] == "event_scripts" {
-							conf.__event_scripts = variable_clone(conf.event_scripts);
-							var _is_error = false;
-							var evs = struct_get_names(conf.event_scripts);
-							for (var j=0; j<array_length(evs); j++) {
-								if string_starts_with(conf.event_scripts[$ evs[j]], "@") {
-									// keep as is
-									continue;
+							var filepath = filename_dir(assetconf.source_mod.source);
+							var f = filepath + "/" + value[$ evs[j]]
+							if string_ends_with(f, KENGINE_CUSTOM_SCRIPT_EXTENSION) {
+								// A reference to a file of a custom script.
+								_ev_custom_script_text = Kengine.Extensions.Mods.ReadFileSync(f);
+								if _ev_custom_script_text != undefined {
+									_ev_custom_script = new Kengine.Asset(KENGINE_CUSTOM_SCRIPT_ASSETTYPE_NAME, assetconf.source_mod.name + "__" + "event_scripts" + "__ev_" + evs[j], false);
+									_ev_custom_script.src = _ev_custom_script_text;
+									_ev_custom_script.Compile();
+								} else {
+									_is_error = true
 								}
-								var filepath = filename_dir(assetconf.source_mod.source);
-								var f = filepath + "/" + conf.event_scripts[$ evs[j]]
-								if string_ends_with(f, KENGINE_CUSTOM_SCRIPT_EXTENSION) {
-									// A reference to a file of a custom script.
-									_ev_custom_script_text = Kengine.mods.read_file(f, true);
-									if _ev_custom_script_text != undefined {
-										_ev_custom_script = new Kengine.Asset(KENGINE_CUSTOM_SCRIPT_ASSETTYPE_NAME, assetconf.source_mod.name + "__" + conf.name + "__ev_" + evs[j], false);
-										_ev_custom_script.src = _ev_custom_script_text;
+							} else {
+								// A reference to a defined custom script.
+								_ev_custom_script = Kengine.Utils.GetAsset(KENGINE_CUSTOM_SCRIPT_ASSETTYPE_NAME, value[$ evs[j]]);
+								if _ev_custom_script != undefined {
+									if not _ev_custom_script.is_compiled {
 										_ev_custom_script.Compile();
-									} else {
-										_is_error = true
 									}
 								} else {
-									// A reference to a defined custom script.
-									_ev_custom_script = Kengine.Utils.GetAsset(KENGINE_CUSTOM_SCRIPT_ASSETTYPE_NAME, conf.event_scripts[$ evs[j]]);
-									if _ev_custom_script != undefined {
-										if not _ev_custom_script.is_compiled {
-											_ev_custom_script.Compile();
-										}
-									} else {
-										_is_error = true;
-									}
+									_is_error = true;
 								}
-								if _is_error {
-									throw __KengineErrorUtils.Create(__KengineErrorUtils.Types.mods__asset_conf__no_resolve, string("AssetConf \"{0}\" property {1}=\"{2}\" not found.", assetconf, "event_scripts["+evs[j]+"]", conf.event_scripts[$ evs[j]]), true);
-								}
-								conf.event_scripts[$ evs[j]] = _ev_custom_script;
 							}
+							if _is_error {
+								throw Kengine.Utils.Errors.Create(Kengine.Utils.Errors.Types.mods__asset_conf__no_resolve, string("AssetConf \"{0}\" property {1}=\"{2}\" not found.", assetconf, "event_scripts["+evs[j]+"]", value[$ evs[j]]), true);
+							}
+							value[$ evs[j]] = _ev_custom_script;
 						}
-					}
-				},
+						return value;
+					}),
+				],
 			},
 
 			auto_index: true,
@@ -251,7 +316,10 @@ function KengineAssetTypes() {
 			var_struct: {
 				is_addable: true,
 				is_replaceable: false,
-				assets_conf_resolve: function (asset, conf, assetconf) {
+				asset_conf_mapping: function (assetconf) {
+					var asset = assetconf.asset;
+					var conf = assetconf.conf;
+
 					var vs = struct_get_names(conf);
 					var path_kind = undefined;
 					var data;
@@ -263,156 +331,22 @@ function KengineAssetTypes() {
 						} else if string_ends_with(conf.path, ".json") {
 							path_kind = "json";
 						}
-						conf.__data = __kengine_load_room_file(assetconf.source_mod_base + "/" + conf.path, path_kind);
+						conf.__data = __kengine_load_room_file(filename_dir(assetconf.source_mod.source) + "/" + conf.path, path_kind);
 						conf.data = variable_clone(conf.__data);
 
 					} else if !array_contains(vs, "data") {
-						throw __KengineErrorUtils.Create(__KengineErrorUtils.Types.mods__asset_conf__no_resolve, string("AssetConf \"{0}\" data/path property not found.", assetconf), true);
+						throw Kengine.Utils.Errors.Create(Kengine.Utils.Errors.Types.mods__asset_conf__no_resolve, string("AssetConf \"{0}\" data/path property not found.", assetconf), true);
 					} else {
 						conf.__data = conf.data;
 						conf.data = variable_clone(conf.__data);
 					}
-
-					data = __KengineStructUtils.Get(conf, "data");
-					if data != undefined {
-						asset.room_info = {
-							width: __KengineStructUtils.Get(conf.data, "width") ?? 200,
-							height: __KengineStructUtils.Get(conf.data, "height") ?? 200,
-							creation_script_name: __KengineStructUtils.Get(conf.data, "creation_script_name") ?? undefined, // TODO workaround for kscript.
-							physicsWorld: __KengineStructUtils.Get(conf.data, "physicsWorld") ?? false,
-							physicsGravityX: __KengineStructUtils.Get(conf.data, "physicsGravityX") ?? 0,
-							physicsGravityY: __KengineStructUtils.Get(conf.data, "physicsGravityY") ?? 0,
-							physicsPixToMeters: __KengineStructUtils.Get(conf.data, "physicsPixToMeters") ?? 0.1,
-							presistent: false, // conf.data.persistent,
-							enableViews: __KengineStructUtils.Get(conf.data, "enableViews") ?? false,
-							clearDisplayBuffer: __KengineStructUtils.Get(conf.data, "clearDisplayBuffer") ?? true,
-							clearViewportBackground: __KengineStructUtils.Get(conf.data, "clearViewportBackground") ?? true,
-							colour: __KengineStructUtils.Get(conf.data, "colour") ?? c_white,
-							instances: __KengineStructUtils.Get(conf.data, "instances") ?? [],
-							layers: __KengineStructUtils.Get(conf.data, "layers") ?? [],
-							views: __KengineStructUtils.Get(conf.data, "views") ?? [],
-						};
-
-						// Instances.
-						var r = undefined; var a, b, c;
-						for (var i=0; i<array_length(asset.room_info.instances); i++) {
-							a = asset.room_info.instances[i];
-							if !__KengineStructUtils.Exists(a, "x") or !__KengineStructUtils.Exists(a,"y")
-							or !__KengineStructUtils.Exists(a, "object_index") or !__KengineStructUtils.Exists(a, "id") {
-								throw __KengineErrorUtils.Create(__KengineErrorUtils.Types.mods__asset_conf__no_resolve, string("Room \"{0}\" essential properties of instance struct(s) missing.", assetconf), true);
-							}
-
-							if (is_string(__KengineStructUtils.Get(a, "object_index"))) {
-								if (not __KengineStructUtils.Exists(a, "_object_name")) {
-									c = a.object_index;
-								} else {
-									c = a._object_name;
-								}
-								r = Kengine.Utils.GetAsset("object", c);
-								if r == undefined {
-									throw __KengineErrorUtils.Create(__KengineErrorUtils.Types.mods__asset_conf__no_resolve, string("Room \"{0}\" instance {1} object not found.", assetconf, string(a.id)), true);
-								}
-								a._object_name = r.name;
-								a[$ "object_index"] = r.index;
-							}
-							/* Do these when creating */
-
-							/*
-							if (is_string(__KengineStructUtils.Get(a, "creation_script_name"))) {
-								r = Kengine.Utils.GetAsset("script", a.creation_script_name);
-								a.creation_script_name = r.name;
-							}
-							if (is_string(__KengineStructUtils.Get(a, "pre_creation_script_name"))) {
-								r = Kengine.Utils.GetAsset("script", a.pre_creation_script_name);
-								a.pre_creation_script_name = r.name;
-							}*/
-						}
-
-						// Layers.
-						for (var i=0; i<array_length(asset.room_info.layers); i++) {
-							a = asset.room_info.layers[i];
-							b = a.elements;
-							for (var j=0; j<array_length(b); j++) {
-								switch (b[j].type) {
-									case layerelementtype_instance:
-										break;
-
-									case layerelementtype_sequence:
-										break;
-
-									case layerelementtype_background:
-									case layerelementtype_sprite:
-										if (__KengineStructUtils.Exists(b[j], "sprite_index")) {
-											if (not __KengineStructUtils.Exists(b[j], "_sprite_name")) {
-												c = b[j].sprite_index;
-											} else {
-												c = b[j]._sprite_name;
-											}
-											r = Kengine.Utils.GetAsset("sprite", c);
-											if r == undefined {
-												throw __KengineErrorUtils.Create(__KengineErrorUtils.Types.mods__asset_conf__no_resolve, string("Room \"{0}\" layer {1} sprite not found.", assetconf, string(i)), true);
-											}
-											b[j]._sprite_name = r.name;
-											b[j].sprite_index = r.id;
-										} else {
-											throw __KengineErrorUtils.Create(__KengineErrorUtils.Types.mods__asset_conf__no_resolve, string("Room \"{0}\" layer {1} sprite not set.", assetconf, string(i)), true);
-										}
-										break;
-									case layerelementtype_tilemap:
-										if (__KengineStructUtils.Exists(b[j], "tileset_index")) {
-											if (not __KengineStructUtils.Exists(b[j], "_tileset_name")) {
-												c = b[j].tileset_index;
-											} else {
-												c = b[j]._tileset_name;
-											}
-											r = Kengine.Utils.GetAsset("tileset", c);
-											if r == undefined {
-												throw __KengineErrorUtils.Create(__KengineErrorUtils.Types.mods__asset_conf__no_resolve, string("Room \"{0}\" layer {1} tileset not found.", assetconf, string(i)), true);
-											}
-											b[j]._tileset_name = r.name;
-											b[j].tileset_index = r.id;
-										} else {
-											throw __KengineErrorUtils.Create(__KengineErrorUtils.Types.mods__asset_conf__no_resolve, string("Room \"{0}\" layer {1} tileset not set.", assetconf, string(i)), true);
-										}
-										break;
-									
-								}
-							}
-							
-						}
-
-						// Views.
-						for (var i=0; i<array_length(asset.room_info.views); i++) {
-							a = asset.room_info.views[i];
-							if (is_string(__KengineStructUtils.Get(a, "object"))) { // target can be object or instance.
-								if (not __KengineStructUtils.Exists(a, "_object_name")) {
-									c = a.object;
-								} else {
-									c = a._object_name;
-								}
-								r = Kengine.Utils.GetAsset("object", c);
-								if r == undefined {
-									r = Kengine.instances.GetInd(c, __KengineCmpUtils.cmp_val1_id_val2_id);
-									if r == undefined {
-										throw __KengineErrorUtils.Create(__KengineErrorUtils.Types.mods__asset_conf__no_resolve, string("Room \"{0}\" view camera {1} object/instance \"{1}\" not found.", assetconf, string(a.cameraID), string(c)), true);
-									} else {
-										r = Kengine.Utils.GetAsset("object", r.instance.id); // real ID.
-										if r != undefined {
-											a._object_name = r.name;
-											a.object = r.index;
-										}
-									}
-								} else {
-									a._object_name = r.name;
-									a.object = r.index;
-								}
-								// TODO: Override when the first instance is set in the room to make the camera_set_view_target. (controller, step?)
-							}
-
-						}
-
-						// TODO: Change tilesets to custom Kengine tilesets?
+					
+					if is_instanceof(asset.rm, __KengineRm) {
+						delete asset.rm;
 					}
+					asset.rm = new __KengineRm(asset, conf);
+
+					// TODO: Change tilesets to custom Kengine tilesets?
 				},
 
 				/*
@@ -424,19 +358,24 @@ function KengineAssetTypes() {
 				*
 				*/
 				assets_var_struct: {
+					rm: undefined,
 					is_active: false,
-					activate: function() { // {this}
-						// TODO: iterate room_info and add stuff to the room.
+					Activate: function() { // {this}
 						if this.is_active == false {
 							if Kengine.current_room_asset != undefined {
-								Kengine.current_room_asset.deactivate();
+								Kengine.current_room_asset.Deactivate();
 							}
 							this.is_active = true;
+							
+							if this.rm != undefined {
+								this.rm.Activate();
+							}
 						}
 					},
-					deactivate: function() { // {this}
+					Deactivate: function() { // {this}
 						// TODO: iterate room_created_info and remove from the room.
 						// unless it is persistent.
+						// - Instances are automatically deleted.
 
 						if this.is_active == false {
 							return;
@@ -460,19 +399,26 @@ function KengineAssetTypes() {
 		 */
 		KENGINE_CUSTOM_SCRIPT_ASSETTYPE_NAME: {
 			name: KENGINE_CUSTOM_SCRIPT_ASSETTYPE_NAME,
-			index_range: [0,1],
+			indexing_options: {
+				index_range: [0,1],
+				exclude_prefixes: ["__",],
+				unique_attrs: [],
+			},
 			asset_kind: KENGINE_CUSTOM_ASSET_KIND,
 			var_struct: {
-				assets_conf_resolve: function (asset, conf, assetconf) {
+				asset_conf_mapping: function (assetconf) {
+					var asset = assetconf.asset;
+					var conf = assetconf.conf;
+
 					var filepath = filename_dir(assetconf.source_mod.source);
 					var f = filepath + "/" + conf.path;
 					if string_ends_with(f, KENGINE_CUSTOM_SCRIPT_EXTENSION) {
 						// A reference to a custom script file.
-						var _ev_custom_script_text = Kengine.mods.read_file(f, true);
+						var _ev_custom_script_text = Kengine.Extensions.Mods.ReadFileSync(f);
 						if _ev_custom_script_text != undefined {
 							asset.src = _ev_custom_script_text;
 						} else {
-							throw __KengineErrorUtils.Create(__KengineErrorUtils.Types.mods__asset_conf__no_resolve, string("AssetConf \"{0}\" property {1}=\"{2}\" not found.", self, "path", conf.path), true);
+							throw Kengine.Utils.Errors.Create(Kengine.Utils.Errors.Types.mods__asset_conf__no_resolve, string("AssetConf \"{0}\" property {1}=\"{2}\" not found.", self, "path", conf.path), true);
 						}
 					}
 				},
@@ -480,24 +426,22 @@ function KengineAssetTypes() {
 					is_compiled: false,
 					Compile: function() { // {this}
 						var asset = this;
-						asset.pg = __KengineParserUtils.__Interpreter.Compiler._compile(asset.src);
+						asset.pg = Kengine.Utils.Parser.interpreter.Compiler._compile(asset.src);
 						if asset.pg == undefined {
-							Kengine.console.echo_error("Compile failure for script: " + string(asset.name)+ ", " + string(Kengine.Utils.Parser.__Interpreter.System._error));
+							Kengine.console.echo_error("Compile failure for script: " + string(asset.name)+ ", " + string(Kengine.Utils.Parser.interpreter.System._error));
 							return
 						}
 						asset.is_compiled = true;
 					},
 					Run: function(that, dict, args) {
-						return __KengineParserUtils.__InterpretAsset(this, that, dict, args);
+						return Kengine.Utils.Parser.InterpretAsset(this, that, dict, args);
 					}
 				},
 			},
-
-			auto_index: true, // Basically nothing since There are no included custom scripts essentially in project.
-
+			auto_index: false,
 		},
 
 	}
 
-	return types;
+	return schema;
 }

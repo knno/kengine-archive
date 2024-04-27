@@ -10,6 +10,10 @@ function __KenginePanelsPanelOptions(options) : __KengineOptions() constructor {
     __add("y", 0)
     __add("width", 200)
     __add("height", 50)
+	__add("content_x", 0)
+	__add("content_y", 0)
+	__add("content_width", -1)
+	__add("content_height", -1)
     __add("title", "Untitled Panel")
     __add("children", [])
     __add("collapse_enabled", true)
@@ -38,7 +42,7 @@ function __KenginePanelsPanelOptions(options) : __KengineOptions() constructor {
  * 
  */
 function __KenginePanelsPanel(options=undefined) constructor {
-	// TODO: Add events.
+	if options == undefined return;
 
 	if not is_instanceof(options, __KenginePanelsPanelOptions) {
 		options = new __KenginePanelsPanelOptions(options);
@@ -47,6 +51,10 @@ function __KenginePanelsPanel(options=undefined) constructor {
     y = undefined
     width = undefined
     height = undefined
+	content_x = undefined
+	content_y = undefined
+    content_width = undefined
+    content_height = undefined
     title = undefined
     children = undefined
     collapse_enabled = undefined
@@ -63,7 +71,6 @@ function __KenginePanelsPanel(options=undefined) constructor {
     __KengineOptions.__Apply(options, self);
 
 	__is_focused = false;
-
 	__drag_anchor = false;
 	__mb_drag = false;
 	__mb_press_count = 0;
@@ -72,6 +79,20 @@ function __KenginePanelsPanel(options=undefined) constructor {
 	__drag_anchor_y = 0;
 	__mouse_x = 0;
 	__mouse_y = 0;
+	__auto_content_wh = false;
+	if content_width == -1 and content_height == -1 {
+		__auto_content_wh = true;
+	}
+	if content_width <= width content_width = width
+	if content_height <= height content_height = height
+	__overflow_x = width < content_width
+	__overflow_y = height < content_height
+	__scrollbar_x = undefined
+	__scrollbar_y = undefined
+
+	for (var _i=0; _i<array_length(self.children); _i++) {
+		self.children[_i].parent = self;
+	}
 
 	self.__Step = function() {
 		var _mouse_click_interval = 15; // fps
@@ -93,18 +114,30 @@ function __KenginePanelsPanel(options=undefined) constructor {
 				_mouse_inside = true;
 			}
 
-			var _mb_pressed, _mb_held, _mb_released, _mb_pressed_twice = false, _mb_pressed_thrice = false;
+			var _mb_pressed, _mb_held, _mb_released, _mb_pressed_twice = false, _mb_pressed_thrice = false, _mw_down = false, _mw_up = false;
 			if mouse_check_button_pressed(mb_left) {_mb_pressed = true;} else {_mb_pressed = false;}
 			if mouse_check_button(mb_left) {_mb_held = true;} else {_mb_held = false;}
 			if mouse_check_button_released(mb_left) {_mb_released = true;} else {_mb_released = false;}
+			if _mouse_inside {if mouse_wheel_down() _mw_down = true; if mouse_wheel_up() _mw_up = true;}
+			if content_width < width content_width = width
+			if content_height < height content_height = height
+			__overflow_x = width < content_width
+			__overflow_y = height < content_height
+
+			var _focus = (focus_enabled == false) or (focus_enabled and __is_focused);
 
 			if _mb_pressed {
 				if focus_enabled {
-					if not _mouse_inside {__is_focused = false;} else {__is_focused = true;}
+					if _mouse_inside {
+						__KenginePanels.focused_panel = self;
+						__is_focused = true;
+					} else {
+						__is_focused = false;
+					}
 				}
 				if (__mb_press_timer > 0) {
 					__mb_press_count += 1;
-					
+
 					if __mb_press_count == 2 {
 						_mb_pressed_twice = true;
 					} else if __mb_press_count == 3 {
@@ -118,8 +151,8 @@ function __KenginePanelsPanel(options=undefined) constructor {
 				__mouse_x = _mouse_x;
 				__mouse_y = _mouse_y;
 
-			} else if _mb_held and not __mb_drag and _mouse_inside {
-				if (_mouse_x != __mouse_x or _mouse_y != __mouse_y) and !__mb_drag and __mb_press_count == 1 and drag_enabled and __is_focused {
+			} else if __KenginePanels.focused_panel == self and _mb_held and not __mb_drag and _mouse_inside {
+				if (_mouse_x != __mouse_x or _mouse_y != __mouse_y) and !__mb_drag and __mb_press_count == 1 and drag_enabled and _focus {
 					if (_mouse_y < y + collapse_height)
 						{
 						__mb_drag = true;
@@ -130,7 +163,9 @@ function __KenginePanelsPanel(options=undefined) constructor {
 					__mb_drag = false;
 				}
 
-			} else if _mb_held and __mb_drag and _mouse_inside {
+			} else if __KenginePanels.focused_panel == self and _mb_held and __mb_drag and _mouse_inside {
+				__mouse_x = _mouse_x;
+				__mouse_y = _mouse_y;
 				if not __drag_anchor {
 					//mouse_clear(mb_left); _mb_pressed = false; _mb_held = false; _mb_released = false;
 					__drag_anchor = true;
@@ -139,7 +174,7 @@ function __KenginePanelsPanel(options=undefined) constructor {
 				}
 			}
 			
-			if _mb_held and __drag_anchor and __mb_drag and __is_focused {
+			if __KenginePanels.focused_panel == self and _mb_held and __drag_anchor and __mb_drag and _focus {
 				x = clamp(_mouse_x + __drag_anchor_x, 0, window_get_width()-width);
 				y = clamp(_mouse_y + __drag_anchor_y, 0, window_get_height()-collapse_height-16);
 			}
@@ -157,7 +192,7 @@ function __KenginePanelsPanel(options=undefined) constructor {
 				__drag_anchor = false;
 			}
 			
-			if _mb_pressed_twice and _mouse_inside and collapse_enabled {
+			if __KenginePanels.focused_panel == self and _mb_pressed_twice and _mouse_inside and collapse_enabled {
 				if (_mouse_y < y + collapse_height)
 					{
 					collapsed = not collapsed;
@@ -171,7 +206,7 @@ function __KenginePanelsPanel(options=undefined) constructor {
 	}
 
 	self.__Draw = function() {
-		
+
 		draw_set_alpha(alpha);
 
 		var _hh = collapse_height;
@@ -187,6 +222,25 @@ function __KenginePanelsPanel(options=undefined) constructor {
 			}
 		}
 
+		if not collapsed {
+			if __overflow_x {
+				self.__scrollbar_x = self.__scrollbar_x ?? new __KenginePanelsScrollbar(KENGINE_PANELS_SCROLLBAR_TYPE.HORIZONTAL, 0, spr_ken_panels_scrollbar, true);
+			} else {
+				if is_instanceof(self.__scrollbar_x, __KenginePanelsScrollbar) {
+					delete self.__scrollbar_x
+				}
+				self.__scrollbar_x = undefined
+			}
+			if self.__overflow_y {
+				self.__scrollbar_y = self.__scrollbar_y ?? new __KenginePanelsScrollbar(KENGINE_PANELS_SCROLLBAR_TYPE.VERTICAL, 0, spr_ken_panels_scrollbar, true);
+			} else {
+				if is_instanceof(self.__scrollbar_y, __KenginePanelsScrollbar) {
+					delete self.__scrollbar_y
+				}
+				self.__scrollbar_y = undefined;
+			}
+		}
+		
 		if __is_focused { draw_set_alpha(alpha) } else { draw_set_alpha(0.9*alpha); }
 		draw_rectangle_color(x,y,x+width,y+_hh,box_colors[0],box_colors[1],box_colors[2],box_colors[3],false);
 
@@ -211,6 +265,21 @@ function __KenginePanelsPanel(options=undefined) constructor {
 		draw_set_halign(fa_left);
 
 		if not self.collapsed {
+			var th, sph, spw, wh;
+			if self.__scrollbar_x != undefined {
+				spw = sprite_get_width(self.__scrollbar_x.spr);
+				th = 0.5*ceil(content_width/width);
+				wh = (width-10-spw*3)/th
+				self.__scrollbar_x.DrawSlots(x+5, y+_hh-16, th, wh, content_width);
+				self.content_x = -self.__scrollbar_x.value
+			}
+			if self.__scrollbar_y != undefined {
+				sph = sprite_get_height(self.__scrollbar_y.spr);
+				th = 0.5*ceil(content_height/height);
+				wh = (height-10-collapse_height-sph*2)/th
+				self.__scrollbar_y.DrawSlots(x+width-16, y+5+collapse_height, th, wh, content_height);
+				self.content_y = -self.__scrollbar_y.value
+			}
 			self.__DrawContents();
 		}
 	}
@@ -223,7 +292,7 @@ function __KenginePanelsPanel(options=undefined) constructor {
 		self.__Draw();
 	}
 
-	self.Add = function(item) {
+	self.__Add = function(item) {
 		var _a = array_length(self.children);
 		item.parent = self;
 		self.children[_a] = item;
@@ -231,10 +300,17 @@ function __KenginePanelsPanel(options=undefined) constructor {
 	}
 
 	self.__DrawContents = function() {
+		var th, _mw = 0, _mh = 0;
 		for (var _i=0; _i<array_length(children); _i++) {
 			if children[_i].Draw != undefined children[_i].Draw();
+			_mw = max(_mw, - self.content_x + children[_i].width);
+			_mh = max(_mh, - self.content_y + children[_i].height);
+		}
+		if __auto_content_wh {
+			content_width = _mw;
+			content_height = _mh;
 		}
 	}
 
-	self.id = __KenginePanels.panels.Add(self)
+	self.id = __KenginePanels.panels.Add(self);
 }

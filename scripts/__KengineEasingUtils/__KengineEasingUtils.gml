@@ -6,7 +6,7 @@
  */
 function __KengineEasingUtils() : __KengineStruct() constructor {
     /** 
-     * @function ease_in
+     * @function EaseIn
      * @memberof Kengine.Utils.Easing
      * @description Take a value and apply ease-in transition on, starting from `_start` and ending after `_duration` with added `_change`.
      * @param {Real} value The value to be applied.
@@ -21,13 +21,13 @@ function __KengineEasingUtils() : __KengineStruct() constructor {
      * @return {Real} Converted real value to ease-in
      * 
      */
-    static ease_in = function(value, start, change, duration){
+    static EaseIn = function(value, start, change, duration){
         value /= duration;
         return change*value*value + start;
     }
     
     /** 
-     * @function ease_inout
+     * @function EaseInOut
      * @memberof Kengine.Utils.Easing
      * @description Take a value and apply ease-in-out transition on, starting from `_start` and ending after `_duration` with added `_change`.
      * @param {Real} value The value to be applied.
@@ -42,7 +42,7 @@ function __KengineEasingUtils() : __KengineStruct() constructor {
      * @return {Real} Converted real value to ease-in-out
      *
      */
-    static ease_inout = function(value, start, change, duration){
+    static EaseInOut = function(value, start, change, duration){
         value /= duration/2;
         if (value < 1) return change/2*value*value+ start;
         value -= 1;
@@ -50,7 +50,7 @@ function __KengineEasingUtils() : __KengineStruct() constructor {
     }
 
     /** 
-     * @function ease_out
+     * @function EaseOut
      * @memberof Kengine.Utils.Easing
      * @description Take a value and apply ease-out transition on, starting from `_start` and ending after `_duration` with added `_change`.
      * @param {Real} value The value to be applied.
@@ -65,9 +65,9 @@ function __KengineEasingUtils() : __KengineStruct() constructor {
      * @return {Real} Converted real value to ease-out
      *
      */
-    static ease_out = function(value, start, change, duration){
+    static EaseOut = function(value, start, change, duration){
         value /= duration;
         return -change * value*(value-2) + start;
     }
-    
 }
+//__KengineEasingUtils();

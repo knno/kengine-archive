@@ -1,4 +1,5 @@
 // First create event...
+Kengine();
 Kengine.Initialize();
 
 extensions = Kengine.Extensions;

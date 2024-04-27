@@ -6,7 +6,7 @@
  * @param {Any} _message
  */
 function __kengine_log(_message) {
-	show_debug_message($"[Kengine] {_message}.");
+	show_debug_message($"[Kengine] {_message}");
 }
 
 /**
@@ -23,11 +23,11 @@ function __kengine_do_ev(ev, ev_arg=undefined) {
 	var scr = "";
 	var _wrapper = wrapper;
 	__KengineStructUtils.SetDefault(_wrapper.asset, "event_scripts", {});
-	scr = __KengineStructUtils.Get(_wrapper.asset.event_scripts, ev);
+	scr = __KengineStructUtils.Get(_wrapper.asset.event_scripts, ev.name);
 	if scr != undefined {
 		var var_struct = {wrapper: _wrapper, event: ev.name, event_arg: ev_arg, script_object: wrapper,};
 		if is_instanceof(scr, Kengine.Asset) {
-			return __KengineParserUtils.__InterpretAsset(scr, _wrapper, var_struct);
+			return __KengineParserUtils.InterpretAsset(scr, _wrapper, var_struct);
 		} else if is_method(scr) {
 			return method(var_struct, scr)();
 		} else if is_string(scr) {
@@ -42,7 +42,7 @@ function __kengine_do_ev(ev, ev_arg=undefined) {
  * @function __kengine_load_room_file
  * @memberof Kengine
  * @private
- * @description Load a room file into a struct that looks like room_get_info. With additional `_ken_` data.
+ * @description Load a room file into a struct that looks like room_get_info. With additional `__` prefixed data.
  * @param {String} path Path to the file containing the data.
  * @param {String} [kind="json"] The format to parse. "json", "tmx", "yy".
  * @return {Any}
@@ -111,7 +111,7 @@ function __kengine_load_sound(path, name="undefined", is3D=false) {
 			message: "Asset file not found.",
 			longMessage: "The asset file for \"" + name + "\" was not loaded. Path \"" + path + "\" does not exist.",
 			stacktrace: debug_get_callstack(),
-			error_source: "kengine",
+			error_source: "Kengine",
 			error_id: 6,
 		};
 	}
@@ -146,7 +146,7 @@ function __kengine_sound_wavbuffer_to_audio(_buff, name = "undefined", _is3D = f
 			message: "Sound asset is not WAV.",
 			longMessage: "The sound asset file \"" + name + "\" was not loaded. Chunk ID is not RIFF.",
 			stacktrace: debug_get_callstack(),
-			error_source: "kengine",
+			error_source: "Kengine",
 			error_id: 8,
 		};
 	}
@@ -189,7 +189,7 @@ function __kengine_sound_wavbuffer_to_audio(_buff, name = "undefined", _is3D = f
 					message: "Sound asset has invalid bits per sample. It can only support signed 8 or 16 bit.",
 					longMessage: "The sound asset file \"" + name + "\" was not loaded. Invalid bits per sample. It can only support signed 8 or 16 bit.",
 					stacktrace: debug_get_callstack(),
-					error_source: "kengine",
+					error_source: "Kengine",
 					error_id: 9,
 				};
 				return -1;
@@ -201,7 +201,7 @@ function __kengine_sound_wavbuffer_to_audio(_buff, name = "undefined", _is3D = f
 				message: "Sound asset has invalid fmt.",
 				longMessage: "The sound asset file \"" + name + "\" was not loaded. Invalid fmt.",
 				stacktrace: debug_get_callstack(),
-				error_source: "kengine",
+				error_source: "Kengine",
 				error_id: 10,
 			};
 		}
@@ -211,7 +211,7 @@ function __kengine_sound_wavbuffer_to_audio(_buff, name = "undefined", _is3D = f
 			message: "Sound asset has invalid signature.",
 			longMessage: "The sound asset file \"" + name + "\" was not loaded. Invalid signature.",
 			stacktrace: debug_get_callstack(),
-			error_source: "kengine",
+			error_source: "Kengine",
 			error_id: 11,
 		};
 	    return -1;

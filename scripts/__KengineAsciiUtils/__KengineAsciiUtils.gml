@@ -13,7 +13,7 @@ function __KengineAsciiUtils() : __KengineStruct() constructor {
     static __GetSpinner = function() {return Kengine.Utils.Ascii.__current_spinner;}
 
 	static __Step = function() {
-		var ascii = Kengine.Utils.Ascii;
+		var ascii = self;
 		if ascii.__current_braille_timer != -1 {
 			ascii.__current_braille_timer++
 		}
@@ -46,4 +46,4 @@ function __KengineAsciiUtils() : __KengineStruct() constructor {
 	}
 
 }
-__KengineAsciiUtils();
+//__KengineAsciiUtils();

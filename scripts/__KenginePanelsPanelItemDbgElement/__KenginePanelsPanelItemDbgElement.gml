@@ -6,21 +6,21 @@
  * @param {String} type
  * @param {String} value
  * @param {String} class
- * @param {Real} padding
+ * @param {Real} _padding
  * @param {Real} lvl
- * @param {Undefined|Array<Any>} children
+ * @param {Undefined|Array<Any>} _children
  * 
  */
-function __KenginePanelsPanelItemDbgElement(type="div", value="", class="", padding=32, lvl=0, children=undefined) : __KenginePanelsPanelItem() constructor {
+function __KenginePanelsPanelItemDbgElement(type="div", value="", class="", _padding=32, lvl=0, _children=undefined) : __KenginePanelsPanelItem() constructor {
 
 	self.value = value
 	self.type = type
 	self.class = class
-	self.padding = padding
+	self.padding = _padding
 	self.lvl = lvl
-	self.children = children
-	x = 0
-	y = 0
+	self.children = _children ?? [];
+	self.x = 0;
+	self.y = 0;
 
 	self.valueprevious = self.value
 
@@ -62,13 +62,14 @@ function __KenginePanelsPanelItemDbgElement(type="div", value="", class="", padd
 		element.toggled = not element.toggled;
 	}
 
-	__DrawChild = function(element, _x, _y) {
+	__DrawChild = function(element, _x, _y, x1,y1,x2,y2) {
 		var _c = draw_get_color()
 		var _ele
 		var _uv
 		var _u = _x
 		var _v = _y
 		var _w = 0, _h = 0
+		var _mu = 0, _mv = 0;
 
 		var _mouse_x = device_mouse_x_to_gui(0);
 		var _mouse_y = device_mouse_y_to_gui(0);
@@ -85,8 +86,10 @@ function __KenginePanelsPanelItemDbgElement(type="div", value="", class="", padd
 					if _ele.type == "div" {
 						_u = _u0;
 					}
-					_uv = __DrawChild(_ele, _u + self.padding, _v)
+					_uv = __DrawChild(_ele, _u + self.padding, _v, x1,y1,x2,y2)
 					_u = _uv[0] - self.padding; _v = _uv[1]
+					_mu = max(_mu, _uv[2]);
+					_mv = max(_mv, _uv[3]);
 
 					draw_set_color(_c)
 					if _ele.type == "br" or _ele.type == "div" {
@@ -96,6 +99,10 @@ function __KenginePanelsPanelItemDbgElement(type="div", value="", class="", padd
 						} else {
 							_u = _u0
 						}
+					}
+					if _ele.class == "arrow" and !_ele.toggled {
+						_h = string_height(_ele.value);
+						_v += _h;
 					}
 					if _ele.class == "extra" {
 						_h = string_height(_ele.value);
@@ -108,8 +115,12 @@ function __KenginePanelsPanelItemDbgElement(type="div", value="", class="", padd
 					} else {
 						_u = _u0;
 					}
+					_mu = max(_mu, _u);
+					_mv = max(_mv, _v);
 				}
 			}
+			_mu = max(_mu, _u);
+			_mv = max(_mv, _v);
 			_u = _u0;
 		} else {
 			if element.visible {
@@ -130,7 +141,11 @@ function __KenginePanelsPanelItemDbgElement(type="div", value="", class="", padd
 				} else {
 					draw_set_color(element.color);
 				}
-				draw_text(_u, _v, string(element.value));
+				if _u >= x1 and _v >= y1 and _u + _w < x2 and _v + _h < y2 {
+					draw_text(_u, _v, string(element.value));
+				}
+				_mu = max(_mu, _u);
+				_mv = max(_mv, _v);
 				_u = _u0;
 				if element.class == "arrow" {
 					if not element.toggled {
@@ -151,9 +166,13 @@ function __KenginePanelsPanelItemDbgElement(type="div", value="", class="", padd
 						}
 					}
 				}
+				_mu = max(_mu, _u);
+				_mv = max(_mv, _v);
 			}
 		}
-		return [_u, _v]
+		element.width = _mu + _w;
+		element.height = _mv + _h;
+		return [_u, _v, element.width, element.height]
 	}
 
 	Draw = function () {
@@ -161,9 +180,12 @@ function __KenginePanelsPanelItemDbgElement(type="div", value="", class="", padd
 		draw_set_valign(fa_top);
 		draw_set_halign(fa_left);
 		draw_set_alpha(alpha);
-		var _u = parent.x + x;
-		var _v = parent.y + y + parent.collapse_height;
+		var _u = parent.x + parent.content_x + x;
+		var _v = parent.y + parent.content_y + y + parent.collapse_height;
 		var _u0 = _u;
+		var _v0 = _v;
+		var _mu = 0;
+		var _mv = 0;
 		var _ele, _c, _w,_h, _uv;
 		_w = 0; _h = 0;
 		_c = draw_get_color();
@@ -178,46 +200,69 @@ function __KenginePanelsPanelItemDbgElement(type="div", value="", class="", padd
 						draw_set_color(_c);
 					}
 					if _ele.type == "div" {
+						_mu = max(_mu, _u);
 						_u = _u0;
 					}
-					_uv = __DrawChild(_ele, _u + self.padding, _v + self.padding);
+					_uv = __DrawChild(_ele, _u + self.padding, _v + self.padding, parent.x, parent.y + parent.collapse_height, parent.x + parent.width, parent.y + parent.height - parent.collapse_height);
 					_u = _uv[0] - self.padding; _v = _uv[1] - self.padding;
+					_mu = max(_mu, _uv[2]);
+					_mv = max(_mv, _uv[3]);
 
 					draw_set_color(_c);
 					if _ele.type == "br" or _ele.type == "div" {
 						if _ele.value != "" {
 							_h = string_height(_ele.value);
 							_v += _h;
+							_mv = max(_mv, _v);
 						} else {
+							_mu = max(_mu, _u);
 							_u = _u0;
 						}
 					}
+					if _ele.class == "arrow" and !_ele.toggled {
+						_h = string_height(_ele.value);
+						_v += _h;
+						_mv = max(_mv, _v);
+					}
 					if _ele.class == "extra" {
 						_h = string_height(_ele.value);
-						_v += _h						
+						_v += _h
+						_mv = max(_mv, _v);
+
+						_mu = max(_mu, _u);
 						_u = _u0
 					}
-					if _ele.value != "\n" and _ele.value != "\\n" {
-						_w = string_width(_ele.value);
-						_u += _w
-					} else {
-						_u = _u0
+					if !is_struct(_ele.value) {
+						if _ele.value != "\n" and _ele.value != "\\n" {
+							_w = string_width(_ele.value);
+							_u += _w
+							_mu = max(_mu, _u);
+						} else {
+							_mu = max(_mu, _u);
+							_u = _u0
+						}
 					}
 				}
 			}
+			_mu = max(_mu, _u);
+			_mv = max(_mv, _v);
 		}
+
+		self.width = _mu - parent.x;
+		self.height = _mv - parent.y;
 	}
 
 	__CreateLayout = function(obj, par=undefined) {
-		if obj == "" return
+		if obj == "" return;
 
-		par = par ?? self
-		var _created_arrow = false
-		var _span, _br
-		var _arrow = false
-		var _is_struct = false
-		var _array = undefined
-		var _extra = ""
+		par = par ?? self;
+		var _created_arrow = false;
+		var _span;
+		var _br;
+		var _arrow = false;
+		var _is_struct = false;
+		var _array = undefined;
+		var _extra = "";
 
 		switch typeof(obj) {
 			case "struct":
@@ -225,9 +270,9 @@ function __KenginePanelsPanelItemDbgElement(type="div", value="", class="", padd
 				_arrow = true;
 				_is_struct = true;
 				_array = struct_get_names(obj);
-				_extra = "";
+				_extra = par==undefined ? "" : " ";
 				break;
-				
+
 			case "array":
 				_arrow = true;
 				_is_struct = false;
@@ -236,9 +281,10 @@ function __KenginePanelsPanelItemDbgElement(type="div", value="", class="", padd
 				break;
 				
 			default:
-				if is_undefined(par.children) par.children = []
-
 				_span = new __KenginePanelsPanelItemDbgElement("span", (!_created_arrow ? " " : "") + string(obj))
+				if string_pos("function", string_trim_start(_span.value)) == 1 {
+					_span.color = c_gray;
+				}
 				_span.parent = par;
 				array_push(par.children, _span);
 
@@ -250,8 +296,6 @@ function __KenginePanelsPanelItemDbgElement(type="div", value="", class="", padd
 		}
 		
 		if _arrow {
-			if is_undefined(par.children) par.children = [];
-
 			_span = new __KenginePanelsPanelItemDbgElement("span", "▼", "arrow");
 			_span.parent = par;
 			_span.color = c_gray;
@@ -261,8 +305,6 @@ function __KenginePanelsPanelItemDbgElement(type="div", value="", class="", padd
 		}
 		
 		if _extra != "" {
-			if is_undefined(par.children) par.children = [];
-
 			_span = new __KenginePanelsPanelItemDbgElement("span", _extra, "extra");
 			_span.parent = par;
 			_span.color = c_gray;
@@ -273,13 +315,13 @@ function __KenginePanelsPanelItemDbgElement(type="div", value="", class="", padd
 
 		var _pcreated = false;
 
-		if is_undefined(par.children) par.children = [];
-
 		for (var _i=0; _i<array_length(_array); _i++) {
 			if _is_struct {
 				_n = _array[_i];
 				_v = obj[$ _n];
-				_p = par;
+				_p = new __KenginePanelsPanelItemDbgElement("div", "", "nested")
+				_p.parent = par;
+				array_push(par.children, _p);
 			} else {
 				_n = "";
 				_v = obj[_i];
@@ -312,8 +354,8 @@ function __KenginePanelsPanelItemDbgElement(type="div", value="", class="", padd
 	__StepMouse = function(element, _x, _y) {
 		var _ele;
 		var _uv;
-		var _u = _x;
-		var _v = _y;
+		var _u = _x + parent.content_x;
+		var _v = _y + parent.content_y;
 		var _u0 = _u;
 		var _x1, _y1;
 		var _w = 0, _h = 0;
@@ -352,6 +394,10 @@ function __KenginePanelsPanelItemDbgElement(type="div", value="", class="", padd
 								} else {
 									_u = _u0;
 								}
+							}
+							if _ele.class == "arrow" and !_ele.toggled {
+								_h = string_height(_ele.value);
+								_v += _h;
 							}
 							if _ele.class == "extra" {
 								_h = string_height(_ele.value);

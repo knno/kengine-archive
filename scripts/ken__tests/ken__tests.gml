@@ -1,9 +1,13 @@
 #region callables
 
-function ken_scr_test_leaks(){
+function ken_scr_test_leak1(){
 	// Test Leak 1: events.
 	repeat (10000) {__KengineEventUtils.Fire("awesome", {obj: "hii"});} // NO LEAKS! :D
 
+	return true;
+}
+
+function ken_scr_test_leak2() {
 	// Test Leak 2: Cscripts.
 	var i = 10000;
 	while (--i>0) {__KengineParserUtils.Interpret("var dummy_var; dummy_var = string(arg);", {arg: i})}; // NO LEAKS! :D
@@ -62,7 +66,7 @@ function ken_scr_test_ball() {
 function ken_test_foo1_foo() {
     if not test.is_testing {
         var fixtures = [
-			new Kengine.Extensions.Tests.Fixture("fixture01", function(){ __kengine_log("Fixture01 setup!")}, function(){ __kengine_log("Fixture01 cleanup!")}),
+			new Kengine.Extensions.Tests.Fixture("fixture01", function(){ }, function(){ }),
         ];
         return {fixtures};
     }
@@ -74,7 +78,7 @@ function ken_test_foo1_foo() {
 function ken_test_foo1_bar() {
     if not test.is_testing {
         var fixtures = [
-            new Kengine.Extensions.Tests.Fixture("fixture02", function(){ __kengine_log("Fixture02 setup!")}, function(){ __kengine_log("Fixture02 cleanup!")}),
+            new Kengine.Extensions.Tests.Fixture("fixture02", function(){ }, function(){ }),
         ];
         return {fixtures};
     }
@@ -109,7 +113,7 @@ function ken_test_balls_collide() {
         test.fixtures = [
             new Kengine.Extensions.Tests.Fixture("fixture-ball-object", function(){
                 // Setup
-                __kengine_log("Balls are being setup.");
+                // __kengine_log("Balls are being setup");
             	var at_objects = Kengine.asset_types.object;
                 var ball_asset;
                 var ball_par_asset;
@@ -124,7 +128,7 @@ function ken_test_balls_collide() {
                 if ball_obj_index == -1 {
                     ball_asset = new Kengine.Asset(at_objects, "obj_ken_test_ball");
                     ball_asset.parent = ball_par_asset;
-                    ball_asset.sprite = spr_ken_ball;
+					ball_asset.sprite = spr_ken_ball;
                     ball_asset.event_scripts = {
                         create: function() {
 							//wrapper.asset = Kengine.Utils.GetAsset("object", "obj_ken_test_ball");
@@ -132,7 +136,7 @@ function ken_test_balls_collide() {
                             wrapper.instance.speed = 30;
                             wrapper.collided = false;
                             var ff = wrapper.instance.id;
-                            __kengine_log($"A ball instance with ID: {ff} created.");
+                            // __kengine_log($"A ball instance with ID: {ff} created.");
                         },
                         collision: function() {
                             wrapper.instance.x = wrapper.instance.xprevious;
@@ -164,7 +168,7 @@ function ken_test_balls_collide() {
                     }
                 } else {
                     ball_asset = at_objects.assets.Get(ball_obj_index);
-                    __kengine_log("Asset already found.");
+                    // __kengine_log("Asset already found.");
                 }
                 Kengine.Extensions.Tests.test_manager.ball_asset = ball_asset;
 
@@ -175,7 +179,7 @@ function ken_test_balls_collide() {
 				// test.ball_2.instance.sprite_index = spr_ball;
 
                 if Kengine.Utils.Instance.Exists(ball_asset) {
-                    __kengine_log("Balls are created.");
+                    // __kengine_log("Balls are created.");
                 }
 
                 // ken_with(ball_par_asset, function(inst) {
@@ -187,6 +191,7 @@ function ken_test_balls_collide() {
                     Kengine.Extensions.Tests.test_manager.ball_1.Destroy();
                     Kengine.Extensions.Tests.test_manager.ball_2.Destroy();
                     Kengine.Extensions.Tests.test_manager.ball_asset = undefined;
+					// __kengine_log("Balls test is cleaned up.")
                 }),
         ];
         return {fixtures: test.fixtures};

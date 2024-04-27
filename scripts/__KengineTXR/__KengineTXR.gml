@@ -1299,13 +1299,13 @@ function __TxrSerializer() constructor {
 		repeat (buffer_read(b, buffer_u32)) ds_stack_push(s, buffer_read(b, buffer_s32));
 		th[@__TXR_THREAD.JUMPSTACK] = s;
 		var m = ds_map_create();
-		n = buffer_read(b, buffer_u32);
+		var n = buffer_read(b, buffer_u32);
 		repeat (n) {
 			var v = _value_read(b);
 			m[?v] = _value_read(b);
 		}
 		th[@__TXR_THREAD.LOCALS] = m;
-		var n = buffer_read(b, buffer_u32);
+		n = buffer_read(b, buffer_u32);
 		var w = array_create(n);
 		for (var i = 0; i < n; i++) {
 			w[i] = _action_read(b);
@@ -2064,6 +2064,7 @@ function __TxrSystem() constructor {
 						// hit an error?:
 						halt = _function_error;
 					} catch (e) {
+						__kengine_log(e);
 						halt = e.message;
 					}
 					if (halt != undefined) continue;
@@ -2253,14 +2254,13 @@ function __TxrSystem() constructor {
 	}
 
 }
-__TxrSystem();
 #endregion
 
 function __TXR() constructor {
-	static System = static_get(__TxrSystem);
-	static Serializer = static_get(__TxrSerializer);
-	static Compiler = static_get(__TxrCompiler);
-	static Builder = static_get(__TxrBuilder);
+	static System = new __TxrSystem();
+	static Serializer = new __TxrSerializer();
+	static Compiler = new __TxrCompiler();
+	static Builder = new __TxrBuilder();
 
 	/// Override functions for ident's and field's get/set functions:
 	/// If overridden, you must set the value to the resolved identifier yourself.
@@ -2364,7 +2364,7 @@ function __TXR() constructor {
 	 * 
 	 */
 	static SetIdent = function(ident, val, locals, convertdot=true) {
-		var _txr = __KengineParserUtils.__Interpreter;
+		var _txr = __KengineParserUtils.interpreter;
 		if convertdot {
 			ident = __KengineParserUtils.__ident2dot(ident);
 		}
@@ -2416,7 +2416,7 @@ function __TXR() constructor {
 	 * 
 	 */
 	static SetField = function(curr, field, value, locals) {
-		if __KengineStructUtils.IsPublic(curr, field) {
+		if __KengineStructUtils.IsPublic(curr, field, true) {
 			if not __KengineStructUtils.IsReadonly(curr, field) {
 				variable_instance_set(curr, field, value);
 				return value;

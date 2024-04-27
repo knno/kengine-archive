@@ -25,10 +25,13 @@ function __KengineExtensionUtils() : __KengineStruct() constructor {
 		for (var i=0; i<array_length(_exts_names); i++) {
 			_ext_name = _exts_names[i];
 			h = variable_get_hash(_ext_name);
-			_ext_asset = struct_get_from_hash(_exts, h);
+			_ext_asset = struct_get_from_hash(_exts, h);        
+    		__KengineBenchmarkUtils.CalcTimerDiff(4); // Clear
+    		__KengineBenchmarkUtils.Mark("Extensions: Starting " + _ext_name, 4);
 			__KengineEventUtils.Fire("extension__start__before", {extension_name: _ext_name, extension_asset: _ext_asset});
 			__KengineExtensionUtils.__Start(_ext_name, _ext_asset);
 			__KengineEventUtils.Fire("extension__start__after", {extension_name: _ext_name, extension_asset: _ext_asset});
+    		__KengineBenchmarkUtils.Mark("Extensions: " + _ext_name + " started", 4);
 		}
 		__KengineEventUtils.Fire("extensions__after", {extensions: _exts,});
 	}
@@ -68,8 +71,9 @@ function __KengineExtensionUtils() : __KengineStruct() constructor {
 		var _ext = ext_asset.id();
 		if is_struct(_ext) {
 	        Kengine.Extensions.Add(_ext);
+			_ext.status = "READY";
 		}
     }
 
 }
-__KengineExtensionUtils();
+//__KengineExtensionUtils();

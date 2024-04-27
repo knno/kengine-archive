@@ -7,8 +7,12 @@
 
 **Contents**
 
+- [Core](/Core)
 - [Utilities](/Utils)
 - [Extensions](/Extensions)
+- [Panels Extension](/Extensions-Panels)
+- [Tests Extension](/Extensions-Tests)
+- [Mods Extension](/Extensions-Mods)
 
 ---
 

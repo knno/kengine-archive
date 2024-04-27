@@ -1,12 +1,15 @@
-<!-- a name="Kengine.Utils.Events"></a -->
-
 # Events  :id=kengine-utils-events
 
 [Kengine.Utils.Events](Kengine.Utils.Events) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
 A struct containing Kengine events utilitiy functions
 
 
-<!-- a name="Kengine.Utils.Events.__all"></a -->
+<!-- tabs:end -->
 
 ## __all  :id=kengine-utils-events-__all
 
@@ -20,8 +23,6 @@ A struct that contains Kengine events as keys and an array of functions (listene
 
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Utils.Events.Define"></a -->
 
 ## Define  :id=kengine-utils-events-define
 
@@ -41,8 +42,6 @@ Define an event.
 | [listeners] | <code>Array.&lt;function()&gt;</code> | <p>The event listener functions</p> |
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Utils.Events.AddListener"></a -->
 
 ## AddListener  :id=kengine-utils-events-addlistener
 
@@ -64,8 +63,6 @@ Add an event listener (function) or more to the events.
 
 <!-- tabs:end -->
 
-<!-- a name="Kengine.Utils.Events.RemoveListener"></a -->
-
 ## RemoveListener  :id=kengine-utils-events-removelistener
 
 `Kengine.Utils.Events.RemoveListener(event, listener, [_all])` ⇒ <code>Bool</code>
@@ -86,8 +83,6 @@ Remove an event listener (function) or more from the events.
 | [_all] | <code>Bool</code> | <code>true</code> | <p>Whether to remove all occurences of the function. Defaults to <code>true</code>.</p> |
 
 <!-- tabs:end -->
-
-<!-- a name="Kengine.Utils.Events.Fire"></a -->
 
 ## Fire  :id=kengine-utils-events-fire
 

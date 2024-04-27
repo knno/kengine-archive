@@ -73,11 +73,8 @@ function setUpNamespaceTemplateData(name) {
     }
 
     if (identifier.kind === "namespace") {
-      identifier.isNamespace = true;
-    }
-    if (identifier.isNamespace) {
-      if (identifier.memberof == "undefined") {
-        identifier.isMainNamespace = true;
+      if (identifier.memberof == "undefined" || (identifier.definedAsMainNamespace == true)) {
+        identifier.hideDetails = false;
         mainNamespaceNames.push(identifier.longname);
       }
       namespaceNames.push([identifier.name, identifier.longname]);
@@ -99,6 +96,15 @@ function namespacedTemplateData(
   subTemplateDatas = [];
 
   for (const templateDatum of allTemplateData) {
+
+    templateDatum.hideDetails = false;
+
+    if (templateDatum.kind == "namespace") {
+      if (mainNamespaceNames.indexOf(templateDatum.longname) != -1 && mainNamespaceNames.indexOf(namespaceLongName) == -1) {
+        templateDatum.hideDetails = true;
+      }
+    }
+
     if (templateDatum.longname == namespaceLongName) {
       if (subTemplateDatas.indexOf(templateDatum) == -1) {
         subTemplateDatas.push(templateDatum);
@@ -106,7 +112,7 @@ function namespacedTemplateData(
     }
 
     if (templateDatum.memberof !== undefined) {
-      if (mainNamespaceNames.indexOf(templateDatum.memberof) == -1) {
+      //if (mainNamespaceNames.indexOf(templateDatum.memberof) == -1) {
         if (
           isParentWithinDepth(
             namespaceLongName,
@@ -119,7 +125,7 @@ function namespacedTemplateData(
             subTemplateDatas.push(templateDatum);
           }
         }
-      }
+      //}
     }
   }
   return subTemplateDatas;
@@ -138,7 +144,7 @@ function writeOne(namespaceName, namespaceLongName, opts) {
     'Kengine.Utils',
   ]
   output = output.replace(reg, (match, displayText, urlText) => {
-    for (var [_nsn, nsln] of namespaceNames.sort(function (a, b) {
+    for (var [_nsn, nsln] of Array.from(namespaceNames).sort(function (a, b) {
       return b[1].length - a[1].length;
     })) {
       if (urlText.startsWith(nsln)) {
@@ -158,7 +164,7 @@ function writeOne(namespaceName, namespaceLongName, opts) {
   reg = /\`([^ \t]*)\` [^⇒]/gm;
   output = output.replace(reg, (match, displayText) => {
     let urlText = displayText;
-    for (var [_nsn, nsln] of namespaceNames.sort(function (a, b) {
+    for (var [_nsn, nsln] of Array.from(namespaceNames).sort(function (a, b) {
       return b[1].length - a[1].length;
     })) {
       if (displayText.startsWith(nsln)) {

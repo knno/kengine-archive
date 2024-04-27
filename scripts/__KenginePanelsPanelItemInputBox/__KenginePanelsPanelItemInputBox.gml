@@ -83,6 +83,8 @@ function __KenginePanelsPanelItemInputBox(options) : __KenginePanelsPanelItem(op
 	__str_width = string_width("_");
 
 	self.Step = function() {
+		var _x = x + parent.content_x
+		var _y = y + parent.content_y
 		var _mouse_x = device_mouse_x_to_gui(0);
 		var _mouse_y = device_mouse_y_to_gui(0);
 		var _game_speed = game_get_speed(gamespeed_fps);
@@ -90,7 +92,7 @@ function __KenginePanelsPanelItemInputBox(options) : __KenginePanelsPanelItem(op
 			if visible and parent.visible {
 				var _temp_pos;
 				var _m_inside = false;
-				if _mouse_x >= parent.x + x and _mouse_y >= parent.y + y and _mouse_x < parent.x + x + width and _mouse_y < parent.y + y + height {
+				if _mouse_x >= parent.x + _x and _mouse_y >= parent.y + _y and _mouse_x < parent.x + _x + width and _mouse_y < parent.y + _y + height {
 					_m_inside = true;
 				}
 				var _mb_pressed, _mb_held, _mb_released, _mb_pressed_twice = false, _mb_pressed_thrice = false;
@@ -570,7 +572,7 @@ function __KenginePanelsPanelItemInputBox(options) : __KenginePanelsPanelItem(op
 			}
 
 			// TXR map
-			var txr_a = ds_map_keys_to_array(__KengineParserUtils.__Interpreter.System._function_map);
+			var txr_a = ds_map_keys_to_array(__KengineParserUtils.interpreter.System._function_map);
 			for (_i=0; _i<array_length(txr_a);_i++) {
 				_n = txr_a[_i];
 				if string_pos(autoc, _n) == 1 {

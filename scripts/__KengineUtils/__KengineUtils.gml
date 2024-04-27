@@ -54,39 +54,43 @@ function __KengineUtils() constructor {
 		throw __KengineErrorUtils.Create(__KengineErrorUtils.Types.script_exec__script__does_not_exist, string("Cannot execute script with non-existent Asset \"{0}\".", scr));
 	}
 
-	static Cmps = static_get(__KengineCmpUtils);
+	static Cmps = new __KengineCmpUtils();
 
-	static Extensions = static_get(__KengineExtensionUtils)
+	static Extensions = new __KengineExtensionUtils();
 
-	static Strings = static_get(__KengineStringUtils)
+	static Strings = new __KengineStringUtils();
 
-	static Errors = static_get(__KengineErrorUtils)
+	static Errors = new __KengineErrorUtils();
 
-	static Arrays = static_get(__KengineArrayUtils)
+	static Arrays = new __KengineArrayUtils();
 
-	static Structs = static_get(__KengineStructUtils)
+	static Structs = new __KengineStructUtils();
 
-	static Ascii = static_get(__KengineAsciiUtils)
+	static Ascii = new __KengineAsciiUtils();
 
-	static Input = static_get(__KengineInputUtils)
+	static Input = new __KengineInputUtils();
 
-	static Easing = static_get(__KengineEasingUtils)
+	static Easing = new __KengineEasingUtils();
 
-	static Data = static_get(__KengineDataUtils)
+	static Data = new __KengineDataUtils();
 
-	static Events = static_get(__KengineEventUtils)
+	static Events = new __KengineEventUtils();
 
-	static Hashkeys = static_get(__KengineHashkeyUtils)
+	static Hashkeys = new __KengineHashkeyUtils();
 
-	static Coroutines = static_get(__KengineCoroutineUtils)
+	static Coroutines = new __KengineCoroutineUtils();
 
-	static Instance = static_get(__KengineInstanceUtils)	
+	static Instance = new __KengineInstanceUtils();
 
-	static Parser = static_get(__KengineParserUtils)
+	static Parser = new __KengineParserUtils();
 
-	static Benchmark = static_get(__KengineBenchmarkUtils)
+	static Benchmark = new __KengineBenchmarkUtils();
 
-	static Assets = static_get(__KengineAssetUtils)
+	static Assets = new __KengineAssetUtils();
+	
+	static Tiles = new __KengineTileUtils();
+
+	static Rooms = new __KengineRoomUtils();
 
 	/**
 	 * @function __CreateBaseObjectAsset
@@ -115,8 +119,9 @@ function __KengineUtils() constructor {
 		__KengineEventUtils.Fire("start__after");
 
 		if (KENGINE_BENCHMARK) {
-			__KengineBenchmarkUtils.Mark(string("Complete in {0}", __KengineBenchmarkUtils.CalcTimerDiff(1)), 0, false);
+			__KengineBenchmarkUtils.Mark(string("Complete in {0}ms", __KengineBenchmarkUtils.CalcTimerDiff(0)/1000), 0, false);
 		}
+		Kengine.status = "READY";
 	}
 
 	/**
@@ -130,9 +135,9 @@ function __KengineUtils() constructor {
 	 * @see {@link Kengine.Utils.Assets.__AsyncAutoIndexCallback}
 	 */
 	static __StartExtensions = function() {
-		__KengineBenchmarkUtils.Mark("Extensions: Starting...", 1);
+		__KengineBenchmarkUtils.Mark("Extensions: Starting...", 3);
 		__KengineExtensionUtils.__FindAndStartAll();
-		__KengineBenchmarkUtils.Mark("Extensions: Complete", 1);
+		__KengineBenchmarkUtils.Mark("Extensions: Complete", 3);
 		__StartFinish();
 	}
 
@@ -140,8 +145,8 @@ function __KengineUtils() constructor {
 		__KengineEventUtils.Fire("start__before");
 
 		if (KENGINE_ASSET_TYPES_AUTO_INDEX_AT_START) {
-			__KengineAssetUtils.AutoIndex();
+			__KengineAssetUtils.__AutoIndex();
 		}
 	}
 }
-__KengineUtils();
+//__KengineUtils();

@@ -74,7 +74,7 @@ function __KengineTestsTestManager() constructor {
 				for (var i=0; i<array_length(_rs); i++) {
 					if (this.reports[$ _rs[i]]._status == "PROGRESS") continue;
 					if (this.reports[$ _rs[i]]._status == "SUCCESS") _f ++;
-					if (this.reports[$ _rs[i]]._status == "FAIL") _f ++;
+					if (this.reports[$ _rs[i]]._status == "FAILURE") _f ++;
 										
 					if _f == array_length(_rs) {
 						_f = true;
@@ -91,15 +91,15 @@ function __KengineTestsTestManager() constructor {
             report = __KengineStructUtils.Get(this.reports, test.name);
             status = method({this: test}, test.Proceed)();
             if status == 2 { // removes it already from array if 2
-                if __KengineStructUtils.Exists(test.result, "assertions") {report.assertions = test.result.assertions;};
-                if __KengineStructUtils.Exists(test.result, "success") {report.success = test.result.success;};
-                if __KengineStructUtils.Exists(test.result, "error") {report.error = test.result.error;};
-                if __KengineStructUtils.Exists(test.result, "output") {report.output = test.result.output;};
+                if __KengineStructUtils.Exists(test.result, "assertions") {report.assertions = test.result.assertions;} else {report.assertions = undefined;};
+                if __KengineStructUtils.Exists(test.result, "success") {report.success = test.result.success;} else {report.success = undefined;};
+                if __KengineStructUtils.Exists(test.result, "error") {report.error = test.result.error;} else {report.error = undefined;};
+                if __KengineStructUtils.Exists(test.result, "output") {report.output = test.result.output;} else {report.output = undefined;};
 
                 if report.success {
                     report._status = "SUCCESS";
                 } else {
-                    report._status = "FAIL";
+                    report._status = "FAILURE";
                 }
 
             } else {
@@ -109,7 +109,7 @@ function __KengineTestsTestManager() constructor {
             // Update console.
             if KENGINE_CONSOLE_ENABLED {
                 var _st = undefined; var __st = undefined; var _c = c_dkgray;
-                __st = (report._status == "SUCCESS") ? "S" : ((report._status == "FAIL") ? "F" : "P");
+                __st = (report._status == "SUCCESS") ? "S" : ((report._status == "FAILURE") ? "F" : "P");
                 if __st == "P" {
                     _st = Kengine.Utils.Ascii.__GetBrailleDot();
                     _c = c_yellow;
@@ -140,21 +140,28 @@ function __KengineTestsTestManager() constructor {
 
     static SaveReports = function(this) {
         var _rnames = struct_get_names(self.reports);
-        var s = $"{array_length(_rnames)} tests passed ✔";
+		var total = array_length(_rnames);
+        var s = $"{total} tests passed ✔";
         var c = c_lime;
         var fails = 0;
-        for (var i=0; i<array_length(_rnames); i++) {
+		var status = "SUCCESS";
+        for (var i=0; i<total; i++) {
             if not self.reports[$ _rnames[i]].success {
                 c = c_red;
                 fails++;
             }
         }
         if c == c_red {
-            s = $"{fails}/{array_length(_rnames)} tests failed ✘";
+			status = "FAILURE";
+            s = $"{fails}/{total} tests failed ✘";
         }
 
         Kengine.console.echo_ext("Kengine: Tests: " + s, c, true, true);
+		Kengine.Utils.Events.Fire("tests__tests_complete", {
+			reports: self.reports,
+			status,
+			fails,
+			total,
+		})
     }
 }
-
-

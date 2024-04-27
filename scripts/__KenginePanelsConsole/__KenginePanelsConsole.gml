@@ -27,7 +27,7 @@ function __KenginePanelsConsoleOptions(options) : __KenginePanelsPanelOptions(op
 /**
  * @function Console
  * @memberof Kengine.Extensions.Panels
- * @description A console is an extended {@link kengine.Extensions.Panels.Panel} with many features for debugging.
+ * @description A console is an extended {@link Kengine.Extensions.Panels.Panel} with many features for debugging.
  * @param {Kengine.Extensions.Panels.ConsoleOptions} options an initial struct for setting options.
  */
 function __KenginePanelsConsole(options=undefined) : __KenginePanelsPanel(options) constructor {
@@ -74,7 +74,7 @@ function __KenginePanelsConsole(options=undefined) : __KenginePanelsPanel(option
 	collapse_height = 0;
 	collapse_enabled = false; 
 	focus_enabled = false;
-	is_focused = true;
+	__is_focused = true;
 	collapsed = true;
 	visible = false;
 	title = "";
@@ -132,6 +132,9 @@ function __KenginePanelsConsole(options=undefined) : __KenginePanelsPanel(option
 
 	self.Draw = function() {
 		var _i;
+		self.content_width = self.width
+		self.content_height = self.height
+
 		if notify_state == 1 {
 			self.draw_collapsed = true;
 			height = str_height*(lines_notify_current);
@@ -143,7 +146,7 @@ function __KenginePanelsConsole(options=undefined) : __KenginePanelsPanel(option
 		draw_set_halign(fa_left);
 		draw_set_valign(fa_top);
 		draw_set_alpha(1);
-		if visible and not self.collapsed and is_focused {
+		if visible and not self.collapsed {
 			// Draw console lines.
 			var _texty;
 			var offset;
@@ -158,7 +161,7 @@ function __KenginePanelsConsole(options=undefined) : __KenginePanelsPanel(option
 					_texty = string_copy(_texty, offset, string_length(_texty)-offset);
 				}
 				draw_set_color(texts_color[_i]);
-				draw_set_alpha(alpha * (1 * (1-.5 * not is_focused)));
+				draw_set_alpha(alpha * (1 * (1-.5 * not __is_focused)));
 				draw_text(x+4-scroll_hpos, y+1+((lines_count-1)-(_i-scroll_pos))*str_height, _texty);
 			}
 			if scroll_pos > 0 or scroll_hpos > 0 {
@@ -207,7 +210,7 @@ function __KenginePanelsConsole(options=undefined) : __KenginePanelsPanel(option
 		// Prepare text
 		_arg0 = string(msg) ?? "<undefined>";
 		if string_char_at(_arg0, 1) == "\"" and string_char_at(_arg0,string_length(_arg0)) == "\"" {
-			_arg0 = string_trim(_arg0, "\"");
+			_arg0 = string_trim(_arg0, ["\""]);
 		}
 		_r = 1; // Repetition
 		if string_length(_arg0) > length {
@@ -322,6 +325,7 @@ function __KenginePanelsConsole(options=undefined) : __KenginePanelsPanel(option
 				} catch (e) {
 					self.echo_error(e.message);
 					self.debug(e);
+					__kengine_log(e);
 				}
 				keyboard_string = "";
 				inputbox.value_last = inputbox.value;
@@ -341,13 +345,13 @@ function __KenginePanelsConsole(options=undefined) : __KenginePanelsPanel(option
 				keyboard_lastkey = vk_nokey;
 				keyboard_lastchar = "";
 				if (not collapsed) and (visible) {
-					is_focused = true;
+					__is_focused = true;
 					inputbox.active = true;
 				}
 			}
 		}
 		
-		if is_focused and visible and not self.collapsed {
+		if visible and not self.collapsed {
 			// Activate input on click inside
 			var _m_inside = false;
 			if _mouse_x >= x and _mouse_y >= y and _mouse_x < x + width and _mouse_y < y + height {
@@ -360,10 +364,13 @@ function __KenginePanelsConsole(options=undefined) : __KenginePanelsPanel(option
 
 			if _m_inside and _mb_pressed {
 				if not inputbox.active {
-					inputbox.active = true;
-					mouse_clear(mb_left);
-					keyboard_lastkey = vk_nokey;
-					keyboard_lastchar = "";
+					if __KenginePanels.focused_panel == undefined {
+						__KenginePanels.focused_panel = self;
+						inputbox.active = true;
+						mouse_clear(mb_left);
+						keyboard_lastkey = vk_nokey;
+						keyboard_lastchar = "";
+					}
 				}
 			}
 
@@ -403,6 +410,7 @@ function __KenginePanelsConsole(options=undefined) : __KenginePanelsPanel(option
 			if not is_undefined(_result) echo(_result);
 		} catch (e) {
 			self.echo_error(e.message);
+			self.debug(e);
 			__kengine_log(e);
 		}
 	}

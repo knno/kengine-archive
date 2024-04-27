@@ -26,4 +26,10 @@ exports.defineTags = function(dictionary) {
             doclet.new_name = tag.value;
         }
     })
+    dictionary.defineTag("main_namespace", {
+        mustNotHaveValue: true,
+        onTagged: function(doclet, tag) {
+            doclet.definedAsMainNamespace = true;
+        }
+    });
 };
