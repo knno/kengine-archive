@@ -161,21 +161,19 @@ function KengineAssetTypes() {
 
 					// Animations
 					var _frame_count = Kengine.Utils.Structs.Get(conf, "frame_count");
-					if _frame_count == undefined {
-						_frame_count = 1;
-					}
+					_frame_count = _frame_count ?? 1;
 					asset.frame_count = _frame_count;
 
 					var _frames = Kengine.Utils.Structs.Get(conf, "frames");
 
 					if !is_undefined(_frame_count) and !is_undefined(_frames) {
-						var v = buffer_create(4*_tile_count*_frame_count, buffer_fixed, 4);
+						v = buffer_create(4*_tile_count*_frame_count, buffer_fixed, 4);
 						for (var _i=0; _i<array_length(_frames); _i++) {
 							buffer_write(v, buffer_u32, _frames[_i]);
 						}
 						asset.frames_buffer = v;
 					} else { 
-						var v = buffer_create(4*_tile_count, buffer_fixed, 4);
+						v = buffer_create(4*_tile_count, buffer_fixed, 4);
 						for (var _i=0; _i<array_length(_tile_count); _i++) {
 							buffer_write(v, buffer_u32, _i);
 						}

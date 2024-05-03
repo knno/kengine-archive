@@ -59,11 +59,11 @@ jobs:
       - name: Get the version from the yyp file for Linux
         if: runner.os == 'Linux'
         run: |
-          echo "YYP_VERSION=$(grep -oP '(?<=IDEVersion":")(\d+\.\d+\.\d+\.\d+)(?=")' ${{ github.workspace }}/${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.yyp)" >> $GITHUB_ENV
+          echo "YYP_VERSION=$(grep -oP '(?<=IDEVersion":")(\d+\.\d+\.\d+\.\d+)(?=")' ${{ github.workspace }}/${{ env.PROJECT_NAME }}.yyp)" >> $GITHUB_ENV
       - name: Get the version from the yyp file for Windows
         if: runner.os == 'Windows'
         run: |
-          $yypVersion = Select-String -Path "${env:GITHUB_WORKSPACE}\${{ env.PROJECT_NAME }}\${{ env.PROJECT_NAME }}.yyp" -Pattern 'IDEVersion":"(\d+\.\d+\.\d+\.\d+)' -AllMatches | ForEach-Object { $_.Matches.Groups[1].Value }
+          $yypVersion = Select-String -Path "${env:GITHUB_WORKSPACE}\${{ env.PROJECT_NAME }}.yyp" -Pattern 'IDEVersion":"(\d+\.\d+\.\d+\.\d+)' -AllMatches | ForEach-Object { $_.Matches.Groups[1].Value }
           "YYP_VERSION=$yypVersion" | Out-File -Append -FilePath $env:GITHUB_ENV 
       - uses: FedericoCarboni/setup-ffmpeg@v3
         if: runner.os == 'Linux'
@@ -87,9 +87,9 @@ jobs:
         uses: bscotch/igor-setup@main
         with:
           access-key: ${{ secrets.YY_ACCESS_KEY }}
-          target-yyp: ${{ github.workspace }}/${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.yyp
+          target-yyp: ${{ github.workspace }}/${{ env.PROJECT_NAME }}.yyp
           local-settings-override-file: ${{ github.workspace }}/local_settings.json
-          runtime: ${{ inputs.runtime }}
+          runtime-version: ${{ inputs.runtime }}
         id: igor
       - name: Read settings-dir and echo the json content
         run: |
@@ -101,8 +101,9 @@ jobs:
         id: build
         timeout-minutes: 30
         with:
-          yyp-path: ${{ github.workspace }}/${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.yyp
+          yyp-path: ${{ github.workspace }}/${{ env.PROJECT_NAME }}.yyp
           user-dir: ${{ steps.igor.outputs.user-dir }}
+          config: Test
       - name: upload-build
         uses: actions/upload-artifact@v4
         with:

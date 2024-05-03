@@ -54,6 +54,7 @@ function __KengineTilemap(tileset, tiledata) constructor {
 	GetRows = GetWidth;
 	GetColumns = GetHeight;
 
+	/// @param {Real}
 	SetMask = function(mask) {
 		self.mask = mask;
 	}

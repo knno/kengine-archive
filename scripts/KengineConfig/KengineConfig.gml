@@ -1,5 +1,3 @@
-/// feather disable all
-
 #region Constants
 
 enum KENGINE_COROUTINES_STATUS {

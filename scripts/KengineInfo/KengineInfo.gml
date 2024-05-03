@@ -1,5 +1,3 @@
-/// @feather disable all in .
-                                                                                                                                              
 /* 
 	Kengine v0.0.2
 	
