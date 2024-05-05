@@ -15,6 +15,7 @@
   [![Contributors][contributors-shield]][contributors-url]
   [![Forks][forks-shield]][forks-url]
   [![Stargazers][stars-shield]][stars-url]
+  [![CI](https://github.com/knno/kengine/actions/workflows/gamemaker.yml/badge.svg)](https://github.com/knno/kengine/actions/workflows/gamemaker.yml)
   [![Issues][issues-shield]][issues-url]
   [![MIT License][license-shield]][license-url]
 
