@@ -250,7 +250,7 @@ enum KENGINE_PANELS_SCROLLBAR_TYPE {
  * @member KENGINE_VERBOSITY
  * @type {Real}
  * @memberof Kengine~constants
- * @description Verbosity level. This logs more info. 0,1,2. It is set to `2` in Debug configuration.
+ * @description Verbosity level. This logs more info. 0,1,2...
  * @defaultvalue 0
  * 
  */
@@ -274,7 +274,7 @@ enum KENGINE_PANELS_SCROLLBAR_TYPE {
  * @defaultvalue Kengine.is_testing
  * 
  */
-#macro KENGINE_IS_TESTING (Kengine.is_testing || os_get_config() == "Test")
+#macro KENGINE_IS_TESTING (os_get_config() == "Test")
 
 /**
  * @member KENGINE_DEFAULT_INSTANCES_LAYER

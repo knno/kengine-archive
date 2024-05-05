@@ -282,7 +282,7 @@ function __KenginePanelsConsole(options=undefined) : __KenginePanelsPanel(option
 	}
 	verbose = function(msg, verbosity, notify=KENGINE_DEBUG) {
 		if enabled {
-			if KENGINE_VERBOSITY > verbosity {
+			if Kengine.verbosity > verbosity {
 				self.debug(msg, notify);
 			}
 		}

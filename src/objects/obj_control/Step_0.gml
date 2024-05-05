@@ -1,6 +1,6 @@
 // This is for CI/CD
 
-if (KENGINE_IS_TESTING) {
+if (Kengine.is_testing) {
 	
 	switch (phase) {
 		case 0:

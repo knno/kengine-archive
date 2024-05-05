@@ -255,6 +255,22 @@ function __KengineMods(_mod_manager) : __KengineStruct() constructor {
             this.extension.FindLocalMods(working_directory),
             this.extension.FindLocalMods(game_save_id),
         ]
+		
+		// Check for KENGINE_MODS_DIR environment variable.
+		var _mods_dir_final;
+		var _mods_dir = environment_get_variable("KENGINE_MODS_DIR");
+		if not directory_exists(_mods_dir) {
+			_mods_dir_final = program_directory + "/" + _mods_dir; // Test program + relpath
+			if not directory_exists(_mods_dir_final) {
+				_mods_dir_final = working_directory + "/" + _mods_dir; // Test working + relpath
+			}
+		} else {
+			_mods_dir_final = _mods_dir;
+		}
+		if directory_exists(_mods_dir_final) {
+			_array[array_length(_array)] = this.extension.FindLocalMods(_mods_dir_final)
+		}
+		
         return _array;
 
         // Other examples:
@@ -291,7 +307,7 @@ function __KengineMods(_mod_manager) : __KengineStruct() constructor {
         if string_ends_with(base, "/") or string_ends_with(base, "\\") {
             base = string_copy(base, 1, string_length(base)-1);
         }
-        _file_name = file_find_first(base + "/mods/" + "*.zip", fa_archive);
+        _file_name = file_find_first(base + "/mods/" + "*.mod.zip", fa_archive);
         while (_file_name != "")
             {
             Kengine.console.debug("Kengine: Mods: Found ZIP archive: \"" + base + "/mods/" + _file_name + "\"");
@@ -301,7 +317,7 @@ function __KengineMods(_mod_manager) : __KengineStruct() constructor {
         file_find_close();
 
         // Secondly, find the ZIP files in base directory.
-        _file_name = file_find_first(base + "/" + "*.zip", fa_archive);
+        _file_name = file_find_first(base + "/" + "*.mod.zip", fa_archive);
         while (_file_name != "")
             {
             Kengine.console.debug("Kengine: Mods: Found ZIP archive: \"" + "/" + _file_name + "\"");
@@ -310,7 +326,7 @@ function __KengineMods(_mod_manager) : __KengineStruct() constructor {
             }
         file_find_close();
 
-        // Finally and top priority, find the directories that are considered mods.
+        // Finally, find the directories that are considered mods.
         _dir_name = file_find_first(base + "/mods/*", fa_directory);
         while (_dir_name != "")
             {
@@ -323,6 +339,7 @@ function __KengineMods(_mod_manager) : __KengineStruct() constructor {
             _dir_name = file_find_next();
             }
         file_find_close();
+		
 
         // Iterate over ZIP files and extract them.
         var _mod;

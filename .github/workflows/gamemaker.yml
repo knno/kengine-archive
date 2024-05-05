@@ -9,29 +9,31 @@ on:
   workflow_dispatch:
     inputs:
       runtime:
-        description: 'Target runtime'
+        description: "Target runtime"
         required: false
       runner:
-        description: 'Runner'
+        description: "Runner"
         required: false
-        default: 'windows-latest'
+        default: "windows-latest"
   workflow_call:
     inputs:
       runtime:
-        description: 'Target runtime'
+        description: "Target runtime"
         required: false
         type: string
       runner:
-        description: 'Runner'
+        description: "Runner"
         required: false
-        default: 'windows-latest'
+        default: "windows-latest"
         type: string
 permissions:
   contents: write
 
 env:
   MATRIX_STRING: '[\"windows-latest\",\"ubuntu-latest\"]'
-  PROJECT_NAME: 'Kengine'
+  PROJECT_NAME: "Kengine"
+  KENGINE_TESTS_VERBOSE: true
+  KENGINE_MODS_DIR: "${{ github.workspace }}/demo_app_data"
 
 jobs:
   runner:
@@ -39,10 +41,10 @@ jobs:
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
-    - if: ${{ inputs.runner }}
-      run: echo "MATRIX_STRING=[\\\"${{ github.event.inputs.runner }}\\\"]" >> $GITHUB_ENV
-    - id: set-matrix
-      run: echo "matrix=${{ env.MATRIX_STRING }}" >> $GITHUB_OUTPUT
+      - if: ${{ inputs.runner }}
+        run: echo "MATRIX_STRING=[\\\"${{ github.event.inputs.runner }}\\\"]" >> $GITHUB_ENV
+      - id: set-matrix
+        run: echo "matrix=${{ env.MATRIX_STRING }}" >> $GITHUB_OUTPUT
 
   test:
     needs: runner
@@ -59,12 +61,12 @@ jobs:
       - name: Get the version from the yyp file for Linux
         if: runner.os == 'Linux'
         run: |
-          echo "YYP_VERSION=$(grep -oP '(?<=IDEVersion":")(\d+\.\d+\.\d+\.\d+)(?=")' ${{ github.workspace }}/${{ env.PROJECT_NAME }}.yyp)" >> $GITHUB_ENV
+          echo "YYP_VERSION=$(grep -oP '(?<=IDEVersion":")(\d+\.\d+\.\d+\.\d+)(?=")' ${{ github.workspace }}/src/${{ env.PROJECT_NAME }}.yyp)" >> $GITHUB_ENV
       - name: Get the version from the yyp file for Windows
         if: runner.os == 'Windows'
         run: |
-          $yypVersion = Select-String -Path "${env:GITHUB_WORKSPACE}\${{ env.PROJECT_NAME }}.yyp" -Pattern 'IDEVersion":"(\d+\.\d+\.\d+\.\d+)' -AllMatches | ForEach-Object { $_.Matches.Groups[1].Value }
-          "YYP_VERSION=$yypVersion" | Out-File -Append -FilePath $env:GITHUB_ENV 
+          $yypVersion = Select-String -Path "${env:GITHUB_WORKSPACE}\src\${{ env.PROJECT_NAME }}.yyp" -Pattern 'IDEVersion":"(\d+\.\d+\.\d+\.\d+)' -AllMatches | ForEach-Object { $_.Matches.Groups[1].Value }
+          "YYP_VERSION=$yypVersion" | Out-File -Append -FilePath $env:GITHUB_ENV
       - uses: FedericoCarboni/setup-ffmpeg@v3
         if: runner.os == 'Linux'
       - name: Create the settings file
@@ -87,7 +89,7 @@ jobs:
         uses: bscotch/igor-setup@main
         with:
           access-key: ${{ secrets.YY_ACCESS_KEY }}
-          target-yyp: ${{ github.workspace }}/${{ env.PROJECT_NAME }}.yyp
+          target-yyp: ${{ github.workspace }}/src/${{ env.PROJECT_NAME }}.yyp
           local-settings-override-file: ${{ github.workspace }}/local_settings.json
           runtime-version: ${{ inputs.runtime }}
         id: igor
@@ -101,7 +103,7 @@ jobs:
         id: build
         timeout-minutes: 30
         with:
-          yyp-path: ${{ github.workspace }}/${{ env.PROJECT_NAME }}.yyp
+          yyp-path: ${{ github.workspace }}/src/${{ env.PROJECT_NAME }}.yyp
           user-dir: ${{ steps.igor.outputs.user-dir }}
           config: Test
       - name: upload-build
@@ -139,7 +141,12 @@ jobs:
             Remove-Item $saveDataDir -Recurse -Force
           }
 
-          $process.WaitForExit()
+          $success = $true
+          Wait-Process -InputObject $process
+          if ($process.ExitCode -ne 0) {
+            $success = $false
+          }
+
           $reader = [System.IO.StreamReader]::new($logFile)
           try {
               while (-not $reader.EndOfStream) {
@@ -151,8 +158,6 @@ jobs:
           finally {
               $reader.Close()
           }
-
-          $success = $LASTEXITCODE
 
           if ($success) {
               Write-Host "Success!"

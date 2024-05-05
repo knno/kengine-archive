@@ -14,6 +14,8 @@ function Kengine() : __KengineStruct() constructor {
 	static status = "NOT_STARTED";
 	
 	static is_testing = function() {
+		var _is_testing = KENGINE_IS_TESTING;
+		if _is_testing == true {return true;}
 		var _param_count = parameter_count();
 		if _param_count > 0
 		{
@@ -30,6 +32,22 @@ function Kengine() : __KengineStruct() constructor {
 		return false;
 	}
 	is_testing = is_testing();
+
+	static verbosity = function() {
+		var v = KENGINE_VERBOSITY;
+		if (v) > 0 {
+			return v;
+		}
+		var _verbosity = environment_get_variable("KENGINE_VERBOSITY");
+		switch (string_lower(_verbosity)) {
+			case "1": case "v": case "true": return 1;
+			case "2": case "vv": return 2;
+			case "3": case "vvv": return 3;
+			case "4": case "vvvv": return 4;
+		}
+		return 0;
+	}
+	verbosity = verbosity();
 
 	static GetStatuses = function(type) {
 

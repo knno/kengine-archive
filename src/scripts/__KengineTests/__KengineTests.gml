@@ -32,7 +32,7 @@ function __KengineTests() : __KengineStruct() constructor {
 
 function ken_init_ext_tests() {
 	
-	if not KENGINE_IS_TESTING return;
+	if not Kengine.is_testing return;
 
     #region Error types
     /**
