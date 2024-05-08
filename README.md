@@ -15,9 +15,12 @@
   [![Contributors][contributors-shield]][contributors-url]
   [![Forks][forks-shield]][forks-url]
   [![Stargazers][stars-shield]][stars-url]
+  [![MIT License][license-shield]][license-url]
+
   [![CI](https://github.com/knno/kengine/actions/workflows/gamemaker.yml/badge.svg)](https://github.com/knno/kengine/actions/workflows/gamemaker.yml)
   [![Issues][issues-shield]][issues-url]
-  [![MIT License][license-shield]][license-url]
+  [![Downloads](https://img.shields.io/github/downloads/knno/kengine/total.svg)]()
+
 
   <p align="center">
     A GameMaker framework for modding support of your projects.
