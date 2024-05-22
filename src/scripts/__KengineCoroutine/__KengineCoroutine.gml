@@ -79,6 +79,7 @@ function __KengineCoroutine(name="", functions=undefined, callback=undefined, ha
 	__RunSingle = function() {
 		var this = self;
 		var _i = this.current_function;
+		this.current_function ++;
 		var m;
 		if array_length(this.__functions) > 0 and _i < array_length(this.__functions) {
 			try {
@@ -109,7 +110,6 @@ function __KengineCoroutine(name="", functions=undefined, callback=undefined, ha
 			}
 		}
 
-		this.current_function ++
 		if this.current_function >= array_length(this.__functions) {
 			var children = array_filter(Kengine.coroutines, method({this}, function(c) {
 				return string_starts_with(c.name, this.name) and c.name != this.name;

@@ -147,7 +147,7 @@ function __KengineAssetType(name, asset_kind=KENGINE_CUSTOM_ASSET_KIND, indexing
 	 * 
 	 */
 	self.IndexAssets = function(indexing_options=undefined) {
-		static chunk_size = KENGINE_ASSET_TYPES_INDEX_CHUNK_SIZE
+		static chunk_size = KENGINE_ASSET_TYPES_AUTO_INDEX_ASYNC ? 0 : KENGINE_ASSET_TYPES_INDEX_CHUNK_SIZE
 		static __index_assets_halt = {halt: true}
 		static __indices_are_assets = false
 
@@ -292,15 +292,14 @@ function __KengineAssetType(name, asset_kind=KENGINE_CUSTOM_ASSET_KIND, indexing
 			// If indexing halts, this means we reached a dead-end. Thus, callback is required both on halt and on successful finish.
 			var _coroutine = new __KengineCoroutine("assettype.autoindex."+string(self.name), _funcs, __ChunkIndexAssetsCallback, __ChunkIndexAssetsCallback);
 
+			self.__indexing_coroutine = _coroutine;
 			if (KENGINE_ASSET_TYPES_AUTO_INDEX_ASYNC) {
-				self.__indexing_coroutine = _coroutine;
 				_coroutine.Start();
 				return _coroutine;
 			} else {
 				_coroutine.Immediate();
+				return _coroutine;
 			}
-
-			return true;
 		}
 
 		return false;

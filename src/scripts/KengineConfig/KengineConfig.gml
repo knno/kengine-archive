@@ -159,7 +159,7 @@ enum KENGINE_PANELS_SCROLLBAR_TYPE {
  * @defaultvalue false
  * 
  */
-#macro KENGINE_ASSET_TYPES_AUTO_INDEX_ASYNC (true)
+#macro KENGINE_ASSET_TYPES_AUTO_INDEX_ASYNC (false)
 
 /**
  * @constant KENGINE_ASSET_TYPES_INDEX_CHUNK_SIZE
@@ -170,7 +170,7 @@ enum KENGINE_PANELS_SCROLLBAR_TYPE {
  * @defaultvalue 10
  * 
  */
-#macro KENGINE_ASSET_TYPES_INDEX_CHUNK_SIZE (5)
+#macro KENGINE_ASSET_TYPES_INDEX_CHUNK_SIZE (10)
 
 /**
  * @member KENGINE_CONSOLE_ENABLED
@@ -259,7 +259,7 @@ enum KENGINE_PANELS_SCROLLBAR_TYPE {
  * @defaultvalue 0
  * 
  */
-#macro KENGINE_VERBOSITY ((os_get_config() == "Debug" || os_get_config() == "Benchmark" || os_get_config() == "Test") ? 3 : 0)
+#macro KENGINE_VERBOSITY ((os_get_config() == "Debug" || os_get_config() == "Benchmark" || os_get_config() == "Test") ? 2 : 0)
 
 /**
  * @member KENGINE_BENCHMARK

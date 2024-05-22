@@ -78,8 +78,8 @@ function __KengineAssetUtils() : __KengineStruct() constructor {
 			return _coroutine;
 		} else {
 			_coroutine.Immediate();
+			return _coroutine;
 		}
-		return true;
 	}
 
 	/**

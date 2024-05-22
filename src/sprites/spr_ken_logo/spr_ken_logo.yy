@@ -1,13 +1,18 @@
 {
   "$GMSprite":"",
   "%Name":"spr_ken_logo",
-  "bboxMode":0,
-  "bbox_bottom":332,
-  "bbox_left":133,
-  "bbox_right":591,
-  "bbox_top":54,
+  "bboxMode":1,
+  "bbox_bottom":399,
+  "bbox_left":0,
+  "bbox_right":724,
+  "bbox_top":0,
   "collisionKind":1,
   "collisionTolerance":0,
+  "ConfigValues":{
+    "Debug":{
+      "textureGroupId":"{ \"name\":\"Default\", \"path\":\"texturegroups/Default\" }",
+    },
+  },
   "DynamicTexturePage":false,
   "edgeFiltering":false,
   "For3D":false,
