@@ -93,6 +93,8 @@
 								const regexp = /#\/latest\/*(.*)/;
 								location.href = location.href.replace(regexp, '#/' + config.latestVersion + '/$1');
 							});
+							const regexp = /#\/latest\/*(.*)/;
+							location.href = location.href.replace(regexp, '#/' + config.latestVersion + '/$1');
 
 							// SET FAVICON
 							document.querySelector('#favicon').href = config.favicon;
