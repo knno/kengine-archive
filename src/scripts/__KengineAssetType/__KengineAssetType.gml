@@ -147,7 +147,7 @@ function __KengineAssetType(name, asset_kind=KENGINE_CUSTOM_ASSET_KIND, indexing
 	 * 
 	 */
 	self.IndexAssets = function(indexing_options=undefined) {
-		static chunk_size = KENGINE_ASSET_TYPES_AUTO_INDEX_ASYNC ? 0 : KENGINE_ASSET_TYPES_INDEX_CHUNK_SIZE
+		static chunk_size = KENGINE_ASSET_TYPES_AUTO_INDEX_ASYNC ? KENGINE_ASSET_TYPES_INDEX_CHUNK_SIZE : 0
 		static __index_assets_halt = {halt: true}
 		static __indices_are_assets = false
 

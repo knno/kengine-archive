@@ -114,6 +114,8 @@ function KengineAssetTypes() {
 				default_private: false,
 				// A filter function for when indexing script assets.
 				index_asset_filter: function(asset) {
+					if string_count("@",asset.name) > 0 return false; // Filter out all unncessary scripts.
+
 					// Remove script assets (even if renamed) that are added already to the index.
 					// This happens because Script assets and function references are returned as 2d array by asset_get_ids.
 					// What we want is the function references.

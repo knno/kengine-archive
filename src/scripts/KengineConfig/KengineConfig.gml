@@ -156,21 +156,21 @@ enum KENGINE_PANELS_SCROLLBAR_TYPE {
  * @description Whether Auto indexing should be asynchronous at game start.
  * @type {Bool}
  * @readonly
- * @defaultvalue false
+ * @defaultvalue true
  * 
  */
-#macro KENGINE_ASSET_TYPES_AUTO_INDEX_ASYNC (false)
+#macro KENGINE_ASSET_TYPES_AUTO_INDEX_ASYNC (true)
 
 /**
  * @constant KENGINE_ASSET_TYPES_INDEX_CHUNK_SIZE
  * @memberof Kengine~Constants
- * @description Auto indexing chunk size for async. Recommended average is 10-200.
+ * @description Auto indexing chunk size for async. Recommended average is 5-25.
  * @type {Real}
  * @readonly
- * @defaultvalue 10
+ * @defaultvalue 5
  * 
  */
-#macro KENGINE_ASSET_TYPES_INDEX_CHUNK_SIZE (10)
+#macro KENGINE_ASSET_TYPES_INDEX_CHUNK_SIZE (5)
 
 /**
  * @member KENGINE_CONSOLE_ENABLED
@@ -259,7 +259,7 @@ enum KENGINE_PANELS_SCROLLBAR_TYPE {
  * @defaultvalue 0
  * 
  */
-#macro KENGINE_VERBOSITY ((os_get_config() == "Debug" || os_get_config() == "Benchmark" || os_get_config() == "Test") ? 2 : 0)
+#macro KENGINE_VERBOSITY ((os_get_config() == "Debug" || os_get_config() == "Benchmark" || os_get_config() == "Test") ? 3 : 0)
 
 /**
  * @member KENGINE_BENCHMARK

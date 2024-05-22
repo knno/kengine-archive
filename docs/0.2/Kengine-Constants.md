@@ -386,7 +386,7 @@ Whether index assets at start of Kengine.
 Whether Auto indexing should be asynchronous at game start.
 
 
-**Default**: <code>false</code>  
+**Default**: <code>true</code>  
 **Read only**: true  
 <!-- tabs:end -->
 
@@ -398,10 +398,10 @@ Whether Auto indexing should be asynchronous at game start.
 
 ##### **Description**
 
-Auto indexing chunk size for async. Recommended average is 10-200.
+Auto indexing chunk size for async. Recommended average is 5-25.
 
 
-**Default**: <code>10</code>  
+**Default**: <code>5</code>  
 **Read only**: true  
 <!-- tabs:end -->
 
