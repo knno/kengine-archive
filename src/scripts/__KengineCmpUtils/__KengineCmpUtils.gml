@@ -13,7 +13,7 @@ function __KengineCmpUtils() : __KengineStruct() constructor {
 	/**
 	 * @function cmp_val1_val2
 	 * @memberof Kengine.cmps
-	 * @description Return whether val1 equals val2.
+	 * @description Returns whether val1 equals val2.
 	 * @param {Any} val1
 	 * @param {Any} val2
 	 * @return {Bool}
@@ -24,7 +24,7 @@ function __KengineCmpUtils() : __KengineStruct() constructor {
 	/**
 	 * @function cmp_val1_val2_id
 	 * @memberof Kengine.cmps
-	 * @description Return whether val1 equals val2.id.
+	 * @description Returns whether val1 equals val2.id.
 	 * @param {Any} val1
 	 * @param {Any} val2
 	 * @return {Bool}
@@ -35,7 +35,7 @@ function __KengineCmpUtils() : __KengineStruct() constructor {
 	/**
 	 * @function cmp_val1_id_val2_id
 	 * @memberof Kengine.cmps
-	 * @description Return whether val1.id equals val2.id.
+	 * @description Returns whether val1.id equals val2.id.
 	 * @param {Any} val1
 	 * @param {Any} val2
 	 * @return {Bool}
@@ -46,7 +46,7 @@ function __KengineCmpUtils() : __KengineStruct() constructor {
 	/**
 	 * @function cmp_val1_name_val2_name
 	 * @memberof Kengine.cmps
-	 * @description Return whether val1.name equals val2.name.
+	 * @description Returns whether val1.name equals val2.name.
 	 * @param {Any} val1
 	 * @param {Any} val2
 	 * @return {Bool}
@@ -57,7 +57,7 @@ function __KengineCmpUtils() : __KengineStruct() constructor {
 	/**
 	 * @function cmp_val1_val2_name
 	 * @memberof Kengine.cmps
-	 * @description Return whether val1 equals val2.name.
+	 * @description Returns whether val1 equals val2.name.
 	 * @param {Any} val1
 	 * @param {Any} val2
 	 * @return {Bool}
@@ -68,7 +68,7 @@ function __KengineCmpUtils() : __KengineStruct() constructor {
 	/**
 	 * @function cmp_val1_val2_index
 	 * @memberof Kengine.cmps
-	 * @description Return whether val1 equals val2.index.
+	 * @description Returns whether val1 equals val2.index.
 	 * @param {Any} val1
 	 * @param {Any} val2
 	 * @return {Bool}
@@ -79,7 +79,7 @@ function __KengineCmpUtils() : __KengineStruct() constructor {
 	/**
 	 * @function cmp_unique_id_name
 	 * @memberof Kengine.cmps
-	 * @description Return whether val1.id equals val2.id AND val1.name equals val2.name. (Thus, the function name)
+	 * @description Returns whether val1.id equals val2.id AND val1.name equals val2.name. (Thus, the function name)
 	 * @param {Any} val1
 	 * @param {Any} val2
 	 * @return {Bool}
@@ -90,7 +90,7 @@ function __KengineCmpUtils() : __KengineStruct() constructor {
 	/**
 	 * @function cmp_unique_attrs
 	 * @memberof Kengine.cmps
-	 * @description Return whether val1 and val2 have unique attributes via given var struct {unique_attrs}
+	 * @description Returns whether val1 and val2 have unique attributes via given var struct {unique_attrs}
 	 * If the array has any attr as a subarray, it is considered a unique_together. Otherwise, compare that attr for val1 and val2.
 	 * Unique together must be both equal.
 	 * @param {Any} val1
@@ -147,7 +147,7 @@ function __KengineCmpUtils() : __KengineStruct() constructor {
 	}
 
 	/**
-	 * @function _cmp_id_or_name
+	 * @function cmp_id_or_name
 	 * @memberof Kengine.cmps
 	 * @private
 	 * @param {Any} val
@@ -156,7 +156,7 @@ function __KengineCmpUtils() : __KengineStruct() constructor {
 	 * This is used internally for {@link Kengine.AssetType.GetAssetReplacement}
 	 * 
 	 */
-	static _cmp_id_or_name = function(val, ind) {
+	static cmp_id_or_name = function(val, ind) {
 		if is_string(id_or_name) {
 			return val.name == id_or_name or val.real_name == id_or_name;
 		} else {
@@ -165,4 +165,3 @@ function __KengineCmpUtils() : __KengineStruct() constructor {
 	}
 
 }
-//__KengineCmpUtils();

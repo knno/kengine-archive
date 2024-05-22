@@ -8,9 +8,9 @@ if (Kengine.is_testing) {
 				obj_control.phase = 1;
 			});
 			break;
-			
+
 		case 1:
-			var extensions_status = Kengine.GetStatuses(KENGINE_STATUS_TYPE.EXTENSIONS);
+			var extensions_status = Kengine.GetStatusArray(KENGINE_STATUS_TYPE.EXTENSIONS);
 			var i = array_find_index(extensions_status, function(ele) { return ele[0] == "Tests"; });
 			if i > -1 {
 				var tests_extension_status = extensions_status[i][1];
@@ -56,7 +56,7 @@ if (Kengine.is_testing) {
 							}
 							__kengine_log($"{results.fails}/{results.total} tests failed ✘");
 						}
-						game_end(results.status == "SUCCESS" ? 0 : 1); // GAME RETURN CODE
+						if GM_build_type != "run" game_end(results.status == "SUCCESS" ? 0 : 1); // GAME RETURN CODE
 					});
 					obj_control.phase = 2;
 				}

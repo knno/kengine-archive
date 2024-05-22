@@ -45,7 +45,7 @@ function __KengineTestsTest(name, fixtures, func, step_func=undefined) construct
      * @name ResolveFixtures
      * @type {Function}
      * @memberof Kengine.Extensions.Tests.Test
-     * @description Resolve the `fixtures` of the test. It is called inside the {@link Kengine.Extensions.Tests.Test.test} function.
+     * @description Resolves the `fixtures` of the test. It is called inside the {@link Kengine.Extensions.Tests.Test.test} function.
      * @return {Array<Kengine.Extensions.Tests.Fixture>}
      * @throws {Kengine.Extensions.Tests.AssertionError}
      *

@@ -8,6 +8,13 @@ function __KengineExtensionUtils() : __KengineStruct() constructor {
 
     static __extensions_order = KENGINE_EXTENSIONS_ORDER
 
+    /**
+     * @function __FindAndStartAll
+     * @private
+     * @memberof Kengine.Utils.Extensions
+     * @description Finds and starts all the extensions found.
+     * 
+     */
 	static __FindAndStartAll = function() {
 		var _exts = __KengineExtensionUtils.__Find(); // {my_ext: <Asset >, ...}
 		__KengineEventUtils.Fire("extensions__before", {extension_assets: _exts,});
@@ -40,7 +47,7 @@ function __KengineExtensionUtils() : __KengineStruct() constructor {
      * @function __Find
      * @private
      * @memberof Kengine.Utils.Extensions
-     * @description Find extensions to start. The name of script assets (functions) that starts with `ken_init_ext_` are matched.
+     * @description Finds extensions to start. The name of script assets (functions) that starts with `ken_init_ext_` are matched.
      * @return {Array<Kengine.Asset>} Assets of function scripts that are extensions.
      *
      */
@@ -61,7 +68,7 @@ function __KengineExtensionUtils() : __KengineStruct() constructor {
      * @function __Start
      * @private
      * @memberof Kengine.Utils.Extensions
-     * @description Start extension.
+     * @description Starts extension.
      * @param {String} ext_name name of the extension.
      * @param {Kengine.Asset} ext_asset asset of the extension.
      *
@@ -76,4 +83,3 @@ function __KengineExtensionUtils() : __KengineStruct() constructor {
     }
 
 }
-//__KengineExtensionUtils();

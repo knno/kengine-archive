@@ -9,7 +9,7 @@ function __KengineStructUtils() : __KengineStruct() constructor {
     /**
      * @function Exists
      * @memberof Kengine.Utils.Structs
-     * @description Check whether a struct member exists.
+     * @description Checks whether a struct member exists.
      * @param {Struct} _struct The struct.
      * @param {String|Struct} name The name or hash key.
      * @return {Bool} Whether the struct member exists.
@@ -32,31 +32,21 @@ function __KengineStructUtils() : __KengineStruct() constructor {
     /**
      * @function Get
      * @memberof Kengine.Utils.Structs
-     * @description Get a struct member.
+     * @description Gets a struct member.
      * @param {Struct|Id.Instance|Constant.All|Any} _struct The struct to get from.
-     * @param {String|Real|Struct} name The hash key to use. If it's a struct, uses "hash" attr.
+     * @param {String|Real|Struct} name The hash key to use. If it's a struct, uses its "hash" member value.
      * @return {Any} The value.
      * 
      */
     static Get = function(_struct, name) {
 		if is_undefined(_struct) return undefined;
 		return _struct[$ name];
-
-        /*
-		if __KengineStructUtils.Exists(_struct, name) {
-            if !is_struct(_struct) {
-                return variable_instance_get(_struct, name);
-            }
-            return struct_get_from_hash(_struct, __KengineHashkeyUtils.hash(name));
-        }
-		return undefined;
-		*/
     }
 
     /**
      * @function SetDefault
      * @memberof Kengine.Utils.Structs
-     * @description Set a struct member with a default value if it's undefined, otherwise it keeps the value.
+     * @description Sets a struct member with a default value if it's undefined, otherwise it keeps the value.
      * @param {Struct} _struct The struct.
      * @param {String|Struct} name The name or hash key.
      * @param {Any} value The value.
@@ -73,9 +63,11 @@ function __KengineStructUtils() : __KengineStruct() constructor {
     /**
      * @function Set
      * @memberof Kengine.Utils.Structs
-     * @description Set a struct member.
+     * @description Sets a struct member.
      * @param {Struct} _struct The struct.
      * @param {String|Struct} name The name or hash key.
+	 * @param {Any} value The value
+	 * @return {Any}
      *
      */
     static Set = function(_struct, name, value) {
@@ -84,13 +76,12 @@ function __KengineStructUtils() : __KengineStruct() constructor {
         }
 		_struct[$ name] = value
 		return value;
-		// return struct_set_from_hash(_struct, __KengineHashkeyUtils.hash(name), value);
     }
 
     /**
      * @function Merge
      * @memberof Kengine.Utils.Structs
-     * @description	Merge struct2 to struct1 recursively.
+     * @description	Merges struct2 to struct1 recursively.
      * @param {Struct} struct1 The main struct.
      * @param {Struct} struct2 The secondary struct.
      * @param {Bool} merge_arrays Whether to merge arrays.
@@ -99,8 +90,9 @@ function __KengineStructUtils() : __KengineStruct() constructor {
     */
     static Merge = function(struct1, struct2, merge_arrays=false) {
         var props = struct_get_names(struct2);
+		var val;
         for(var i = 0; i < array_length(props); i++) {
-            var val = struct2[$ props[i]];
+            val = struct2[$ props[i]];
             if (is_struct(val)) {
                 if !struct_exists(struct1, props[i]) {
                     struct1[$ props[i]] = val;
@@ -118,13 +110,39 @@ function __KengineStructUtils() : __KengineStruct() constructor {
         return struct1;
     }
 
+	/**
+	 * @function FilterOutPrefixed
+	 * @memberof Kengine.Utils.Structs
+	 * @description Filters out struct members that begin with a prefix
+	 * @param {Struct} struct The struct.
+	 * @param {String} prefix The prefix.
+	 * @return {Struct}
+	 *
+	 */
+	static FilterOutPrefixed = function(struct, prefix="_") {
+        var props = struct_get_names(struct);
+		var struct2 = {};
+        var val;
+		for(var i = 0; i < array_length(props); i++) {
+            val = struct[$ props[i]];
+            if (is_struct(val)) {
+                struct2[$ props[i]] = __KengineStructUtils.FilterOutPrefixed(val, prefix);
+            } else {
+				if string_starts_with(props[i], prefix) continue;
+                struct2[$ props[i]] = val;
+            }
+        }
+        return struct2;
+	}
+
     /**
      * @function DotSet
      * @memberof Kengine.Utils.Structs
-     * @description Set a struct member using dot notation.
+     * @description Sets a struct member using dot notation.
      * @param {Struct} _struct The struct.
      * @param {String} key The dot notation of key.
-     * @param {String} val The value.
+     * @param {Any} val The value.
+	 * @return {Any}
      *
      */
     static DotSet = function(_struct, key, val) {
@@ -143,11 +161,12 @@ function __KengineStructUtils() : __KengineStruct() constructor {
     /**
      * @function DotGet
      * @memberof Kengine.Utils.Structs
-     * @description Get a struct member using dot notation.
+     * @description Gets a struct member using dot notation.
      * @param {Struct} _struct The struct.
      * @param {String} key The dot notation of key.
      * @param {Any} [default_val=undefined] The default value to return.
-     *
+     * @return {Any}
+	 *
      */
     static DotGet = function(_struct, key, default_val=undefined) {
         var keys = string_split(key, ".");
@@ -167,7 +186,7 @@ function __KengineStructUtils() : __KengineStruct() constructor {
 	/**
 	 * @function IsPublic
 	 * @memberof Kengine.Utils.Structs
-	 * @description Return whether `object` or its member is public or not. By reading the struct's `__opts.public`.
+	 * @description Returns whether `object` or its member is public or not. By reading the struct's `__opts.public`.
      * @param {Any} _object
 	 * @param {String} [member_name=undefined] The member if you want to get its access publicity.
 	 * @param {Any} [default_val=undefined]
@@ -238,7 +257,7 @@ function __KengineStructUtils() : __KengineStruct() constructor {
 	/**
 	 * @function IsPrivate
 	 * @memberof Kengine.Utils.Structs
-	 * @description Return whether `object` or its member is private or not. (`.__opts.private`)
+	 * @description Returns whether `object` or its member is private or not. (`.__opts.private`)
 	 * @param {Any} _object
 	 * @param {String|Undefined} [member_name=undefined] The member if you want to get its access privacy.
 	 * @param {Bool} [default_val=undefined]
@@ -247,7 +266,7 @@ function __KengineStructUtils() : __KengineStruct() constructor {
 	 */
     static IsPrivate = function(_object, member_name=undefined, default_val=undefined) {
         var o, val;
-		default_val = default_val ?? __KengineParser.__default_private
+		default_val ??= KENGINE_PARSER_DEFAULT_PRIVATE
 
         if is_array(_object) {
 			if member_name == undefined {
@@ -304,7 +323,7 @@ function __KengineStructUtils() : __KengineStruct() constructor {
 	/**
 	 * @function SetPrivate
 	 * @memberof Kengine.Utils.Structs
-	 * @description Set `object` or its member is private or not. (`.__opts.private`)
+	 * @description Sets `object` or its member is private or not. (`.__opts.private`)
 	 * @param {Any} _object
 	 * @param {String|Undefined} [member_name=undefined] The member if you want to set its access privacy.
 	 * @param {Bool} [private=true] Whether it is private or not.
@@ -348,7 +367,7 @@ function __KengineStructUtils() : __KengineStruct() constructor {
 	/**
 	 * @function IsReadonly
 	 * @memberof Kengine.Utils.Structs
-	 * @description Return whether `object` or its member is readonly or not. (`.__opts.readonly`)
+	 * @description Returns whether `object` or its member is readonly or not. (`.__opts.readonly`)
 	 * @param {Any} _object
 	 * @param {String|Undefined} [member_name=undefined] The member if you want to get its access readonliness.
 	 * @param {Bool} [default_val=false]
@@ -401,7 +420,7 @@ function __KengineStructUtils() : __KengineStruct() constructor {
 	/**
 	 * @function SetReadonly
 	 * @memberof Kengine.Utils.Struct
-	 * @description Set whether `object` or its member is readonly or not. (`.__opts.readonly`)
+	 * @description Sets whether `object` or its member is readonly or not. (`.__opts.readonly`)
 	 * @param {Any} _object
 	 * @param {String|Undefined} [member_name=undefined] The member if you want to set its access readonliness.
 	 * @param {Bool} [readonly=true]
@@ -444,15 +463,4 @@ function __KengineStructUtils() : __KengineStruct() constructor {
 		}
 	}
 
-	/**
-	 * @function SetStatic
-	 * @memberof Kengine.Utils.Struct
-	 * @description Set the static of a struct, to a struct.
-	 * @param {Struct} struct The struct reference to set.
-	 * @param {Struct} struct2 The struct to set as the struct.
-	 */
-	 static SetStatic = function(struct, struct2) {
-		 
-	 }
 }
-//__KengineStructUtils();

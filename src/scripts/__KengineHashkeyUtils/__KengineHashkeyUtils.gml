@@ -11,26 +11,26 @@ function __KengineHashkeyUtils() : __KengineStruct() constructor  {
 	}
 
     /**
-     * @function add
+     * @function Add
      * @memberof Kengine.Utils.Hashkeys
-     * @description Add a hash to _hashkeys.
+     * @description Adds a hash to _hashkeys.
      * @param {String} name The name.
      * @return {Struct} The key struct which contains name and hash attrs.
      *
      */
-    static add = function(name) {
+    static Add = function(name) {
         __all[$ name] = {name: name, hash: variable_get_hash(name)};
     }
 
     /**
-     * @function hash
+     * @function Hash
      * @memberof Kengine.Utils.Hashkeys
-     * @description Convert hashkey or string or hash to just hash.
+     * @description Converts hashkey or string or hash to just hash.
      * @param {Struct|String|Real} name The name as a string, real or hash key.
      * @return {Any} The hash to use.
      *
      */
-    static hash = function(name) {
+    static Hash = function(name) {
         var key;
         if is_struct(name) {
             key = name.hash; // hash key
@@ -39,7 +39,7 @@ function __KengineHashkeyUtils() : __KengineStruct() constructor  {
         } else if is_string(name) {
 			if (name) == "toString" return undefined;
             if !__KengineStructUtils.Exists(__all, name) {
-                add(name);
+                Add(name);
             }
             key = __all[$ name].hash;
 
@@ -50,6 +50,7 @@ function __KengineHashkeyUtils() : __KengineStruct() constructor  {
     /**
      * @member __all
      * @type {Struct}
+     * @private
      * @memberof Kengine.Utils.Hashkeys
      * @description A struct that contains name and hash structs for structs.
      * 

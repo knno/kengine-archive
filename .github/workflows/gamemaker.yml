@@ -33,7 +33,7 @@ env:
   MATRIX_STRING: '[\"windows-latest\",\"ubuntu-latest\"]'
   PROJECT_NAME: "Kengine"
   KENGINE_TESTS_VERBOSE: true
-  KENGINE_MODS_DIR: "${{ github.workspace }}/demo_app_data"
+  KENGINE_MODS_DIR: "${{ github.workspace }}/demo"
 
 jobs:
   runner:
@@ -112,7 +112,7 @@ jobs:
           name: igor-build-${{ matrix.os }}
           path: ${{ steps.build.outputs.out-dir }}
       - if: runner.os == 'Windows'
-        name: Run Olympus test
+        name: Run tests
         timeout-minutes: 30
         shell: pwsh
         working-directory: ${{ steps.build.outputs.out-dir }}

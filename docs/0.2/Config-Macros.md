@@ -2,7 +2,7 @@
 
 &nbsp;
 
-`__KengineConfig()` holds macros that affect the general behavior of Kengine. This script never needs to be directly called in your code, but the script and the macros it contains must be present in a project for Kengine to work.
+The `KengineConfig` script holds macros that affect the general behavior. This script never needs to be directly called in your code, but the script and the macros it contains must be present in a project for Kengine to work.
 
 ## General
 

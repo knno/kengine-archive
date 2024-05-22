@@ -42,7 +42,7 @@ function __KengineParserUtils() : __KengineStruct() constructor {
 	 * @function __InterpretObject
 	 * @memberof Kengine.Utils.Parser
 	 * @private
-	 * @description Try to interpret an object: Find what kind of object it is. Maybe a YYasset or a KAsset script.
+	 * @description Tries to interpret an object: Find what kind of object it is. Maybe a YYasset (KAsset scripts excluded.)
 	 * @param {Any} object
 	 * @param {Bool} [show_err=true] Whether to show an error on failure.
 	 * @return {Any}
@@ -116,7 +116,7 @@ function __KengineParserUtils() : __KengineStruct() constructor {
 	/**
 	 * @function __InterpretDotValue
 	 * @memberof Kengine.Utils.Parser
-	 * @description Interpret a dot notation value (dotvalue)
+	 * @description Interprets a dot notation value (dotvalue)
 	 * @private
 	 * @param {Any} dotvalue
 	 * @return {Any} Undefined if not found. 
@@ -286,10 +286,10 @@ function __KengineParserUtils() : __KengineStruct() constructor {
 		}
 
 		if not _scr.is_compiled {
-			_scr.__compile();
+			_scr.Compile();
 		}
 
-		if dict[$ "this"] != undefined {
+		if this == undefined and dict[$ "this"] != undefined {
 			this = dict.this;
 		}
 
@@ -299,6 +299,8 @@ function __KengineParserUtils() : __KengineStruct() constructor {
 			script_name: _scr.name,
 			arguments: args,
 		}}, true).a;
+		
+		dict2[$ "self"] = this;
 
 		return __InterpretTxr(_scr.pg, dict2);
 	}
@@ -307,7 +309,7 @@ function __KengineParserUtils() : __KengineStruct() constructor {
 		var _scr
 		if is_instanceof(thing, __KengineAsset) {
 			if not thing.is_compiled {
-				thing.__compile();
+				thing.Compile();
 			}
 			_scr = thing.pg;
 		} else if is_string(thing) {

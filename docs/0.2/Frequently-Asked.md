@@ -6,6 +6,12 @@ Here I will list common questions and their answers of challenges, problems, and
 
 <hr>
 
+### How to Update to a newer version? {docsify-ignore}
+
+[See this info on upgrading](README?id=quick-upgrade)
+
+&nbsp;
+
 ### What platforms does Kengine support? {docsify-ignore}
 
 Tested on Windows. Please [report bugs here](https://github.com/knno/kengine/issues) if you find any.
@@ -14,7 +20,7 @@ Tested on Windows. Please [report bugs here](https://github.com/knno/kengine/iss
 
 ### How is Kengine licensed? Can I use it for commercial projects? {docsify-ignore}
 
-[Kengine is released under the MIT license](https://github.com/knno/kengine/blob/master/LICENSE). This means you can use it for whatever purpose you want, including commercial projects. It'd be great if you include "Kengine by knno" in the credits ("Kenan Masri", or "knno") and/or say thanks!
+[Kengine is released under the MIT license](https://github.com/knno/kengine/blob/main/LICENSE). This means you can use it for whatever purpose you want, including commercial projects. It'd be great if you include "Kengine by knno" in the credits ("Kenan Masri", or "knno") and/or say thanks!
 
 &nbsp;
 
@@ -34,6 +40,7 @@ Thanks for the GameMaker open source community for their support and tools. You 
 ### Can I send you donations? {docsify-ignore}
 
 Thanks for the appreciation. If you would like to support my work, please share the library with your friends! You can also contact me on discord (knno).
+You can donate when downloading from itch.io: [https://knno.itch.io/kengine/](https://knno.itch.io/kengine/)
 
 &nbsp;
 

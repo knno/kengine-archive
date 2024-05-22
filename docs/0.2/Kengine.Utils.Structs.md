@@ -19,7 +19,7 @@ A struct containing Kengine structs utilitiy functions
 
 ##### **Description**
 
-Check whether a struct member exists.
+Checks whether a struct member exists.
 
 
 **Returns**: <code>Bool</code> - Whether the struct member exists.  
@@ -39,7 +39,7 @@ Check whether a struct member exists.
 
 ##### **Description**
 
-Get a struct member.
+Gets a struct member.
 
 
 **Returns**: <code>Any</code> - The value.  
@@ -47,7 +47,7 @@ Get a struct member.
 | Param | Type | Description |
 | --- | --- | --- |
 | _struct | <code>Struct</code> \| <code>Id.Instance</code> \| <code>Constant.All</code> \| <code>Any</code> | <p>The struct to get from.</p> |
-| name | <code>String</code> \| <code>Real</code> \| <code>Struct</code> | <p>The hash key to use. If it's a struct, uses &quot;hash&quot; attr.</p> |
+| name | <code>String</code> \| <code>Real</code> \| <code>Struct</code> | <p>The hash key to use. If it's a struct, uses its &quot;hash&quot; member value.</p> |
 
 <!-- tabs:end -->
 
@@ -59,7 +59,7 @@ Get a struct member.
 
 ##### **Description**
 
-Set a struct member with a default value if it's undefined, otherwise it keeps the value.
+Sets a struct member with a default value if it's undefined, otherwise it keeps the value.
 
 
 **Returns**: <code>Any</code> - The new value. Or the default value.  
@@ -74,13 +74,13 @@ Set a struct member with a default value if it's undefined, otherwise it keeps t
 
 ## Set  :id=kengine-utils-structs-set
 
-`Kengine.Utils.Structs.Set(_struct, name)`
+`Kengine.Utils.Structs.Set(_struct, name, value)` ⇒ <code>Any</code>
 <!-- tabs:start -->
 
 
 ##### **Description**
 
-Set a struct member.
+Sets a struct member.
 
 
 
@@ -88,6 +88,7 @@ Set a struct member.
 | --- | --- | --- |
 | _struct | <code>Struct</code> | <p>The struct.</p> |
 | name | <code>String</code> \| <code>Struct</code> | <p>The name or hash key.</p> |
+| value | <code>Any</code> | <p>The value</p> |
 
 <!-- tabs:end -->
 
@@ -99,7 +100,7 @@ Set a struct member.
 
 ##### **Description**
 
-Merge struct2 to struct1 recursively.
+Merges struct2 to struct1 recursively.
 
 
 **Returns**: <code>Struct</code> - The first struct after being merged.  
@@ -112,15 +113,34 @@ Merge struct2 to struct1 recursively.
 
 <!-- tabs:end -->
 
-## DotSet  :id=kengine-utils-structs-dotset
+## FilterOutPrefixed  :id=kengine-utils-structs-filteroutprefixed
 
-`Kengine.Utils.Structs.DotSet(_struct, key, val)`
+`Kengine.Utils.Structs.FilterOutPrefixed(struct, prefix)` ⇒ <code>Struct</code>
 <!-- tabs:start -->
 
 
 ##### **Description**
 
-Set a struct member using dot notation.
+Filters out struct members that begin with a prefix
+
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| struct | <code>Struct</code> | <p>The struct.</p> |
+| prefix | <code>String</code> | <p>The prefix.</p> |
+
+<!-- tabs:end -->
+
+## DotSet  :id=kengine-utils-structs-dotset
+
+`Kengine.Utils.Structs.DotSet(_struct, key, val)` ⇒ <code>Any</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
+Sets a struct member using dot notation.
 
 
 
@@ -128,19 +148,19 @@ Set a struct member using dot notation.
 | --- | --- | --- |
 | _struct | <code>Struct</code> | <p>The struct.</p> |
 | key | <code>String</code> | <p>The dot notation of key.</p> |
-| val | <code>String</code> | <p>The value.</p> |
+| val | <code>Any</code> | <p>The value.</p> |
 
 <!-- tabs:end -->
 
 ## DotGet  :id=kengine-utils-structs-dotget
 
-`Kengine.Utils.Structs.DotGet(_struct, key, [default_val])`
+`Kengine.Utils.Structs.DotGet(_struct, key, [default_val])` ⇒ <code>Any</code>
 <!-- tabs:start -->
 
 
 ##### **Description**
 
-Get a struct member using dot notation.
+Gets a struct member using dot notation.
 
 
 
@@ -160,7 +180,7 @@ Get a struct member using dot notation.
 
 ##### **Description**
 
-Return whether <code>object</code> or its member is public or not. By reading the struct's <code>__opts.public</code>.
+Returns whether <code>object</code> or its member is public or not. By reading the struct's <code>__opts.public</code>.
 
 
 
@@ -180,7 +200,7 @@ Return whether <code>object</code> or its member is public or not. By reading th
 
 ##### **Description**
 
-Return whether <code>object</code> or its member is private or not. (<code>.__opts.private</code>)
+Returns whether <code>object</code> or its member is private or not. (<code>.__opts.private</code>)
 
 
 **Returns**: <code>Bool</code> - Whether it is private or not.  
@@ -201,7 +221,7 @@ Return whether <code>object</code> or its member is private or not. (<code>.__op
 
 ##### **Description**
 
-Set <code>object</code> or its member is private or not. (<code>.__opts.private</code>)
+Sets <code>object</code> or its member is private or not. (<code>.__opts.private</code>)
 
 
 
@@ -221,7 +241,7 @@ Set <code>object</code> or its member is private or not. (<code>.__opts.private<
 
 ##### **Description**
 
-Return whether <code>object</code> or its member is readonly or not. (<code>.__opts.readonly</code>)
+Returns whether <code>object</code> or its member is readonly or not. (<code>.__opts.readonly</code>)
 
 
 **Returns**: <code>Bool</code> - Whether it is private or not.  

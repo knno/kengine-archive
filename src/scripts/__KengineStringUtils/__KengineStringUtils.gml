@@ -61,4 +61,3 @@ function __KengineStringUtils() : __KengineStruct() constructor {
     }
 
 }
-//__KengineStringUtils();

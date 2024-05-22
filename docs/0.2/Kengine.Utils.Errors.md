@@ -128,6 +128,19 @@ Cannot replace Asset.
 
 <!-- tabs:end -->
 
+### asset__invalid  :id=kengine-utils-errors-types-asset__invalid
+
+[Kengine.Utils.Errors.Types.asset__invalid](Kengine.Utils.Errors?id=kengine.utils.errors.types.asset__invalid) <code>String</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
+Asset is invalid.
+
+
+<!-- tabs:end -->
+
 ### asset__asset_type__cannot_add  :id=kengine-utils-errors-types-asset__asset_type__cannot_add
 
 [Kengine.Utils.Errors.Types.asset__asset_type__cannot_add](Kengine.Utils.Errors?id=kengine.utils.errors.types.asset__asset_type__cannot_add) <code>String</code>
@@ -189,45 +202,6 @@ Cannot create instance from asset (non-existent Asset).
 ##### **Description**
 
 Cannot execute script (non-existent script).
-
-
-<!-- tabs:end -->
-
-### tests__test__func_invalid_return  :id=kengine-utils-errors-types-tests__test__func_invalid_return
-
-[Kengine.Utils.Errors.Types.tests__test__func_invalid_return](Kengine.Utils.Errors?id=kengine.utils.errors.types.tests__test__func_invalid_return) <code>String</code>
-<!-- tabs:start -->
-
-
-##### **Description**
-
-Test function did not return a struct.
-
-
-<!-- tabs:end -->
-
-### tests__fixture__does_not_exist  :id=kengine-utils-errors-types-tests__fixture__does_not_exist
-
-[Kengine.Utils.Errors.Types.tests__fixture__does_not_exist](Kengine.Utils.Errors?id=kengine.utils.errors.types.tests__fixture__does_not_exist) <code>String</code>
-<!-- tabs:start -->
-
-
-##### **Description**
-
-Test fixture does not exist.
-
-
-<!-- tabs:end -->
-
-### tests__assertion__is_not  :id=kengine-utils-errors-types-tests__assertion__is_not
-
-[Kengine.Utils.Errors.Types.tests__assertion__is_not](Kengine.Utils.Errors?id=kengine.utils.errors.types.tests__assertion__is_not) <code>String</code>
-<!-- tabs:start -->
-
-
-##### **Description**
-
-Assertion failure.
 
 
 <!-- tabs:end -->
@@ -336,6 +310,45 @@ AssetConf does not exist.
 
 <!-- tabs:end -->
 
+### tests__test__func_invalid_return  :id=kengine-utils-errors-types-tests__test__func_invalid_return
+
+[Kengine.Utils.Errors.Types.tests__test__func_invalid_return](Kengine.Utils.Errors?id=kengine.utils.errors.types.tests__test__func_invalid_return) <code>String</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
+Test function did not return a struct.
+
+
+<!-- tabs:end -->
+
+### tests__fixture__does_not_exist  :id=kengine-utils-errors-types-tests__fixture__does_not_exist
+
+[Kengine.Utils.Errors.Types.tests__fixture__does_not_exist](Kengine.Utils.Errors?id=kengine.utils.errors.types.tests__fixture__does_not_exist) <code>String</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
+Test fixture does not exist.
+
+
+<!-- tabs:end -->
+
+### tests__assertion__is_not  :id=kengine-utils-errors-types-tests__assertion__is_not
+
+[Kengine.Utils.Errors.Types.tests__assertion__is_not](Kengine.Utils.Errors?id=kengine.utils.errors.types.tests__assertion__is_not) <code>String</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
+Assertion failure.
+
+
+<!-- tabs:end -->
+
 ## Create  :id=kengine-utils-errors-create
 
 `Kengine.Utils.Errors.Create([error_type], [longMessage], [useLong])` ⇒ <code>Struct</code>
@@ -344,7 +357,7 @@ AssetConf does not exist.
 
 ##### **Description**
 
-Create an error struct that is thrown.
+Creates an error struct that is thrown.
 
 
 
@@ -354,5 +367,30 @@ Create an error struct that is thrown.
 | [longMessage] | <code>String</code> | <code>&quot;&quot;</code> |  |
 | [useLong] | <code>Bool</code> | <code>false</code> |  |
 
+<!-- tabs:end -->
+
+## Define  :id=kengine-utils-errors-define
+
+`Kengine.Utils.Errors.Define(key, _message)`
+<!-- tabs:start -->
+
+
+##### **Description**
+
+Adds an error type.
+
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>String</code> | <p>The key to the error handle.</p> |
+| _message | <code>String</code> | <p>The message to display.</p> |
+
+
+##### **Example**
+
+```gml
+Kengine.Utils.Errors.Define("myext__myclass__does_not_exist", "instance of MyClass does not exist.");
+```
 <!-- tabs:end -->
 

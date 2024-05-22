@@ -1,6 +1,15 @@
 {
   "$GMWindowsOptions":"",
   "%Name":"Windows",
+  "ConfigValues":{
+    "Test":{
+      "option_windows_disable_sandbox":"true",
+      "option_windows_save_location":"0",
+    },
+    "Debug":{
+      "option_windows_disable_sandbox":"false",
+    },
+  },
   "name":"Windows",
   "option_windows_allow_fullscreen_switching":false,
   "option_windows_borderless":false,

@@ -1,6 +1,17 @@
 /**
  * @typedef {Kengine.Extensions.Panels.PanelItemOptions} PanelItemInputBoxOptions
  * @memberof Kengine.Extensions.Panels
+ * @see {@link KengineOptions}
+ * 
+ * @property {Bool} [readonly]
+ * @property {String} [identifier]
+ * @property {Bool} [box_enabled]
+ * @property {Bool} [autoc_enabled]
+ * @property {Bool} [history_enabled]
+ * @property {Bool} [active]
+ * @property {Real} [background]
+ * @property {String} [text]
+ * 
  * @description PanelItemInputBox options struct.
  * 
  */
@@ -32,22 +43,7 @@ function __KenginePanelsPanelItemInputBox(options) : __KenginePanelsPanelItem(op
     if not is_instanceof(options, __KenginePanelsPanelItemInputBoxOptions) {
 		options = new __KenginePanelsPanelItemInputBoxOptions(options);
 	}
-	if false { // feather ignore GM2047
-		readonly = undefined;
-		valign = undefined
-		halign = undefined
-		x = undefined
-		y = undefined
-		width = undefined
-		height = undefined
-		history_enabled = undefined
-		text = undefined
-		autoc_enabled = undefined
-		box_enabled = undefined
-		background = undefined
-		box_colors = undefined
-	}
-    __KengineOptions.__Apply(options, self);
+    KengineOptions.__Apply(options, self);
 
     self.value_temp = self.value;
 	if self.active == undefined {
@@ -65,7 +61,8 @@ function __KenginePanelsPanelItemInputBox(options) : __KenginePanelsPanelItem(op
 	__cursor_talpha = 1;
 	__cursor_tspeed = .5;
 	__cursor_ttimer = 0;
-	cusror_color = c_white;
+	__mcursor_start = 0;
+	cursor_color = c_white;
 	box_enabled = !readonly;
 
 	__kbd_key_timer = 0;
@@ -78,6 +75,7 @@ function __KenginePanelsPanelItemInputBox(options) : __KenginePanelsPanelItem(op
 	autoc = "";
 	__autoc_pos = 0;
 
+	__xoffset = 0;
 	draw_set_font(font);
 	__str_height = string_height("|");
 	__str_width = string_width("_");
@@ -107,7 +105,22 @@ function __KenginePanelsPanelItemInputBox(options) : __KenginePanelsPanelItem(op
 				}
 				
 				if active {
-					// feather ignore GM1044
+					if _m_inside {
+						window_set_cursor(cr_beam);
+						if _mb_pressed {
+							__mcursor_start = min((_mouse_x - (parent.x + _x)) / __str_width, string_length(value));
+							__mcursor_start += __xoffset;
+						} else if _mb_held {
+							cursor_pos = min((_mouse_x - (parent.x + _x)) / __str_width, string_length(value));
+							cursor_pos += __xoffset;
+							selection_set(__mcursor_start, cursor_pos);
+						} else if _mb_released {
+							__mcursor_start = 0;
+						}
+					} else {
+						window_set_cursor(cr_default);
+					}
+					/// feather ignore GM1044
 					if keyboard_lastkey == __kbd_last_key {
 						__kbd_key_timer ++;
 					} else {
@@ -206,6 +219,7 @@ function __KenginePanelsPanelItemInputBox(options) : __KenginePanelsPanelItem(op
 						}
 						clipboard_set_text(copy);
 						if __KengineInputUtils.keyboard_check_pressed(ord("X")) {
+							_temp_pos = cursor_pos;
 							var _temp_pos_ltr = false;
 							if cursor_pos > __kbd_sel_start {
 								_temp_pos_ltr = true;
@@ -263,61 +277,57 @@ function __KenginePanelsPanelItemInputBox(options) : __KenginePanelsPanelItem(op
 					draw_set_font(font);
 
 					// Spacing, typing and backspace.
-					if string_width(keyboard_string) < width {
-						value = keyboard_string;
-						if value != value_temp { // New character
-							autoc = "";
-							__cursor_talpha = 1;
-							__cursor_ttimer = 0;
-							if keyboard_key == vk_backspace {
-								if string_length(value) > 0 and cursor_pos >= 0 {
-									// Remove char at cursor especially \#
-									var _a = string_copy(value_temp, 0, cursor_pos - 1);
-									var _b = string_copy(value_temp, cursor_pos + 1, string_length(value_temp) - cursor_pos + 1);
-									if cursor_pos > 0 cursor_pos--;
-									value = _a + _b;
-								} else {
-									cursor_pos = 0;
-								}
-								value_temp = value;
-								keyboard_lastchar = "";
-								keyboard_string = value;
-								__KengineInputUtils.keyboard_clear(keyboard_key);
-								keyboard_key = vk_nokey;
-
-							} else if keyboard_key != vk_enter {
-								if __kbd_sel_start != -1 {
-									_temp_pos = cursor_pos;
-									selection_remove();
-									value = string_delete(value, string_length(value), 1);
-									value_temp = value;
-									cursor_pos = _temp_pos;
-								}
-								// Put char at cursor
-								var _a = string_copy(value_temp, 0, cursor_pos);
-								var _b = string_copy(value_temp, cursor_pos + 1, string_length(value_temp) - cursor_pos + 2);
-								cursor_pos++;
-
-								// If backspace or delete char, use empty.
-								if keyboard_lastchar == ansi_char(127) or keyboard_lastchar == ansi_char(8) {
-									keyboard_lastchar = "";
-									cursor_pos --;
-								}
-
-								value = _a + keyboard_lastchar + _b;
-								value_temp = value;
-								keyboard_lastchar = "";
-								keyboard_string = value;
-								__KengineInputUtils.keyboard_clear(keyboard_key);
-								keyboard_key = vk_nokey;
-								__kbd_key_timer = 0;
+					value = keyboard_string;
+					if value != value_temp { // New character
+						autoc = "";
+						__cursor_talpha = 1;
+						__cursor_ttimer = 0;
+						if keyboard_key == vk_backspace {
+							if string_length(value) > 0 and cursor_pos >= 0 {
+								// Remove char at cursor especially \#
+								var _a = string_copy(value_temp, 0, cursor_pos - 1);
+								var _b = string_copy(value_temp, cursor_pos + 1, string_length(value_temp) - cursor_pos + 1);
+								if cursor_pos > 0 cursor_pos--;
+								value = _a + _b;
+							} else {
+								cursor_pos = 0;
 							}
+							value_temp = value;
+							keyboard_lastchar = "";
+							keyboard_string = value;
+							__KengineInputUtils.keyboard_clear(keyboard_key);
+							keyboard_key = vk_nokey;
+
+						} else if keyboard_key != vk_enter {
+							if __kbd_sel_start != -1 {
+								_temp_pos = cursor_pos;
+								selection_remove();
+								value = string_delete(value, string_length(value), 1);
+								value_temp = value;
+								cursor_pos = _temp_pos;
+							}
+							// Put char at cursor
+							var _a = string_copy(value_temp, 0, cursor_pos);
+							var _b = string_copy(value_temp, cursor_pos + 1, string_length(value_temp) - cursor_pos + 2);
+							cursor_pos++;
+
+							// If backspace or delete char, use empty.
+							if keyboard_lastchar == ansi_char(127) or keyboard_lastchar == ansi_char(8) {
+								keyboard_lastchar = "";
+								cursor_pos --;
+							}
+
+							value = _a + keyboard_lastchar + _b;
+							value_temp = value;
+							keyboard_lastchar = "";
+							keyboard_string = value;
+							__KengineInputUtils.keyboard_clear(keyboard_key);
+							keyboard_key = vk_nokey;
+							__kbd_key_timer = 0;
 						}
-						value_temp = value;
-						keyboard_string = value;
-					} else {
-						keyboard_string = value_temp;
 					}
+					value_temp = value;
+					keyboard_string = value;
 
 					// (cleanup)
 					if(keyboard_lastkey != vk_lshift and
@@ -339,6 +349,15 @@ function __KenginePanelsPanelItemInputBox(options) : __KenginePanelsPanelItem(op
 	}
 
 	self.Draw = function() {
+
+		var _val = value;
+		if cursor_pos*__str_width > width {
+			__xoffset = max(__xoffset, round(cursor_pos - width/__str_width));
+		} else if cursor_pos < __xoffset {
+			__xoffset = cursor_pos;
+		}
+		_val = string_copy(_val, 1+__xoffset, string_length(_val)-__xoffset);
+
 		/// feather ignore GM1044
 		draw_set_font(font);
 		draw_set_valign(valign);
@@ -357,9 +376,6 @@ function __KenginePanelsPanelItemInputBox(options) : __KenginePanelsPanelItem(op
 			}
 			draw_rectangle(parent.x+x,parent.y+y,parent.x+x+width,parent.y+y+height, true);
 		}
-		draw_set_color(color);
-
-		draw_text(parent.x+x+3, parent.y+y+1 + 5, value);
 
 		// Draw keyboard selection start, if found, to the cursor position.
 		if __kbd_sel_start != -1 {
@@ -375,18 +391,21 @@ function __KenginePanelsPanelItemInputBox(options) : __KenginePanelsPanelItem(op
 			}
 			y1 = parent.y + y + 1 + 5;
 			y2 = y1 + __str_height;
-			gpu_set_blendmode_ext(bm_dest_colour, bm_zero);
-			draw_set_color(box_colors[0]);
+			x1 -= __xoffset * __str_width;
+			x2 -= __xoffset * __str_width;
+			draw_set_color(box_colors[1]);
 			draw_rectangle(x1,y1,x2,y2, false);
-			gpu_set_blendmode(bm_normal);
 			draw_set_color(color);
 		}
-		
+
+		draw_set_color(color);
+		draw_text(parent.x+x+3, parent.y+y+1 + 5, _val);
+
 		// Draw cursor
 		if __cursor_talpha {
-			var cursor_offset = string_width(string_copy(value, 0, cursor_pos));
-		
-			draw_set_color(cusror_color);
+			var cursor_offset = string_width(string_copy(value, 0, cursor_pos - __xoffset));
+
+			draw_set_color(cursor_color);
 			draw_set_alpha(1);
 			draw_line(
 				parent.x + x + 5 + cursor_offset,
@@ -401,7 +420,7 @@ function __KenginePanelsPanelItemInputBox(options) : __KenginePanelsPanelItem(op
 	/**
 	 * @function selection_get
 	 * @memberof Kengine.panel.PanelItemInputBox
-	 * @description Get the selected part from the text value.
+	 * @description Gets the selected part from the text value.
 	 * @return {String} The selected string of the text value.
 	 */
 	selection_get = function() {

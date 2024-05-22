@@ -11,19 +11,6 @@ A struct containing Kengine events utilitiy functions
 
 <!-- tabs:end -->
 
-## __all  :id=kengine-utils-events-__all
-
-[Kengine.Utils.Events.__all](Kengine.Utils.Events?id=kengine.utils.events.__all) <code>Struct</code>
-<!-- tabs:start -->
-
-
-##### **Description**
-
-A struct that contains Kengine events as keys and an array of functions (listeners) to call on event fire.
-
-
-<!-- tabs:end -->
-
 ## Define  :id=kengine-utils-events-define
 
 `Kengine.Utils.Events.Define(event, [listeners])`
@@ -32,7 +19,7 @@ A struct that contains Kengine events as keys and an array of functions (listene
 
 ##### **Description**
 
-Define an event.
+Defines an event.
 
 
 
@@ -51,7 +38,7 @@ Define an event.
 
 ##### **Description**
 
-Add an event listener (function) or more to the events.
+Adds an event listener (function) or more to the events.
 
 
 **Returns**: <code>Bool</code> - Whether added successfuly (if the event is defined) or not.  
@@ -71,7 +58,7 @@ Add an event listener (function) or more to the events.
 
 ##### **Description**
 
-Remove an event listener (function) or more from the events.
+Removes an event listener (function) or more from the events.
 
 
 **Returns**: <code>Bool</code> - Whether removed successfuly (if the event is defined) or not.  
@@ -92,7 +79,7 @@ Remove an event listener (function) or more from the events.
 
 ##### **Description**
 
-Fire an event with arguments.
+Fires an event with arguments.
 
 
 **Returns**: <code>Bool</code> \| <code>Undefined</code> - Whether the event is registered.  

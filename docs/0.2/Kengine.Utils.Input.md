@@ -11,15 +11,15 @@ A struct containing Kengine input utilitiy functions
 
 <!-- tabs:end -->
 
-## ken_keyboard_check_released  :id=kengine-utils-input-ken_keyboard_check_released
+## keyboard_check_released  :id=kengine-utils-input-keyboard_check_released
 
-`Kengine.Utils.Input.ken_keyboard_check_released(key)` ⇒ <code>Bool</code>
+`Kengine.Utils.Input.keyboard_check_released(key)` ⇒ <code>Bool</code>
 <!-- tabs:start -->
 
 
 ##### **Description**
 
-Return whether key is released.
+Returns whether key is released.
 
 
 
@@ -37,7 +37,7 @@ Return whether key is released.
 
 ##### **Description**
 
-Return whether key is being held down.
+Returns whether key is being held down.
 
 
 
@@ -55,7 +55,7 @@ Return whether key is being held down.
 
 ##### **Description**
 
-Return whether key is pressed.
+Returns whether key is pressed.
 
 
 
@@ -73,7 +73,7 @@ Return whether key is pressed.
 
 ##### **Description**
 
-Clear keyboard key state.
+Clears keyboard key state.
 
 
 

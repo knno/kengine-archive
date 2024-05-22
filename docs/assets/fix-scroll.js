@@ -2,7 +2,7 @@
   function create() {
 
     return function (hook) {
-      const threshold = 10;
+      const threshold = 50;
 
       hook.doneEach(function () {
         let urlId = new URLSearchParams(location.hash.split("?")[1]).get("id");

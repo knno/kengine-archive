@@ -19,16 +19,16 @@ A struct containing Kengine arrays utilitiy functions
 
 ##### **Description**
 
-Delete value from an array.
+Deletes value from an array.
 
 
 **Returns**: <code>Real</code> - Count of deleted indices.  
 
-| Param | Type |
-| --- | --- |
-| array | <code>Array.&lt;Any&gt;</code> | 
-| value | <code>Any</code> | 
-| _all | <code>Bool</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| array | <code>Array.&lt;Any&gt;</code> |  |
+| value | <code>Any</code> |  |
+| _all | <code>Bool</code> | <p>Whether to delete all occurences</p> |
 
 <!-- tabs:end -->
 
@@ -40,7 +40,7 @@ Delete value from an array.
 
 ##### **Description**
 
-Return the minimum and maximum numbers in an array
+Returns the minimum and maximum numbers in an array
 
 
 **Returns**: <code>Array.&lt;Any&gt;</code> - An array containing the minimum and maximum numbers  
@@ -59,7 +59,7 @@ Return the minimum and maximum numbers in an array
 
 ##### **Description**
 
-Return arrays' values as a single array.
+Returns arrays' values as a single array.
 
 
 

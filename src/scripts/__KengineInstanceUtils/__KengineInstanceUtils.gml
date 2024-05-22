@@ -53,7 +53,7 @@ function __KengineInstanceUtils() : __KengineStruct() constructor {
 	/**
 	 * @function CreateLayer
 	 * @memberof Kengine.Utils.Instance
-	 * @description Create a Kengine `Instance` and adds it to the [instances]{@link Kengine.instances} collection, creating a real instance in the room.
+	 * @description Creates an `Instance` and adds it to the [instances]{@link Kengine.instances} collection, creating a real instance in the room.
 	 * @param {Real} x The X position of the instance.
 	 * @param {Real} y The Y position of the instance.
 	 * @param {String} [layer=undefined] The layer to create the instance at.
@@ -68,7 +68,7 @@ function __KengineInstanceUtils() : __KengineStruct() constructor {
 	/**
 	 * @function CreateDepth
 	 * @memberof Kengine.Utils.Instance
-	 * @description Create a Kengine `Instance` and adds it to the [instances]{@link Kengine.instances} collection, creating a real instance in the room.
+	 * @description Creates an `Instance` and adds it to the [instances]{@link Kengine.instances} collection, creating a real instance in the room.
 	 * @param {Real} x The X position of the instance.
 	 * @param {Real} y The Y position of the instance.
 	 * @param {Real} [depth=0] The depth to create the instance at.
@@ -164,6 +164,4 @@ function __KengineInstanceUtils() : __KengineStruct() constructor {
 			func(_to_call_insts[_i]);
 		}
 	}
-
 }
-//__KengineInstanceUtils();

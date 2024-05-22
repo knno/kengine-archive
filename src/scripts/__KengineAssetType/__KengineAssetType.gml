@@ -8,20 +8,9 @@
  * @param {Constant.AssetType|String} [asset_kind=KENGINE_CUSTOM_ASSET_KIND] A default asset kind if it's a YYAsset (asset_room, asset_object, etc.) or {@link KENGINE_CUSTOM_ASSET_KIND} if it's custom.
  * @param {Struct|Undefined} [indexing_options=undefined] A struct containing key-value configuration for indexing of this asset type. {@link Kengine.AssetType.IndexingOptions}
  * @param {Struct|Undefined} [var_struct] A struct of attributes to add to this asset type. If there is a function value, it is copied as a method with self as this asset type.
- *
- * @example
- * // This example defines an AssetType for the object YYAsset. Then it indexes all objects in the game.
- * my_asset_type = new Kengine.AssetType("object", asset_object, {
- *      index_range: [0,999999],
- *      exclude_prefixes: ["_rm_",],
- *		unique_attrs: ["id", "name", "real_name",], // Using default attrs.
- * });
- * my_asset_type.index_assets();
  * 
  */
 function __KengineAssetType(name, asset_kind=KENGINE_CUSTOM_ASSET_KIND, indexing_options=undefined, var_struct=undefined) : __KengineStruct() constructor {
-
-
 	var this = self;
 
 	__indexing_coroutine = undefined;
@@ -31,14 +20,11 @@ function __KengineAssetType(name, asset_kind=KENGINE_CUSTOM_ASSET_KIND, indexing
 	* @memberof Kengine.AssetType
 	* @description AssetType indexing options struct.
 	* @property {Array<Real>} [index_range=[0,999999]]] An array of min, max for the indexing range.
-	* @property {Array<String>} [exclude_prefixes=["__",]]] An array of prefixing strings that should be excluding when indexing.
+	* @property {Array<Struct>} [rename_rules] An array of renaming rules when indexing assets.
+	* @property {Array<String>} [exclude_prefixes=["__",]]] An array of prefixing strings that should be excluding when indexing at start.
 	* @property {Array<String|Array<String>>} [unique_attrs=["id","name","real_name",]]] A list of attribute names that are unique by nature. So when indexing happens, it is only added once, otherwise replaced. Attributes such as `id` and `real_name` must be unique when adding assets. You can also use array of attrs inside to make them unique together.
 	*/
 	self.indexing_options = indexing_options ?? {};
-
-	//if struct_exists(Kengine.asset_types, name) {
-	//	throw __KengineErrorUtils.create(__KengineErrorUtils.Types.asset_type__asset_type__exists, string("AssetType \"{0}\" already exists.", name));
-	//}
 
 	__KengineStructUtils.SetDefault(self.indexing_options, "unique_attrs", ["id", "name", "real_name"]);
 
@@ -75,7 +61,7 @@ function __KengineAssetType(name, asset_kind=KENGINE_CUSTOM_ASSET_KIND, indexing
 	 * @name asset_kind
 	 * @type {String|Constant.AssetType|Any}
 	 * @memberof Kengine.AssetType
-	 * @description The `asset_kind` property of the AssetType. Can be provided in creation options. Defaults to `{@link KENGINE_CUSTOM_ASSET_KIND}.
+	 * @description The `asset_kind` property of the AssetType. Can be provided in creation options. Defaults to `{@link KENGINE_CUSTOM_ASSET_KIND}`.
 	 * @defaultvalue KENGINE_CUSTOM_ASSET_KIND
 	 * 
 	 */
@@ -102,7 +88,7 @@ function __KengineAssetType(name, asset_kind=KENGINE_CUSTOM_ASSET_KIND, indexing
 	/**
 	 * @function GetAssetReplacement
 	 * @memberof Kengine.AssetType
-	 * @description Return an [Asset]{@link Kengine.Asset} by id or name. This function looks up the replacement chain of found asset, and iterates until it finds the final replacement of the asset and returns it.
+	 * @description Returns an [Asset]{@link Kengine.Asset} by id or name. This function looks up the replacement chain of found asset, and iterates until it finds the final replacement of the asset and returns it.
 	 * @param {String|Real} id_or_name The real ID or name of the asset.
 	 * @param {Real} [replacement_depth=0] If the asset is marked as replaced, take the replacement.. and repeat that for replacement_depth` times. Use `0` to get last in the chain. Use `-1` to get the first in chain. Use `false` to not lookup replacements.
 	 * @param {String} [return_type="asset"] What to return. "asset" (the asset itself), "id" (the asset id), or "index" (the index of the asset in the {@link Kengine.Collection}). Defaults to "asset"
@@ -117,7 +103,7 @@ function __KengineAssetType(name, asset_kind=KENGINE_CUSTOM_ASSET_KIND, indexing
 	self.GetAssetReplacement = function(id_or_name, replacement_depth=0, return_type="asset") {
 		var _types, _a_by_types, _asset_aind;
 		_a_by_types = __KengineStructUtils.Get(Kengine.asset_types, self.name).assets.GetAll();
-		_asset_aind = array_find_index(_a_by_types, method({id_or_name}, __KengineCmpUtils._cmp_id_or_name));
+		_asset_aind = array_find_index(_a_by_types, method({id_or_name}, __KengineCmpUtils.cmp_id_or_name));
 
 		if _asset_aind == -1 return undefined;
 
@@ -156,7 +142,7 @@ function __KengineAssetType(name, asset_kind=KENGINE_CUSTOM_ASSET_KIND, indexing
 	 * @function IndexAssets
 	 * @memberof Kengine.AssetType
 	 * @param {Struct} [indexing_options=undefined]
-	 * @description The asset indexing functions (IndexAssets, index_asset) prepare and adds all the assets of this type, or only prepares and adds the provided {@link Kengine.Asset} to the {@link Kengine.Collection}, returning whether operation was successful.
+	 * @description The asset indexing functions (IndexAssets, IndexAsset) prepare and adds all the assets of this type, or only prepares and adds the provided {@link Kengine.Asset} to the {@link Kengine.Collection}, returning whether operation was successful.
 	 * @return {Bool} Whether successful indexing occured or not.
 	 * 
 	 */
@@ -164,7 +150,6 @@ function __KengineAssetType(name, asset_kind=KENGINE_CUSTOM_ASSET_KIND, indexing
 		static chunk_size = KENGINE_ASSET_TYPES_INDEX_CHUNK_SIZE
 		static __index_assets_halt = {halt: true}
 		static __indices_are_assets = false
-
 
 		static __ChunkIndexAssets = function(indices_are_assets, index_range, asset_list, indexing_options) {
 
@@ -261,7 +246,7 @@ function __KengineAssetType(name, asset_kind=KENGINE_CUSTOM_ASSET_KIND, indexing
 			if is_string(self.asset_kind) {
 				__indices_are_assets = true;
 			} else {
-				// Feather disable GM1044
+				/// feather disable GM1044
 				_assets = asset_get_ids(self.asset_kind);
 				_index_range[0] = 0;
 				_index_range[1] = array_length(_assets);
@@ -324,7 +309,8 @@ function __KengineAssetType(name, asset_kind=KENGINE_CUSTOM_ASSET_KIND, indexing
 	/**
 	 * @function IndexAsset
 	 * @memberof Kengine.AssetType
-	 * @description The asset indexing functions (IndexAssets, index_asset) prepare and adds all the assets of this type, or only prepares and adds the provided {@link Kengine.Asset} to the {@link Kengine.Collection}, returning whether operation was successful.
+	 * @description The asset indexing functions (IndexAssets, IndexAsset) prepare and adds all the assets of this type, or only prepares and adds the provided {@link Kengine.Asset} to the {@link Kengine.Collection}, returning whether operation was successful.
+	 * The function surpasses `indexing_options.exclude_prefixes`.
 	 * @param {Kengine.Asset} asset The asset to index.
 	 * @return {Array<Any>} A two-value array containing whether the asset was added or not, and the index of the asset or -1.
 	 * 
@@ -343,7 +329,7 @@ function __KengineAssetType(name, asset_kind=KENGINE_CUSTOM_ASSET_KIND, indexing
 			var _tags;
 			if __KengineStructUtils.Get(asset, "tags") == undefined {
 				if asset.__is_yyp {
-					// Feather disable GM1044
+					/// feather disable GM1044
 					_tags = asset_get_tags(asset.id, self.asset_kind);
 					_tags[array_length(_tags)] = "YYAsset";
 				} else {
@@ -558,7 +544,6 @@ function __KengineAssetType(name, asset_kind=KENGINE_CUSTOM_ASSET_KIND, indexing
 			}
 		}
 	}
-
 
 	Kengine.asset_types[$ self.name] = self;
 

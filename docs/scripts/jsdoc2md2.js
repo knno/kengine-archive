@@ -51,7 +51,8 @@ function setUpNamespaceTemplateData(name) {
   let namespaceNames = templateData.reduce((namespaceNames, identifier) => {
     identifier.lowerLongname = `${identifier.longname
       .toLowerCase()
-      .replace(/\./g, "-")}`;
+      .replace(/\./g, "-")
+      .replace(/\~/g, "-")}`;
 
     if (identifier.returns) {
       for (const ret of identifier.returns) {
@@ -131,9 +132,9 @@ function namespacedTemplateData(
   return subTemplateDatas;
 }
 
-function writeOne(namespaceName, namespaceLongName, opts) {
-  const template = `{{#namespace name="${namespaceName}"}}{{>docs}}{{/namespace}}`;
-  const outputFile = Path.resolve(outputDir, `${namespaceLongName}.md`);
+function writeOne(namespaceName, namespaceLongName, opts, _template) {
+  const template = _template ?? `{{#namespace name="${namespaceName}"}}{{>docs}}{{/namespace}}`;
+  const outputFile = Path.resolve(outputDir, `${namespaceLongName.replace("~", "-")}.md`);
   opts.template = template;
   console.log(`rendering ${namespaceLongName}`);
   var output = jsdoc2md.renderSync(opts);
@@ -149,10 +150,11 @@ function writeOne(namespaceName, namespaceLongName, opts) {
     })) {
       if (urlText.startsWith(nsln)) {
         urlText = urlText
-          .replace(nsln + ".", nsln + "?id=")
-          .replace(/\?id=.*$/, `?id=${urlText.toLowerCase()}`);
+        .replace(nsln + ".", nsln + "?id=")
+        .replace(/\?id=.*$/, `?id=${urlText.toLowerCase()}`);
         break;
       }
+      urlText = urlText.replace("~", "-");
     }
     if (noLinks.indexOf(urlText.split('?id=')[0]) !== -1) {
       return displayText
@@ -169,10 +171,11 @@ function writeOne(namespaceName, namespaceLongName, opts) {
     })) {
       if (displayText.startsWith(nsln)) {
         urlText = urlText
-          .replace(nsln + ".", nsln + "?id=")
-          .replace(/\?id=.*$/, `?id=${urlText.toLowerCase()}`);
+        .replace(nsln + ".", nsln + "?id=")
+        .replace(/\?id=.*$/, `?id=${urlText.toLowerCase()}`);
         break;
       }
+      urlText = urlText.replace("~", "-");
     }
     if (noLinks.indexOf(urlText.split('?id=')[0]) !== -1) {
       return displayText
@@ -191,7 +194,7 @@ var opts = {
   data: templateData,
   "example-lang": "gml",
 };
-if (typeof partials != undefined) {
+if (typeof partials != "undefined") {
   partials = Path.resolve(partials, "./**/*.hbs");
   const fileSet = new FileSet(partials);
   opts.partial = fileSet.files;

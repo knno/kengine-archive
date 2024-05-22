@@ -27,7 +27,7 @@ function __KengineModsAssetConf(conf) constructor {
 		if string_starts_with(ns[i], "_") continue;
 		self.conf[$ ns[i]] = conf[$ ns[i]];
 	}
-    
+
 	var this = self;
     Kengine.Utils.Events.Fire("mods__asset_conf__init__before", {asset_conf: this});
 
@@ -105,7 +105,7 @@ function __KengineModsAssetConf(conf) constructor {
 			throw Kengine.Utils.Errors.Create("assettype__does_not_exist", string("AssetType \"{0}\" for AssetConf \"{1}\" does not exist.", self.conf.type, self.conf.name));
 		}
 
-		self.asset = new Kengine.Asset(_assettype, self.conf.name);
+		self.asset = new __KengineAsset(_assettype, self.conf.name);
 
 		if Kengine.Utils.Structs.Exists(_assettype, "asset_conf_mapping") {
 			if is_callable(_assettype.asset_conf_mapping) {
@@ -129,7 +129,7 @@ function __KengineModsAssetConf(conf) constructor {
 
 		if struct_exists(self.conf, "replaces") {
 			self.target = Kengine.Utils.GetAsset(_assettype, self.conf.replaces);
-			self.target.ReplaceBy(self.asset);
+			self.target.ReplaceWith(self.asset);
 		} else {
 			self.target = self.asset;
 			if self.target.tags == undefined self.target.tags = new __KengineCollection();

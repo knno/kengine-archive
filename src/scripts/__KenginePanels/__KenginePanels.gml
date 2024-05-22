@@ -1,3 +1,9 @@
+/**
+ * @namespace Panels
+ * @memberof Kengine.Extensions
+ * @description Kengine's Panels extension
+ *
+ */
 function __KenginePanels() : __KengineStruct() constructor {
 	static name = "Panels";
 
@@ -56,33 +62,6 @@ function __KenginePanels() : __KengineStruct() constructor {
 
 			if _j == undefined __KenginePanels.focused_panel = undefined;
 		}
-		
-		if Kengine.status == "READY" {
-			/*if Kengine.watcher == undefined {
-				var parElement = new __KenginePanelsPanelItemDbgElement("div");
-				var status = new __KenginePanelsPanelItemDbgElement("span", Kengine.status);
-				status.color = c_aqua;
-				var _br = new __KenginePanelsPanelItemDbgElement("br", "\n")
-				var item = new __KenginePanelsPanelItemDbgElement("div", {
-					//Extensions: Kengine.Extensions,
-					//Utils: Kengine.Utils,
-					instances: Kengine.instances.__all,
-					asset_types: struct_get_names(Kengine.asset_types),
-				});
-				array_push(parElement.children, status, _br, item);
-				Kengine.watcher = new Kengine.Extensions.Panels.Panel({
-					title: "Watcher",
-					x: 0,
-					y: 0,
-					height: 350,
-					width: 300,
-					children: [parElement]
-				});
-				Kengine.watcher.add = function(watch) {
-				}
-			}*/
-		}
-
 	}
 }
 

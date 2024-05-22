@@ -5,14 +5,27 @@
  */
 function Kengine() : __KengineStruct() constructor {
 
+	/**
+	 * @constant __initialized
+	 * @memberof Kengine
+	 * @description Whether Kengine has been initiated or not.
+	 * @type {Bool}
+	 * @readonly
+	 * @private
+	 * 
+	 */
+	static __initialized = false
+
+	if __initialized {
+		return;
+	}
+
 	static Struct = __KengineStruct;
 
 	static Utils = new __KengineUtils();
 
-	static watcher = undefined;
-
 	static status = "NOT_STARTED";
-	
+
 	static is_testing = function() {
 		var _is_testing = KENGINE_IS_TESTING;
 		if _is_testing == true {return true;}
@@ -49,10 +62,26 @@ function Kengine() : __KengineStruct() constructor {
 	}
 	verbosity = verbosity();
 
-	static GetStatuses = function(type) {
-
+	/**
+	 * @function GetStatusArray
+	 * @memberof Kengine
+	 * @description Returns the current status of Kengine
+	 * @param {String} type The `KENGINE_STATUS_TYPE` such as (MAIN, COROUTINES, EXTENSIONS)
+	 * @return {Array<Any>} pairs of (name, status)
+	 * 
+	 * @example
+	 * var statuses = Kengine.GetStatusArray(KENGINE_STATUS_TYPE.MAIN);
+	 * var i = array_find_index(statuses, function(ele) { return ele[0] == "Kengine"; });
+	 * if i > -1 {
+	 *   var kengine_status = statuses[i][1];
+	 *   if kengine_status == "NOT_STARTED" ...
+	 *   if kengine_status == "STARTING" ...
+	 *   if kengine_status == "READY" ...
+	 * }
+	 * 
+	 */
+	static GetStatusArray = function(type) {
 		var statuses = [];
-		
 		if (type & KENGINE_STATUS_TYPE.MAIN) {
 			statuses[array_length(statuses)] = ["Kengine", Kengine.status]
 		}
@@ -75,22 +104,7 @@ function Kengine() : __KengineStruct() constructor {
 				}
 			}
 		}
-
 		return statuses;
-	}
-
-	/**
-	 * @constant initialized
-	 * @memberof Kengine
-	 * @description Whether Kengine has been initiated or not.
-	 * @type {Bool}
-	 * @readonly
-	 * 
-	 */
-	static initialized = false
-
-	if initialized {
-		return obj_kengine.__kengine;
 	}
 
 	/**
@@ -98,6 +112,7 @@ function Kengine() : __KengineStruct() constructor {
 	 * @type {Kengine.Collection}
 	 * @memberof Kengine
 	 * @description This collection contains all created {@link Kengine.Instance}.
+	 * 
 	 */
 	static instances = new __KengineCollection()
 
@@ -106,12 +121,13 @@ function Kengine() : __KengineStruct() constructor {
 		/**
 		 * @function Add
 		 * @memberof Kengine.Extensions
-		 * @description Add a struct to Kengine extensions.
+		 * @description Adds a struct to Kengine extensions.
 		 *
 		 * > if your extension returns a struct, then it is added automatically and no need to call this method.
 		 *
 		 * @param {Struct} ext The extension struct to add.
 		 * @return {Struct}
+		 * 
 		 */
 		static Add = method(self, function(ext) {
 			self[$ ext.name] = ext;
@@ -119,9 +135,10 @@ function Kengine() : __KengineStruct() constructor {
 		/**
 		 * @function Get
 		 * @memberof Kengine.Extensions
-		 * @description Return a Kengine extension by name.
+		 * @description Returns a Kengine extension by name.
 		 * @param {String} name
 		 * @return {Struct}
+		 * 
 		 */
 		static Get = method(self, function(name) {
 			return __KengineStructUtils.Get(self, name);
@@ -130,8 +147,9 @@ function Kengine() : __KengineStruct() constructor {
 		 * @function Exists
 		 * @memberof Kengine.Extensions
 		 * @param {String} name
-		 * @description Return whether a Kengine extension exists by name.
+		 * @description Returns whether a Kengine extension exists by name.
 		 * @return {Bool}
+		 * 
 		 */
 		static Exists = method(self, function(name) {
 			return self.Get(name) != undefined;
@@ -139,8 +157,9 @@ function Kengine() : __KengineStruct() constructor {
 		/**
 		 * @function GetAllNames
 		 * @memberof Kengine.Extensions
-		 * @description Get all Extensions.
+		 * @description Gets all Extensions' names.
 		 * @return {Array}
+		 * 
 		 */
 		static GetAllNames = method(self, function() {
 			return array_filter(struct_get_names(self), method(self, function(element) {
@@ -150,8 +169,9 @@ function Kengine() : __KengineStruct() constructor {
 		/**
 		 * @function GetAll
 		 * @memberof Kengine.Extensions
-		 * @description Get all Extensions.
+		 * @description Gets all Extensions.
 		 * @return {Array}
+		 * 
 		 */
 		static GetAll = method(self, function() {
 			return array_map(self.GetAllNames(), method(self, function(element, index) {
@@ -164,16 +184,17 @@ function Kengine() : __KengineStruct() constructor {
 	 * @name Extensions
 	 * @type {Struct}
 	 * @memberof Kengine
-	 * @description A key value struct of name to Kengine extension.
+	 * @description A struct of `name` as key and `extension` as value.
+	 * 
 	 */
-	static Extensions = (new __Extensions());
-
+	static Extensions = new __Extensions();
 
 	/**
 	 * @name coroutines
 	 * @type {Array<Kengine.Coroutine>}
 	 * @memberof Kengine
-	 * @description An array of {@link Kengine.Coroutine} currently processing.
+	 * @description An array of {@link Kengine.Coroutine} that are currently processing.
+	 * 
 	 */
 	static coroutines = []
 	static __coroutines_last_tick = 0
@@ -182,10 +203,18 @@ function Kengine() : __KengineStruct() constructor {
 	 * @name current_room_asset
 	 * @type {Kengine.Asset|Undefined}
 	 * @memberof Kengine
-	 * @description The Room-type {@link Kengine.Asset} currently active as room.
+	 * @description The Room-type {@link Kengine.Asset} currently active as `room`.
+	 * 
 	 */
 	static current_room_asset = undefined
 
+	/**
+	 * @member asset_type_options
+	 * @type {Undefined|Struct}
+	 * @memberof Kengine
+	 * @description The asset type options for Kengine.
+	 *
+	 */
 	static asset_type_options = undefined
 
 	/**
@@ -193,6 +222,9 @@ function Kengine() : __KengineStruct() constructor {
 	 * @type {Struct}
 	 * @memberof Kengine
 	 * @description The asset types struct of Kengine.
+	 * 
+	 * @example
+	 * Kengine.asset_types.sprites
 	 *
 	 */
 	static asset_types = {}
@@ -260,6 +292,13 @@ function Kengine() : __KengineStruct() constructor {
 	* 
 	*/
 	static __uids = 0
+
+	/**
+	* @function new_uid
+	* @memberof Kengine
+	* @description Returns a new UID. This is mostly used for assets.
+	* 
+	*/
 	static new_uid = function() {return __uids++}
 
 	/**
@@ -279,15 +318,15 @@ function Kengine() : __KengineStruct() constructor {
 	 *
 	 */
 	static Initialize = function() {
-		if initialized return false;
+		if __initialized return false;
 		status = "STARTING"
-		asset_types = (new __KengineStruct())
-		initialized = true;
+		asset_types = new __KengineStruct()
+		__initialized = true;
 
 		__KengineBenchmarkUtils.Init();
 
 		main_object = self;
-		
+
 		variable_global_set("Kengine", self);
 
 		__KengineUtils.__Start();

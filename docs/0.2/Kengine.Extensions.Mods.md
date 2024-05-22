@@ -11,6 +11,76 @@ Kengine's Mods extension
 
 <!-- tabs:end -->
 
+## GetAssetTypeSynonymsArray  :id=kengine-extensions-mods-getassettypesynonymsarray
+
+`Kengine.Extensions.Mods.GetAssetTypeSynonymsArray(asset_type)` ⇒ <code>Array.&lt;String&gt;</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
+Returns the synonyms array for an asset type. First one is the canonical.
+
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| asset_type | <code>String</code> \| <code>Kengine.AssetType</code> | <p>The asset type you want to get synonyms for.</p> |
+
+<!-- tabs:end -->
+
+## ParseModFileSync  :id=kengine-extensions-mods-parsemodfilesync
+
+`Kengine.Extensions.Mods.ParseModFileSync(modname, source)` ⇒ <code>Struct</code> \| <code>Undefined</code> \| <code>Any</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
+Parses a mod definition file (source) while also handling imports.
+
+
+**Returns**: <code>Struct</code> \| <code>Undefined</code> \| <code>Any</code> - The definition data.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| modname | <code>String</code> | <p>The mod name.</p> |
+| source | <code>String</code> | <p>The source to parse.</p> |
+
+<!-- tabs:end -->
+
+## DefaultGameFindMods  :id=kengine-extensions-mods-defaultgamefindmods
+
+`Kengine.Extensions.Mods.DefaultGameFindMods()` ⇒ <code>Array.&lt;Array.&lt;Kengine.Extensions.Mods.Mod&gt;&gt;</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
+The default mods finder function. It returns an array of arrays that contain mods found.
+<code>{this}</code> is the Mod Manager.
+
+
+<!-- tabs:end -->
+
+## FindLocalMods  :id=kengine-extensions-mods-findlocalmods
+
+`Kengine.Extensions.Mods.FindLocalMods(base)` ⇒ [<code>Array.&lt;Mod&gt;</code>](Kengine.Extensions.Mods?id=kengine.extensions.mods.mod)
+<!-- tabs:start -->
+
+
+##### **Description**
+
+Finds directory mods and return Mod objects in an array.
+
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| base | <code>String</code> | <p>The base location of the finding, could be working_directory, program_directory, game_save_id, a custom path...</p> |
+
+<!-- tabs:end -->
+
 ## AssetConf  :id=kengine-extensions-mods-assetconf
 
 `Kengine.Extensions.Mods.AssetConf(conf)`
@@ -31,7 +101,7 @@ An AssetConf is a configuration object for an asset to be applied or unapplied. 
 
 ### conf  :id=kengine-extensions-mods-assetconf-conf
 
-[Kengine.Extensions.Mods.AssetConf.conf](Kengine.Extensions.Mods?id=kengine.extensions.mods.assetconf.conf) <code>Struct</code>
+[Kengine.Extensions.Mods.AssetConf.conf](Kengine.Extensions.Mods?id=kengine.extensions.mods.assetconf.conf) <code>Kengine.Struct</code>
 <!-- tabs:start -->
 
 
@@ -67,7 +137,6 @@ Whether the assetconf is applied by a specific mod. Defaults to <code>false</cod
 The target asset of this asset conf. It can be the same as <code>self.asset</code> if it's totally new, or the replacement asset target.
 
 
-**See**: [Kengine.Asset.__replaces](Kengine?id=kengine.asset.__replaces)  
 <!-- tabs:end -->
 
 ### source_mod  :id=kengine-extensions-mods-assetconf-source_mod
@@ -83,6 +152,19 @@ The mod emitting this assetconf.
 
 <!-- tabs:end -->
 
+### asset  :id=kengine-extensions-mods-assetconf-asset
+
+[Kengine.Extensions.Mods.AssetConf.asset](Kengine.Extensions.Mods?id=kengine.extensions.mods.assetconf.asset) <code>Kengine.Asset</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
+The asset created by this asset conf. It can be the same as <code>self.target</code> if it's totally new.
+
+
+<!-- tabs:end -->
+
 ### Apply  :id=kengine-extensions-mods-assetconf-apply
 
 `Kengine.Extensions.Mods.AssetConf.Apply()`
@@ -91,7 +173,7 @@ The mod emitting this assetconf.
 
 ##### **Description**
 
-.
+Applies this asset conf, creating a new asset.
 
 
 <!-- tabs:end -->
@@ -104,14 +186,14 @@ The mod emitting this assetconf.
 
 ##### **Description**
 
-.
+Unapplies this asset conf, destroying or removing the asset created.
 
 
 <!-- tabs:end -->
 
 ## Mod  :id=kengine-extensions-mods-mod
 
-`Kengine.Extensions.Mods.Mod(name, [asset_confs], [dependencies], [source], [enabled])`
+`Kengine.Extensions.Mods.Mod(name, [asset_confs], [_dependencies], [source], [enabled])`
 <!-- tabs:start -->
 
 
@@ -126,24 +208,10 @@ Newely added <code>Kengine.Asset</code>s can either be simply just added or repl
 | --- | --- | --- | --- |
 | name | <code>String</code> |  | <p>The name of the Mod.</p> |
 | [asset_confs] | [<code>Array.&lt;AssetConf&gt;</code>](Kengine.Extensions.Mods?id=kengine.extensions.mods.assetconf) | <code>[]</code> | <p>AssetConfs that the Mod comprises.</p> |
-| [dependencies] | [<code>Array.&lt;Mod&gt;</code>](Kengine.Extensions.Mods?id=kengine.extensions.mods.mod) \| <code>Array.&lt;String&gt;</code> | <code>[]</code> | <p>Mod dependencies of other Mods or their names.</p> |
-| [source] | <code>Kengine.Extensions.Mods.ModSource</code> |  | <p>Mod source.</p> |
+| [_dependencies] | [<code>Array.&lt;Mod&gt;</code>](Kengine.Extensions.Mods?id=kengine.extensions.mods.mod) \| <code>Array.&lt;String&gt;</code> | <code>[]</code> | <p>Mod dependencies of other Mods or their names.</p> |
+| [source] | <code>String</code> |  | <p>Mod source path.</p> |
 | [enabled] | <code>Bool</code> | <code>false</code> | <p>Whether the mod is enabled or not.</p> |
 
-<!-- tabs:end -->
-
-### source_path  :id=kengine-extensions-mods-mod-source_path
-
-[Kengine.Extensions.Mods.Mod.source_path](Kengine.Extensions.Mods?id=kengine.extensions.mods.mod.source_path) <code>String</code>
-<!-- tabs:start -->
-
-
-##### **Description**
-
-The source_path property of the Mod.
-
-
-**Default**: <code>&quot;&lt;unknown source_path&gt;&quot;</code>  
 <!-- tabs:end -->
 
 ### name  :id=kengine-extensions-mods-mod-name
@@ -225,15 +293,15 @@ Whether Mod is enabled or not.
 **Descripton**: The source of this mod.  
 <!-- tabs:end -->
 
-### GetAllAssetConfs  :id=kengine-extensions-mods-mod-getallassetconfs
+### GetAssetConfs  :id=kengine-extensions-mods-mod-getassetconfs
 
-`Kengine.Extensions.Mods.Mod.GetAllAssetConfs()` ⇒ [<code>Array.&lt;AssetConf&gt;</code>](Kengine.Extensions.Mods?id=kengine.extensions.mods.assetconf)
+`Kengine.Extensions.Mods.Mod.GetAssetConfs()` ⇒ [<code>Array.&lt;AssetConf&gt;</code>](Kengine.Extensions.Mods?id=kengine.extensions.mods.assetconf)
 <!-- tabs:start -->
 
 
 ##### **Description**
 
-Return all the mod's asset confs.
+Returns the mod's asset confs.
 
 
 <!-- tabs:end -->
@@ -246,7 +314,7 @@ Return all the mod's asset confs.
 
 ##### **Description**
 
-Enable the mod. Applying its <code>asset_confs</code>.
+Enables the mod. Applying its <code>asset_confs</code>.
 
 
 <!-- tabs:end -->
@@ -259,7 +327,7 @@ Enable the mod. Applying its <code>asset_confs</code>.
 
 ##### **Description**
 
-Disable the mod. Unapplying its <code>asset_confs</code>.
+Disables the mod. Unapplying its <code>asset_confs</code>.
 
 
 <!-- tabs:end -->
@@ -272,7 +340,7 @@ Disable the mod. Unapplying its <code>asset_confs</code>.
 
 ##### **Description**
 
-Resolve dependencies. If there are <code>string</code> values as dependencies, it is converted to a <code>Mod</code> (if found) or it's kept.
+Resolves dependencies. If there are <code>string</code> values as dependencies, it is converted to a <code>Mod</code> (if found) or it's kept.
 
 
 <!-- tabs:end -->
@@ -285,8 +353,27 @@ Resolve dependencies. If there are <code>string</code> values as dependencies, i
 
 ##### **Description**
 
-Resolve or update mod's assetconfs from the mod's source.
+Resolves or update mod's assetconfs from the mod's source.
 
+
+<!-- tabs:end -->
+
+### UpdateAssetConfs  :id=kengine-extensions-mods-mod-updateassetconfs
+
+`Kengine.Extensions.Mods.Mod.UpdateAssetConfs(asset_confs)`
+<!-- tabs:start -->
+
+
+##### **Description**
+
+Resolves or update mod's current assetconfs with updated and/or newly created assetconfs.
+This would add and update existing asset confs of the mod.
+
+
+
+| Param | Type |
+| --- | --- |
+| asset_confs | [<code>Array.&lt;AssetConf&gt;</code>](Kengine.Extensions.Mods?id=kengine.extensions.mods.assetconf) \| <code>Struct</code> | 
 
 <!-- tabs:end -->
 
@@ -311,14 +398,14 @@ A mod manager is a singleton object that manages [Mod](Kengine.Extensions.Mods?i
 
 ##### **Description**
 
-Collection of <code>Mod</code> objects that are found by [Kengine.Extensions.Mods.ModManager.FindMods](Kengine.Extensions.Mods?id=kengine.extensions.mods.modmanager.findmods). Defaults to empty Collection.
+Collection of <code>Mod</code> objects that are found by [FindMods](Kengine.Extensions.Mods?id=kengine.extensions.mods.modmanager.findmods). Defaults to empty Collection.
 
 
 <!-- tabs:end -->
 
-### find_mods  :id=kengine-extensions-mods-modmanager-find_mods
+### FindMods  :id=kengine-extensions-mods-modmanager-findmods
 
-`Kengine.Extensions.Mods.ModManager.find_mods()` ⇒ <code>Collection</code> \| [<code>Array.&lt;Mod&gt;</code>](Kengine.Extensions.Mods?id=kengine.extensions.mods.mod)
+`Kengine.Extensions.Mods.ModManager.FindMods()` ⇒ <code>Collection</code> \| [<code>Array.&lt;Mod&gt;</code>](Kengine.Extensions.Mods?id=kengine.extensions.mods.mod)
 <!-- tabs:start -->
 
 
@@ -343,7 +430,7 @@ A function to reload mods.
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| [discover] | <code>Bool</code> | <code>false</code> | <p>Whether to discover new mods or not.</p> |
+| [discover] | <code>Bool</code> | <code>true</code> | <p>Whether to discover new mods or not.</p> |
 
 <!-- tabs:end -->
 
@@ -355,7 +442,7 @@ A function to reload mods.
 
 ##### **Description**
 
-Enable a Mod. If forced, enable its dependencies.</p>
+Enables a Mod. If forced, enable its dependencies.</p>
 <p>Returns a struct containing <code>{success, dependencies_to_enable, dependencies_not_found, dependencies_enabled}</code>.</p>
 <p><code>success</code>: Whether enabling was successful.</p>
 <p><code>dependencies_to_enable</code>: Dependencies that still need to be enabled manually. If <code>force</code> is <code>true</code>, This should be an empty array.</p>
@@ -379,7 +466,7 @@ Enable a Mod. If forced, enable its dependencies.</p>
 
 ##### **Description**
 
-Disable a Mod. If forced, disable its dependants and dependencies.</p>
+Disables a Mod. If forced, disable its dependants and dependencies.</p>
 <p>Returns a struct containing <code>{success, mods_disabled, dependants_to_disable, dependencies_to_disable}</code>.</p>
 <p><code>success</code>: Whether disabling was successful.</p>
 <p><code>mods_disabled</code>: All mods that have been disabled as a result of calling this function.</p>

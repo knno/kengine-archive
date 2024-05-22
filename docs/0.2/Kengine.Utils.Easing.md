@@ -19,7 +19,7 @@ A struct containing Kengine easing utilitiy functions
 
 ##### **Description**
 
-Take a value and apply ease-in transition on, starting from <code>_start</code> and ending after <code>_duration</code> with added <code>_change</code>.
+Takes a value and applies ease-in transition on, starting from <code>_start</code> and ending after <code>_duration</code> with added <code>_change</code>.
 
 
 **Returns**: <code>Real</code> - Converted real value to ease-in  
@@ -40,7 +40,7 @@ Take a value and apply ease-in transition on, starting from <code>_start</code> 
 ##### **Example**
 
 ```gml
-// Step event_x2 = ease_in(_x1, 0, 2, 60); // _x2 is from 0 to 2 in 60 steps eased-in.
+// Step event_x2 = Kengine.Utils.Easing.EaseIn(_x1, 0, 2, 60); // _x2 is from 0 to 2 in 60 steps eased-in.
 ```
 <!-- tabs:end -->
 
@@ -52,7 +52,7 @@ Take a value and apply ease-in transition on, starting from <code>_start</code> 
 
 ##### **Description**
 
-Take a value and apply ease-in-out transition on, starting from <code>_start</code> and ending after <code>_duration</code> with added <code>_change</code>.
+Takes a value and applies ease-in-out transition on, starting from <code>_start</code> and ending after <code>_duration</code> with added <code>_change</code>.
 
 
 **Returns**: <code>Real</code> - Converted real value to ease-in-out  
@@ -73,7 +73,7 @@ Take a value and apply ease-in-out transition on, starting from <code>_start</co
 ##### **Example**
 
 ```gml
-// Step event_x2 = ease_inout(_x1, 0, 2, 60); // _x2 is from 0 to 2 in 60 steps eased-in-out.
+// Step event_x2 = Kengine.Utils.Easing.EaseInOut(_x1, 0, 2, 60); // _x2 is from 0 to 2 in 60 steps eased-in-out.
 ```
 <!-- tabs:end -->
 
@@ -85,7 +85,7 @@ Take a value and apply ease-in-out transition on, starting from <code>_start</co
 
 ##### **Description**
 
-Take a value and apply ease-out transition on, starting from <code>_start</code> and ending after <code>_duration</code> with added <code>_change</code>.
+Takes a value and applies ease-out transition on, starting from <code>_start</code> and ending after <code>_duration</code> with added <code>_change</code>.
 
 
 **Returns**: <code>Real</code> - Converted real value to ease-out  
@@ -106,7 +106,7 @@ Take a value and apply ease-out transition on, starting from <code>_start</code>
 ##### **Example**
 
 ```gml
-// Step event_x2 = ease_out(_x1, 0, 2, 60); // _x2 is from 0 to 2 in 60 steps eased-out.
+// Step event_x2 = Kengine.Utils.Easing.EaseOut(_x1, 0, 2, 60); // _x2 is from 0 to 2 in 60 steps eased-out.
 ```
 <!-- tabs:end -->
 

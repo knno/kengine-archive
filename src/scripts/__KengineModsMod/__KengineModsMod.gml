@@ -5,7 +5,7 @@
  * @param {String} name The name of the Mod.
  * @param {Array<Kengine.Extensions.Mods.AssetConf>} [asset_confs=[]]] AssetConfs that the Mod comprises.
  * @param {Array<Kengine.Extensions.Mods.Mod>|Array<String>} [_dependencies=[]]] Mod dependencies of other Mods or their names.
- * @param {Kengine.Extensions.Mods.ModSource} [source=undefined] Mod source.
+ * @param {String} [source=undefined] Mod source path.
  * @param {Bool} [enabled=false] Whether the mod is enabled or not.
  * @description A `Kengine.Extensions.Mods.Mod` is a group of {@link Kengine.Extensions.Mods.AssetConf} instances that will be enabled in order to apply them as `Kengine.Asset` instances.
  * Newely added `Kengine.Asset`s can either be simply just added or replace pre-existing Assets. When enabling a `Mod`, this happens. When disabling the `Mod`, all its `Kengine.Asset`s are removed and replaced ones are restored to their previous state.
@@ -76,13 +76,13 @@ function __KengineModsMod(name, asset_confs=undefined, _dependencies=undefined, 
 	Kengine.Utils.Events.Fire("mods__mod__init__before", {_mod: this});
 
 	/**
-	 * @function GetAllAssetConfs
+	 * @function GetAssetConfs
 	 * @memberof Kengine.Extensions.Mods.Mod
-	 * @description Return all the mod's asset confs.
+	 * @description Returns the mod's asset confs.
 	 * @return {Array<Kengine.Extensions.Mods.AssetConf>}
 	 *
 	 */
-	self.GetAllAssetConfs = function() {
+	GetAssetConfs = function() {
 		var _asset_confs = [];
 		var _asset_confs_names = __KengineMods.__GetAcceptableAssetConfsTypesNames(struct_get_names(self.asset_confs));
 		array_sort(_asset_confs_names, function(a, b) {
@@ -100,13 +100,13 @@ function __KengineModsMod(name, asset_confs=undefined, _dependencies=undefined, 
 	/**
 	 * @function Enable
 	 * @memberof Kengine.Extensions.Mods.Mod
-	 * @description Enable the mod. Applying its `asset_confs`.
+	 * @description Enables the mod. Applying its `asset_confs`.
 	 *
 	 */
-	self.Enable = function() {
+	Enable = function() {
 		var this = self;
 		Kengine.Utils.Events.Fire("mods__mod__enable__before", {_mod: this});
-		var _asset_confs = self.GetAllAssetConfs();
+		var _asset_confs = self.GetAssetConfs();
 		for (var _i=0; _i<array_length(_asset_confs); _i++) {
 			_asset_confs[_i].Apply(self);
 		}
@@ -117,13 +117,13 @@ function __KengineModsMod(name, asset_confs=undefined, _dependencies=undefined, 
 	/**
 	 * @function Disable
 	 * @memberof Kengine.Extensions.Mods.Mod
-	 * @description Disable the mod. Unapplying its `asset_confs`.
+	 * @description Disables the mod. Unapplying its `asset_confs`.
 	 * 
 	 */
-	self.Disable = function() {
+	Disable = function() {
 		var this = self;
 		Kengine.Utils.Events.Fire("mods__mod__disable__before", {_mod: this});
-		var _asset_confs = self.GetAllAssetConfs();
+		var _asset_confs = self.GetAssetConfs();
 		for (var _i=0; _i<array_length(_asset_confs); _i++) {
 			_asset_confs[_i].Unapply(self);
 		}
@@ -134,10 +134,10 @@ function __KengineModsMod(name, asset_confs=undefined, _dependencies=undefined, 
 	/**
 	 * @function ResolveDependencies
 	 * @memberof Kengine.Extensions.Mods.Mod
-	 * @description Resolve dependencies. If there are `string` values as dependencies, it is converted to a `Mod` (if found) or it's kept.
+	 * @description Resolves dependencies. If there are `string` values as dependencies, it is converted to a `Mod` (if found) or it's kept.
 	 *
 	 */
-	self.ResolveDependencies = function() {
+	ResolveDependencies = function() {
 		for (var _i=0; _i<array_length(self.dependencies); _i++) {
 			if is_string(self.dependencies[_i]) {
 				var _mod = __KengineMods.mod_manager.mods.GetInd(self.dependencies[_i], Kengine.Utils.Cmps.cmp_val1_val2_name);
@@ -151,15 +151,15 @@ function __KengineModsMod(name, asset_confs=undefined, _dependencies=undefined, 
 	/**
 	 * @function Update
 	 * @memberof Kengine.Extensions.Mods.Mod
-	 * @description Resolve or update mod's assetconfs from the mod's source.
+	 * @description Resolves or update mod's assetconfs from the mod's source.
 	 *
 	 */
-	self.Update = function() {
+	Update = function() {
         if self.enabled return
 
         var this = self;
 
-		var _data = Kengine.Extensions.Mods.ParseModFileSync(self.name, self.source); // TODO: Async?
+		var _data = Kengine.Extensions.Mods.ParseModFileSync(self.name, self.source); // TODO: Async option
 
 		if _data == undefined {
 			return false;
@@ -184,14 +184,14 @@ function __KengineModsMod(name, asset_confs=undefined, _dependencies=undefined, 
 	/**
 	 * @function UpdateAssetConfs
 	 * @memberof Kengine.Extensions.Mods.Mod
-	 * @param {Array<Kengine.Extensions.Mods.AssetConf>|Struct} asset_confs
-	 * @description Resolve or update mod's current assetconfs with updated and/or newly created assetconfs.
+	 * @description Resolves or update mod's current assetconfs with updated and/or newly created assetconfs.
 	 * This would add and update existing asset confs of the mod.
+	 * @param {Array<Kengine.Extensions.Mods.AssetConf>|Struct} asset_confs
 	 * 
 	 */
-	self.UpdateAssetConfs = function(asset_confs) {
+	UpdateAssetConfs = function(asset_confs) {
 		var _asset_confs_struct = __KengineMods.__NormalizeAssetConfs(asset_confs);
-		var _prev_asset_confs_array = self.GetAllAssetConfs();
+		var _prev_asset_confs_array = self.GetAssetConfs();
         var _a;
 		var _ms;
 		var _typ;
@@ -228,7 +228,7 @@ function __KengineModsMod(name, asset_confs=undefined, _dependencies=undefined, 
                         // Replace original asset confs (objects) conf with new info (confs).
 						_ms = struct_get_names(_a[_j]);
 						for (var m=0; m<array_length(_ms); m++) {
-							Kengine.Utils.Structs.SetDefault(_prev_asset_confs_array[_k].conf, _ms[m], Kengine.Utils.Structs.Get(_a[_j], _ms[m]));
+							Kengine.Utils.Structs.Set(_prev_asset_confs_array[_k].conf, _ms[m], Kengine.Utils.Structs.Get(_a[_j], _ms[m]));
 						}
 						_create = _k;
 						break;
@@ -264,7 +264,7 @@ function __KengineModsMod(name, asset_confs=undefined, _dependencies=undefined, 
 		self.asset_confs = _asset_confs_struct;
 	}
 
-	self.toString = function() {
+	toString = function() {
 		return string("<Mod {0}>", self.name);
 	}
 

@@ -1,14 +1,17 @@
 /**
  * @function Tilemap
- * @new_name Kengine.Tilemap
  * @memberof Kengine
- * @description A tilemap representation of internal tilemaps.
+ * @new_name Kengine.Tilemap
+ * @param {Kengine.Asset} tileset
+ * @param {Id.Buffer|Array} tiledata A buffer of type s32 or array which has the indices of tiles.
+ * @description A tilemap representation to replicate internal tilemaps behavior.
  *
  */
-function __KengineTilemap(tileset, tiledata) constructor {
+function __KengineTilemap(tileset, tiledata, _x, _y, width, height) constructor {
 	self.tileset = tileset;
 	self.frame = 0;
-	self.frame_count = array_length(tileset.frames);
+	self.__frame = 0;
+	self.frame_count = tileset.frame_count;
 
 	self.vertex_buffers = [];
 
@@ -27,14 +30,21 @@ function __KengineTilemap(tileset, tiledata) constructor {
 
 	var _tilepotcount = __KengineTileUtils.GetMaskValue(self.tileset);
 
+	/// feather ignore GM1044
+	/**
+	 * @name mask
+	 * @type {Constant.TileMask|Real}
+	 * @memberof Kengine.Tilemap
+	 *
+	 */
 	self.mask = tile_mirror | tile_flip | tile_rotate | (_tilepotcount - 1);
 
-	self.x = 0;
-	self.y = 0;
-	self.width = 0; // cells
-	self.height = 0; // cells
-	self.tile_width = 0; // pixels
-	self.tile_height = 0; // pixels
+	self.x = _x;
+	self.y = _y;
+	self.width = width; // cells
+	self.height = height; // cells
+	self.tile_width = tileset.tile_width; // pixels
+	self.tile_height = tileset.tile_height; // pixels
 
 	GetX = function() { return self.x; }
 	GetY = function() { return self.y; }
@@ -54,7 +64,13 @@ function __KengineTilemap(tileset, tiledata) constructor {
 	GetRows = GetWidth;
 	GetColumns = GetHeight;
 
-	/// @param {Real}
+	/**
+	 * @function SetMask
+	 * @memberof Kengine.Tilemap
+	 * @description Sets the mask for the tilemap.
+	 * @param {Constant.TileMask|Real} mask
+	 *
+	 */
 	SetMask = function(mask) {
 		self.mask = mask;
 	}
@@ -62,8 +78,8 @@ function __KengineTilemap(tileset, tiledata) constructor {
 	GetMask = function() {
 		return self.mask;
 	}
-	
-	Draw = function() {
+
+	__Draw = function() {
 		shader_set(__KengineTileUtils.shader);
 		texture_set_stage(__KengineTileUtils.shader_tileset_sampler_index, self.tileset.GetTexture());
 		vertex_submit(self.vertex_buffers[self.frame], pr_trianglelist, -1);
@@ -75,10 +91,10 @@ function __KengineTilemap(tileset, tiledata) constructor {
 		var grid_height = self.height;
 		var tile_width = self.tile_width;
 		var tile_height = self.tile_height;
-		var tileset_width = self.tileset.width;
-		var tileset_height = self.tileset.height;
+		var tileset_width = self.tileset.sprite.GetWidth();
+		var tileset_height = self.tileset.sprite.GetHeight();
 		var frame_count = self.frame_count;
-		
+
 		if self.__lastbuild != undefined {
 			if grid_width == self.__lastbuild.grid_width 
 			and grid_height == self.__lastbuild.grid_height
@@ -111,11 +127,11 @@ function __KengineTilemap(tileset, tiledata) constructor {
 			}
 		}
 
-		var vertex_buffer = vertex_create_buffer();
 		var fmt = __KengineTileUtils.vertex_format;
 
 		var col, t, tx, ty, tu, tv, tu2, tv2, data, v;
-		for (var _i=0; _i<array_length(frame_count); _i++) {
+		for (var _i=0; _i<frame_count; _i++) {
+			var vertex_buffer = vertex_create_buffer();
 			vertex_begin(vertex_buffer, fmt);
 			buffer_seek(self.buffer, buffer_seek_start, 0);
 			for (var _y = 0; _y < grid_height; _y++) {
@@ -130,7 +146,7 @@ function __KengineTilemap(tileset, tiledata) constructor {
 					}
 
 					t = __KengineTileUtils.TileGetIndex(v);
-					t = self.tileset.GetFrameIndex(t, self.frame);
+					t = self.tileset.GetFrameIndex(t, _i);
 
 					tx = (t) mod (tileset_width/tile_width);
 					ty = (t) div (tileset_width/tile_height);
@@ -170,13 +186,15 @@ function __KengineTilemap(tileset, tiledata) constructor {
 		}
 	}
 
-	__Step = function(ref) {
-		self.x = ref.x;
-		self.y = ref.y;
+	__Step = function() {
+		self.x = other.x;
+		self.y = other.y;
 
-		self.frame += 1;
+		self.__frame += self.tileset.fps/game_get_speed(gamespeed_fps);
+		self.frame = floor(self.__frame);
 		if self.frame >= self.frame_count {
 			self.frame = 0;
+			self.__frame = 0;
 		}
 	}
 }

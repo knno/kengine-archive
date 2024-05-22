@@ -1,0 +1,13 @@
+{
+  "$GMScript":"",
+  "%Name":"__KengineFooExtensionClass",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"__KengineFooExtensionClass",
+  "parent":{
+    "name":"Example",
+    "path":"folders/Kengine/Scripts/Extensions/Example.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

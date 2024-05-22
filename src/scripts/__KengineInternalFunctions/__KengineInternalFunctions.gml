@@ -42,7 +42,7 @@ function __kengine_do_ev(ev, ev_arg=undefined) {
  * @function __kengine_load_room_file
  * @memberof Kengine
  * @private
- * @description Load a room file into a struct that looks like room_get_info. With additional `__` prefixed data.
+ * @description Loads a room file into a struct that looks like room_get_info. With additional `__` prefixed data.
  * @param {String} path Path to the file containing the data.
  * @param {String} [kind="json"] The format to parse. "json", "tmx", "yy".
  * @return {Any}
@@ -78,7 +78,7 @@ function __kengine_load_room_file(path, kind="json") {
  * @memberof Kengine
  * @private
  * @param {String} path
- * @description Load file contents as text.
+ * @description Loads file contents as text.
  * @return {String|Undefined} The content.
  */
 function __kengine_load_txt_file(path) {
@@ -102,8 +102,8 @@ function __kengine_load_txt_file(path) {
  * @param {String} path
  * @param {String} [name="undefined"]
  * @param {Bool} [is3D=false]
- * @description Load sound file to audio.
- * @return {Real} The audio ID.
+ * @description Loads sound file to audio.
+ * @return {Asset.GMSound} The audio ID.
  */
 function __kengine_load_sound(path, name="undefined", is3D=false) {
 	if !file_exists(path) {
@@ -131,7 +131,8 @@ function __kengine_load_sound(path, name="undefined", is3D=false) {
  * @param {Id.Buffer} _buff The buffer to create sound from.
  * @param {String} [name="undefined"] The name of the sound asset (for debugging).
  * @param {Bool} [_is3D=false] Whether sound is 3D or not.
- * @description Load WAV buffer to audio for an asset with a name.
+ * @return {Asset.GMSound}
+ * @description Loads WAV buffer to audio for an asset with a name.
  *
  */
 function __kengine_sound_wavbuffer_to_audio(_buff, name = "undefined", _is3D = false) {

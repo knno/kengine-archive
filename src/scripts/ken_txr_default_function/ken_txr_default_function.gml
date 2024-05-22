@@ -3,7 +3,7 @@ function ken_txr_default_function(){
 	var _scrs = Kengine.asset_types.script.assets;
 	var scr_ind = _scrs.GetInd(scr, function(val1, val2) {
 		if ((val1 == val2.name) or (val1 == val2.real_name)) {
-			return not __KengineStructUtils.IsPrivate(val2, __KengineParser.__default_private);
+			return not __KengineStructUtils.IsPrivate(val2, KENGINE_PARSER_DEFAULT_PRIVATE);
 		}
 		return false;
 	});

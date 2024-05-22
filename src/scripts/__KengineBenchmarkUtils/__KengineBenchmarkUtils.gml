@@ -51,4 +51,3 @@ function __KengineBenchmarkUtils() : __KengineStruct() constructor {
         Kengine.console.verbose("Kengine: Benchmark: " + string(message) + _time_message, 1);
     }
 }
-//__KengineBenchmarkUtils();

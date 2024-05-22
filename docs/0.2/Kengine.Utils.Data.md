@@ -13,7 +13,7 @@ A struct containing Kengine data utilitiy functions
 
 ## ValuesMap  :id=kengine-utils-data-valuesmap
 
-`Kengine.Utils.Data.ValuesMap(struct_or_array, func, [par])`
+`Kengine.Utils.Data.ValuesMap(struct_or_array, func, [_par])`
 <!-- tabs:start -->
 
 
@@ -29,7 +29,7 @@ The returned value from the func is the new value. It accepts argument <code>val
 | --- | --- | --- |
 | struct_or_array | <code>Struct</code> \| <code>Array.&lt;Any&gt;</code> |  |
 | func | <code>function</code> |  |
-| [par] | <code>Struct</code> \| <code>Array.&lt;Any&gt;</code> | <p>A parameter for recursive calls.</p> |
+| [_par] | <code>Struct</code> \| <code>Array.&lt;Any&gt;</code> | <p>A parameter for recursive calls.</p> |
 
 <!-- tabs:end -->
 

@@ -24,7 +24,7 @@ function __KengineModsModManager() constructor {
 	self.mods = [];
 
 	/**
-	 * @function find_mods
+	 * @function FindMods
 	 * @memberof Kengine.Extensions.Mods.ModManager
 	 * @description A function to search for mods. It uses `find_mods_func`.
 	 * @return {Collection|Array<Kengine.Extensions.Mods.Mod>}
@@ -72,6 +72,7 @@ function __KengineModsModManager() constructor {
 		}
 		Kengine.Utils.Events.Fire("mods__mod_manager__find_mods__after", {mod_manager: this, mods: _mods});
 		
+		// Flatten
 		for (var m=0;m<array_length(_mods); m++) {
 			self.mods.AddOnce(_mods[m]);
 		}
@@ -95,7 +96,7 @@ function __KengineModsModManager() constructor {
 	 * @memberof Kengine.Extensions.Mods.ModManager
 	 * @param {String|Kengine.Extensions.Mods.Mod} _mod The mod to enable.
 	 * @param {Real} [force=0] Whether to enable the mod forcefully by enabling its dependencies.
-	 * @description Enable a Mod. If forced, enable its dependencies.
+	 * @description Enables a Mod. If forced, enable its dependencies.
 	 * 
 	 * Returns a struct containing `{success, dependencies_to_enable, dependencies_not_found, dependencies_enabled}`.
 	 * 
@@ -167,7 +168,7 @@ function __KengineModsModManager() constructor {
 	 * @memberof Kengine.Extensions.Mods.ModManager
 	 * @param {String|Kengine.Extensions.Mods.Mod} _mod The mod to disable.
 	 * @param {Real} [_force=0] Whether to disable the mod forcefully by disabling its dependants and dependencies.
-	 * @description Disable a Mod. If forced, disable its dependants and dependencies.
+	 * @description Disables a Mod. If forced, disable its dependants and dependencies.
 	 *
 	 * Returns a struct containing `{success, mods_disabled, dependants_to_disable, dependencies_to_disable}`.
 	 *

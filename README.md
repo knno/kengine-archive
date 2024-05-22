@@ -17,13 +17,12 @@
   [![Stargazers][stars-shield]][stars-url]
   [![MIT License][license-shield]][license-url]
 
-  [![CI](https://github.com/knno/kengine/actions/workflows/gamemaker.yml/badge.svg)](https://github.com/knno/kengine/actions/workflows/gamemaker.yml)
+  [![CI][ci-shield]][ci-url]
   [![Issues][issues-shield]][issues-url]
-  [![Downloads](https://img.shields.io/github/downloads/knno/kengine/total.svg)]()
-
+  [![Downloads][downloads-shield]][downloads-url]
 
   <p align="center">
-    A GameMaker framework for modding support of your projects.
+    Modding support for your GameMaker projects.
     <br />
     <a href="https://knno.github.io/kengine/"><strong>Explore the docs »</strong></a>
     <br />
@@ -58,3 +57,7 @@ Please click on [Credits](https://knno.github.io/kengine/#/latest/Credits) to vi
 [license-shield]: https://img.shields.io/github/license/knno/kengine.svg
 [license-url]: https://github.com/knno/kengine/blob/master/LICENSE.txt
 [concept-img]: images/concept-img.png
+[ci-shield]: https://github.com/knno/kengine/actions/workflows/gamemaker.yml/badge.svg
+[ci-url]: https://github.com/knno/kengine/actions/workflows/gamemaker.yml
+[downloads-shield]: https://img.shields.io/github/downloads/knno/kengine/total.svg
+[downloads-url]: https://github.com/knno/kengine/releases/

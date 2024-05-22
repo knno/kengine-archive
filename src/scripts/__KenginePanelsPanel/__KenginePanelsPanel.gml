@@ -4,7 +4,7 @@
  * @description Panel options struct.
  * 
  */
-function __KenginePanelsPanelOptions(options) : __KengineOptions() constructor {
+function __KenginePanelsPanelOptions(options) : KengineOptions() constructor {
 	__start(options)
     __add("x", 0)
     __add("y", 0)
@@ -68,7 +68,7 @@ function __KenginePanelsPanel(options=undefined) constructor {
     alpha = undefined
     box_colors = undefined
     inner_box_colors = undefined
-    __KengineOptions.__Apply(options, self);
+    KengineOptions.__Apply(options, self);
 
 	__is_focused = false;
 	__drag_anchor = false;
@@ -210,11 +210,16 @@ function __KenginePanelsPanel(options=undefined) constructor {
 		draw_set_alpha(alpha);
 
 		var _hh = collapse_height;
+		var _y = other.y;
+		other.y = is_debug_overlay_open() ? 16 : 0;
 
 		if draw_collapsed {
 			_hh = height;
 		} else {
-			if not visible return;
+			if not visible { 		
+				self.y = _y;
+				return
+			}
 			if not collapsed {
 				_hh = height;
 			} else {
@@ -254,7 +259,7 @@ function __KenginePanelsPanel(options=undefined) constructor {
 		if __is_focused { draw_set_alpha(1*alpha); } else { draw_set_alpha(0.80*alpha); }
 		draw_rectangle(x,y,x+width,y+_hh, true);
 
-		draw_set_font(font_ken_panels);
+		draw_set_font(fnt_ken_panels);
 		draw_set_valign(fa_middle);
 		draw_set_halign(fa_center);
 		if __is_focused { draw_set_alpha(1*alpha); } else { draw_set_alpha(0.75*alpha); }
@@ -282,6 +287,7 @@ function __KenginePanelsPanel(options=undefined) constructor {
 			}
 			self.__DrawContents();
 		}
+		other.y = _y;
 	}
 
 	self.Step = function() {

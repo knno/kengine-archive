@@ -9,7 +9,7 @@ function __KengineErrorUtils() : __KengineStruct() constructor {
     /**
      * @function Create
      * @memberof Kengine.Utils.Errors
-     * @description Create an error struct that is thrown.
+     * @description Creates an error struct that is thrown.
      * @param {String} [error_type="unknown"] Error type as a string, or as a reference to an attribute of `Kengine.Utils.Errors.Types`.
      * @param {String} [longMessage=""]
      * @param {Bool} [useLong=false]
@@ -41,7 +41,18 @@ function __KengineErrorUtils() : __KengineStruct() constructor {
         }
     }
 
-	static AddType = function(key, _message) {
+    /**
+     * @function Define
+     * @memberof Kengine.Utils.Errors
+     * @param {String} key The key to the error handle.
+     * @param {String} _message The message to display.
+     * @description Adds an error type.
+     * 
+     * @example
+     * Kengine.Utils.Errors.Define("myext__myclass__does_not_exist", "instance of MyClass does not exist.");
+     * 
+     */
+	static Define = function(key, _message) {
 		__KengineErrorUtils.Types[$ key] = _message
 	}
 
@@ -162,4 +173,3 @@ function __KengineErrorUtils() : __KengineStruct() constructor {
     }
 	Types = new Types();
 }
-//__KengineErrorUtils();

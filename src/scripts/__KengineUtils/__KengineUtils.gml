@@ -9,7 +9,7 @@ function __KengineUtils() constructor {
 	/**
 	 * @function GetAsset
 	 * @memberof Kengine.Utils
-	 * @description Retrieve an {@link Kengine.Asset} from an AssetType (if loaded).
+	 * @description Retrieves a {@link Kengine.Asset} from `asset_type` (if loaded).
 	 * @param {Kengine.AssetType|String} asset_type The type of the asset to retrieve.
 	 * @param {Real|String} id_or_name The real ID or name of the asset.
 	 * @return {Kengine.Asset|Undefined} An asset, or `undefined`.
@@ -29,29 +29,31 @@ function __KengineUtils() constructor {
 	/**
 	 * @function Execute
 	 * @memberof Kengine.Utils
-	 * @description A replacement for execute_script. Executes the script or method or a script-type asset.
-	 * @param {Function|Kengine.Asset} scr The script to execute.
+	 * @description A replacement for `execute_script`. Executes the script or method or a script-type asset.
+	 * @param {Function|Kengine.Asset} script_or_method The script or method to execute.
 	 * @param {Array<Any>} [args] arguments to use in an array.
 	 * @return {Any} The return of the script.
 	 * 
 	 */
-	static Execute = function(scr, args) {
+	static Execute = function(script_or_method, args) {
 		args = args ?? [];
-		if is_instanceof(scr, __KengineAsset) {
-			if struct_exists(scr, "Execute") {
-				scr = scr.Execute ?? scr.id;
-			} else if struct_exists(scr, "Run") { // custom scripts
-				return scr.Run(undefined, undefined, args);
+		if is_instanceof(script_or_method, __KengineAsset) {
+			if struct_exists(script_or_method, "Execute") {
+				script_or_method = script_or_method.Execute ?? script_or_method.id;
+			} else if struct_exists(script_or_method, "Run") { // custom scripts
+				return script_or_method.Run(undefined, undefined, args);
+			} else if script_or_method.__is_yyp {
+				script_or_method = script_or_method.id;
 			} else {
-				scr = scr.id;
+				return Kengine.Utils.Parser.InterpretAsset(script_or_method, self, , args);
 			}
 		}
-		if script_exists(scr) {
-			return script_execute_ext(scr, args);		
-		} else if typeof(scr) == "method" {
-			return script_execute_ext(scr, args);
+		if script_exists(script_or_method) {
+			return script_execute_ext(script_or_method, args);		
+		} else if typeof(script_or_method) == "method" {
+			return script_execute_ext(script_or_method, args);
 		}
-		throw __KengineErrorUtils.Create(__KengineErrorUtils.Types.script_exec__script__does_not_exist, string("Cannot execute script with non-existent Asset \"{0}\".", scr));
+		throw __KengineErrorUtils.Create(__KengineErrorUtils.Types.script_exec__script__does_not_exist, string("Cannot execute script with non-existent Asset \"{0}\".", script_or_method));
 	}
 
 	static Cmps = new __KengineCmpUtils();
@@ -90,15 +92,13 @@ function __KengineUtils() constructor {
 	
 	static Tiles = new __KengineTileUtils();
 
-	static Rooms = new __KengineRoomUtils();
-
 	/**
 	 * @function __CreateBaseObjectAsset
 	 * @memberof Kengine.Utils
 	 * @private
-	 * @description A function to create the base object asset (It is excluded from indexing because we want to index it ourself.)
+	 * @description A function that creates the base object asset (It is excluded from indexing because we want to index it ourselves.)
 	 * 
-	 * This function is called after auto indexing.
+	 * This function is called automatically after auto-indexing.
 	 * 
 	 * @see {@link Kengine.Utils.Assets.__AsyncAutoIndexCallback}
 	 */
@@ -108,14 +108,22 @@ function __KengineUtils() constructor {
 			// Define default object asset.
 			Kengine.__default_object_asset = new Kengine.Asset(_object_asset_type, "obj_default_object", true, KENGINE_WRAPPED_OBJECT);
 			Kengine.__default_object_asset.real_name = object_get_name(KENGINE_WRAPPED_OBJECT);
-			/// Feather ignore GM1008
+			/// feather ignore GM1008
 			Kengine.__default_object_asset.id = KENGINE_WRAPPED_OBJECT; // Resource
 			Kengine.__default_object_asset.parent = undefined;
 			Kengine.__default_object_asset.event_scripts = {};	
 		}
 	}
 
-	static __StartFinish = function() {
+	/**
+	 * @function __StartFinished
+	 * @private
+	 * @description A function that is called when Kengine started fully.
+	 * 
+	 * This function is called automatically.
+	 * 
+	 */
+	static __StartFinished = function() {
 		__KengineEventUtils.Fire("start__after");
 
 		if (KENGINE_BENCHMARK) {
@@ -128,9 +136,9 @@ function __KengineUtils() constructor {
 	 * @function __StartExtensions
 	 * @memberof Kengine.Utils
 	 * @private
-	 * @description A function to start Kengine extensions.
+	 * @description A function that starts Kengine extensions.
 	 * 
-	 * This function is called after auto indexing.
+	 * This function is called automatically after auto-indexing.
 	 * 
 	 * @see {@link Kengine.Utils.Assets.__AsyncAutoIndexCallback}
 	 */
@@ -138,7 +146,7 @@ function __KengineUtils() constructor {
 		__KengineBenchmarkUtils.Mark("Extensions: Starting...", 3);
 		__KengineExtensionUtils.__FindAndStartAll();
 		__KengineBenchmarkUtils.Mark("Extensions: Complete", 3);
-		__StartFinish();
+		__StartFinished();
 	}
 
 	static __Start = function() {

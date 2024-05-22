@@ -1,4 +1,4 @@
-if not Kengine.initialized exit;
+if not Kengine.__initialized exit;
 
 #region Kengine.debug
 instances = Kengine.instances;
@@ -44,10 +44,14 @@ if Kengine.coroutines != undefined {
 
 #region Kengine.room
 
-if (Kengine.current_room_asset == undefined) {
-	Kengine.current_room_asset = __KengineUtils.GetAsset("rm", room_get_name(room));
-	if (Kengine.current_room_asset != undefined) {
-		Kengine.current_room_asset.Activate();
+if Kengine.status == "READY" {
+	if (Kengine.current_room_asset == undefined) {
+		Kengine.current_room_asset = __KengineUtils.GetAsset("rm", room_get_name(room));
+		if (Kengine.current_room_asset != undefined) {
+			if Kengine.current_room_asset.is_active == false {
+				Kengine.current_room_asset.Activate();
+			}
+		}
 	}
 }
 

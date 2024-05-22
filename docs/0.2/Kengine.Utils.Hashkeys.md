@@ -11,28 +11,15 @@ A struct containing Kengine hashkeys utilitiy functions
 
 <!-- tabs:end -->
 
-## __all  :id=kengine-utils-hashkeys-__all
+## Add  :id=kengine-utils-hashkeys-add
 
-[Kengine.Utils.Hashkeys.__all](Kengine.Utils.Hashkeys?id=kengine.utils.hashkeys.__all) <code>Struct</code>
+`Kengine.Utils.Hashkeys.Add(name)` ⇒ <code>Struct</code>
 <!-- tabs:start -->
 
 
 ##### **Description**
 
-A struct that contains name and hash structs for structs.
-
-
-<!-- tabs:end -->
-
-## add  :id=kengine-utils-hashkeys-add
-
-`Kengine.Utils.Hashkeys.add(name)` ⇒ <code>Struct</code>
-<!-- tabs:start -->
-
-
-##### **Description**
-
-Add a hash to _hashkeys.
+Adds a hash to _hashkeys.
 
 
 **Returns**: <code>Struct</code> - The key struct which contains name and hash attrs.  
@@ -43,15 +30,15 @@ Add a hash to _hashkeys.
 
 <!-- tabs:end -->
 
-## hash  :id=kengine-utils-hashkeys-hash
+## Hash  :id=kengine-utils-hashkeys-hash
 
-`Kengine.Utils.Hashkeys.hash(name)` ⇒ <code>Any</code>
+`Kengine.Utils.Hashkeys.Hash(name)` ⇒ <code>Any</code>
 <!-- tabs:start -->
 
 
 ##### **Description**
 
-Convert hashkey or string or hash to just hash.
+Converts hashkey or string or hash to just hash.
 
 
 **Returns**: <code>Any</code> - The hash to use.  

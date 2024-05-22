@@ -1,7 +1,9 @@
 /**
  * @name Struct
  * @memberof Kengine
- *
+ * @new_name Kengine.Struct
+ * @description A base struct
+ * 
  */
 function __KengineStruct(_struct=undefined, _opts=undefined) constructor {
 

@@ -8,7 +8,7 @@ function __KengineEasingUtils() : __KengineStruct() constructor {
     /** 
      * @function EaseIn
      * @memberof Kengine.Utils.Easing
-     * @description Take a value and apply ease-in transition on, starting from `_start` and ending after `_duration` with added `_change`.
+     * @description Takes a value and applies ease-in transition on, starting from `_start` and ending after `_duration` with added `_change`.
      * @param {Real} value The value to be applied.
      * @param {Real} start The start value.
      * @param {Real} change The end or change of the value.
@@ -17,7 +17,7 @@ function __KengineEasingUtils() : __KengineStruct() constructor {
      * @see Kengine.Utils.Easing.ease_inout
      * @example
      * // Step event
-     * _x2 = ease_in(_x1, 0, 2, 60); // _x2 is from 0 to 2 in 60 steps eased-in.
+     * _x2 = Kengine.Utils.Easing.EaseIn(_x1, 0, 2, 60); // _x2 is from 0 to 2 in 60 steps eased-in.
      * @return {Real} Converted real value to ease-in
      * 
      */
@@ -29,7 +29,7 @@ function __KengineEasingUtils() : __KengineStruct() constructor {
     /** 
      * @function EaseInOut
      * @memberof Kengine.Utils.Easing
-     * @description Take a value and apply ease-in-out transition on, starting from `_start` and ending after `_duration` with added `_change`.
+     * @description Takes a value and applies ease-in-out transition on, starting from `_start` and ending after `_duration` with added `_change`.
      * @param {Real} value The value to be applied.
      * @param {Real} start The start value.
      * @param {Real} change The end or change of the value.
@@ -38,7 +38,7 @@ function __KengineEasingUtils() : __KengineStruct() constructor {
      * @see Kengine.Utils.Easing.ease_out
      * @example
      * // Step event
-     * _x2 = ease_inout(_x1, 0, 2, 60); // _x2 is from 0 to 2 in 60 steps eased-in-out.
+     * _x2 = Kengine.Utils.Easing.EaseInOut(_x1, 0, 2, 60); // _x2 is from 0 to 2 in 60 steps eased-in-out.
      * @return {Real} Converted real value to ease-in-out
      *
      */
@@ -52,7 +52,7 @@ function __KengineEasingUtils() : __KengineStruct() constructor {
     /** 
      * @function EaseOut
      * @memberof Kengine.Utils.Easing
-     * @description Take a value and apply ease-out transition on, starting from `_start` and ending after `_duration` with added `_change`.
+     * @description Takes a value and applies ease-out transition on, starting from `_start` and ending after `_duration` with added `_change`.
      * @param {Real} value The value to be applied.
      * @param {Real} start The start value.
      * @param {Real} change The end or change of the value.
@@ -61,7 +61,7 @@ function __KengineEasingUtils() : __KengineStruct() constructor {
      * @see Kengine.Utils.Easing.ease_inout
      * @example
      * // Step event
-     * _x2 = ease_out(_x1, 0, 2, 60); // _x2 is from 0 to 2 in 60 steps eased-out.
+     * _x2 = Kengine.Utils.Easing.EaseOut(_x1, 0, 2, 60); // _x2 is from 0 to 2 in 60 steps eased-out.
      * @return {Real} Converted real value to ease-out
      *
      */
@@ -70,4 +70,3 @@ function __KengineEasingUtils() : __KengineStruct() constructor {
         return -change * value*(value-2) + start;
     }
 }
-//__KengineEasingUtils();

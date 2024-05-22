@@ -2,6 +2,7 @@
 /**
  * @function Collection
  * @memberof Kengine
+ * @new_name Kengine.Collection
  * @param {Array<Any>|Undefined} [array=undefined] The initial array to use.
  * @param {Function|Undefined} [defaultcmp=undefined] A default cmp to be used in functions such as get_ind.
  * @description A collection is a just an array with add, remove, get, and set functions.
@@ -16,7 +17,7 @@ function __KengineCollection(array=undefined, defaultcmp=undefined) : __KengineS
 	/**
 	 * @function GetAll
 	 * @memberof Kengine.Collection
-	 * @description Return all values inside the collection.
+	 * @description Returns all values inside the collection.
 	 * @return {Array<Any>|Any|Undefined}
 	 */
 	GetAll = function() { return __all;}
@@ -24,7 +25,7 @@ function __KengineCollection(array=undefined, defaultcmp=undefined) : __KengineS
 	/**
 	 * @function Get
 	 * @memberof Kengine.Collection
-	 * @description Return value searched by collection index.
+	 * @description Returns value searched by collection index.
 	 * @param {Real} ind The index of the value in the collection.
 	 * @return {Any} The value held in the collection index.
 	 */
@@ -35,7 +36,7 @@ function __KengineCollection(array=undefined, defaultcmp=undefined) : __KengineS
 	/**
 	 * @function GetInd
 	 * @memberof Kengine.Collection
-	 * @description Return index of the value in the collection.
+	 * @description Returns index of the value in the collection.
 	 * @param {Any} val The value in the collection to be searched for its collection index.
 	 * @param {Function} [cmp] A `Function` that takes `val`, `val2`, where `val2` is from the collection to compare `val` with. Return `true` to match. Defaults to initial `defaulcmp`.
 	 * @return {Real} The index of the value in the collection.
@@ -53,7 +54,7 @@ function __KengineCollection(array=undefined, defaultcmp=undefined) : __KengineS
 	/**
 	 * @function Exists
 	 * @memberof Kengine.Collection
-	 * @description Return whether value is already in the collection.
+	 * @description Returns whether value is already in the collection.
 	 * @param {Any} val The value in the collection to be searched for.
 	 * @param {Function} [cmp] A `Function` that takes `val`, `val2`, where `val2` is from the collection to compare `val` with. Return `true` to match. Defaults to initial `defaultcmp`.
 	 * @return {Bool} Whether the value exists or not.
@@ -68,7 +69,7 @@ function __KengineCollection(array=undefined, defaultcmp=undefined) : __KengineS
 	/**
 	 * @function Add
 	 * @memberof Kengine.Collection
-	 * @description Add the value to the collection.
+	 * @description Adds the value to the collection.
 	 * @param {Any} val The value to be added to the collection.
 	 * @return {Real} The collection index of the added value.
 	 */
@@ -83,7 +84,7 @@ function __KengineCollection(array=undefined, defaultcmp=undefined) : __KengineS
 	/**
 	 * @function AddOnce
 	 * @memberof Kengine.Collection
-	 * @description Add the value to the collection, only if it does not exist already.
+	 * @description Adds the value to the collection, only if it does not exist already.
 	 * @param {Any} val The value to be added to the collection only if it does not exist already.
 	 * @param {Function} [cmp] A `Function` that takes `val`, `val2`, where `val2` is from the collection to compare `val` with. Return `true` to match. Defaults to initial `defaultcmp`.
 	 * @return {Real} The collection index of the value whether added or found.
@@ -97,7 +98,7 @@ function __KengineCollection(array=undefined, defaultcmp=undefined) : __KengineS
 	/**
 	 * @function Remove
 	 * @memberof Kengine.Collection
-	 * @description Remove the value from the collection.
+	 * @description Removes the value from the collection.
 	 * @param {Any} val The value to be removed from the collection.
 	 * @param {Function} [cmp] A `Function` that takes `val`, `val2`, where `val2` is from the collection to compare `val` with. Return `true` to match. Defaults to initial `defaultcmp`.
 	 * @return {Any} The removed value or undefined.
@@ -114,7 +115,7 @@ function __KengineCollection(array=undefined, defaultcmp=undefined) : __KengineS
 	/**
 	 * @function RemoveInd
 	 * @memberof Kengine.Collection
-	 * @description Remove a looked-up value by the provided index from the collection.
+	 * @description Removes a looked-up value by the provided index from the collection.
 	 * @param {Real} ind The index which value is to be removed.
 	 */
 	RemoveInd = function(ind) {
@@ -126,7 +127,7 @@ function __KengineCollection(array=undefined, defaultcmp=undefined) : __KengineS
 	/**
 	 * @function Length
 	 * @memberof Kengine.Collection
-	 * @description Return length of the values in the collection.
+	 * @description Returns length of the values in the collection.
 	 * @return {Real} The length of the values in the collection.
 	 *
 	 */
@@ -137,7 +138,7 @@ function __KengineCollection(array=undefined, defaultcmp=undefined) : __KengineS
 	/**
 	 * @function Filter
 	 * @memberof Kengine.Collection
-	 * @description Return a filtered array from the collection values.
+	 * @description Returns a filtered array from the collection values.
 	 * @param {Function} func A `Function` that takes `value`. Return `true` to take.
 	 * @return {Array<Any>}
 	 *
@@ -155,7 +156,7 @@ function __KengineCollection(array=undefined, defaultcmp=undefined) : __KengineS
 	/**
 	 * @function FilterSelf
 	 * @memberof Kengine.Collection
-	 * @description Return a filtered copy of self from the collection values.
+	 * @description Returns a filtered copy of self from the collection values.
 	 * @param {Function} func A `Function` that takes `value`. Return `true` to take.
 	 * @param {Bool} [return_array=false]
 	 * @return {Kengine.Collection}

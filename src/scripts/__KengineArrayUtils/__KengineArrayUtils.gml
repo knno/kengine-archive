@@ -9,10 +9,10 @@ function __KengineArrayUtils() : __KengineStruct() constructor {
     /**
      * @function DeleteValue
      * @memberof Kengine.Utils.Arrays
-     * @description Delete value from an array.
+     * @description Deletes value from an array.
      * @param {Array<Any>} array
      * @param {Any} value
-     * @param {Bool} _all
+     * @param {Bool} _all Whether to delete all occurences
      * @return {Real} Count of deleted indices.
      * 
      */
@@ -36,9 +36,9 @@ function __KengineArrayUtils() : __KengineStruct() constructor {
     /** 
      * @function MinMax
      * @memberof Kengine.Utils.Arrays
-     * @description Return the minimum and maximum numbers in an array
+     * @description Returns the minimum and maximum numbers in an array
      * @param {Array} arr The input array
-     * @returns {Array<Any>} An array containing the minimum and maximum numbers
+     * @return {Array<Any>} An array containing the minimum and maximum numbers
      * 
      */
     static MinMax = function(arr) {
@@ -60,9 +60,9 @@ function __KengineArrayUtils() : __KengineStruct() constructor {
     /** 
      * @function Concat
      * @memberof Kengine.Utils.Arrays
-     * @description Return arrays' values as a single array.
+     * @description Returns arrays' values as a single array.
      * @param {Array<Array<Any>>} arrays
-     * @returns {Array<Any>}
+     * @return {Array<Any>}
      * 
      */
     static Concat = function(arrays) {
@@ -75,4 +75,3 @@ function __KengineArrayUtils() : __KengineStruct() constructor {
         return _a;
     }
 }
-//__KengineArrayUtils();

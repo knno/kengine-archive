@@ -6,8 +6,7 @@
 
 ##### **Description**
 
-Kengine's Tests extension</p>
-<p>Note - Disabling copy on write behavior for arrays is required.
+Kengine's Tests extension
 
 
 <!-- tabs:end -->
@@ -266,7 +265,7 @@ Whether the test is being tested right now.
 
 ##### **Description**
 
-Resolve the <code>fixtures</code> of the test. It is called inside the [Kengine.Extensions.Tests.Test.test](Kengine.Extensions.Tests?id=kengine.extensions.tests.test.test) function.
+Resolves the <code>fixtures</code> of the test. It is called inside the [Kengine.Extensions.Tests.Test.test](Kengine.Extensions.Tests?id=kengine.extensions.tests.test.test) function.
 
 
 **Throws**:

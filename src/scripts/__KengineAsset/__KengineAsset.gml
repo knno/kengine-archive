@@ -5,7 +5,7 @@
  * @param {String|Kengine.AssetType} type The AssetType or its name that this Asset belongs to.
  * @param {String} name The name of this Asset. This name should be the same as the name of the `YYAsset` if it represents one.
  * @param {Bool} [is_yyp=false] Whether this asset is a representation of a real YYAsset. Defaults to `false`.
- * @param {Real|Asset} [real_id=undefined] The real ID of this Asset. This id should be the same as the index of the `YYAsset` if it represents one. Otherwise it is automatically assigned.
+ * @param {Real|Asset} [real_id=undefined] The real ID of this Asset. This id should be the same as the ID of the `YYAsset` if it represents one. Otherwise it is automatically assigned.
  * @param {String} [real_name=undefined] The real name of this Asset. This name should be the same as the name of the `YYAsset` if it represents one. Otherwise you can assign any name.
  * @param {Bool} [auto_index=true] Whether to index the asset or not. Defaults to `true`.
  * @example
@@ -19,7 +19,22 @@ function __KengineAsset(type, name, is_yyp=false, real_id=undefined, real_name=u
 
 	var this = self;
 
+	/**
+	 * @name real_id
+	 * @type {Real}
+	 * @memberof Kengien.Asset
+	 * @description The real ID of the Asset.
+	 * 
+	 */
 	real_id = real_id ?? -1;
+
+	/**
+	 * @name real_name
+	 * @type {Real}
+	 * @memberof Kengien.Asset
+	 * @description The real name of the Asset.
+	 * 
+	 */
 	real_name = real_name ?? "";
 
 	/**
@@ -52,6 +67,7 @@ function __KengineAsset(type, name, is_yyp=false, real_id=undefined, real_name=u
 	 *
 	 */
 	self.__is_indexed = false;
+
 	/**
 	 * @name index
 	 * @type {Real}
@@ -60,6 +76,15 @@ function __KengineAsset(type, name, is_yyp=false, real_id=undefined, real_name=u
 	 *
 	 */
 	self.index = undefined;
+
+	/**
+	 * @name real_id
+	 * @type {Real}
+	 * @memberof Kengien.Asset
+	 * @description A Unique ID for the asset.
+	 * @see {@link Kengine.new_uid}
+	 * 
+	 */
 	self.uid = undefined;
 
 	if typeof(type) == "string" {
@@ -190,7 +215,7 @@ function __KengineAsset(type, name, is_yyp=false, real_id=undefined, real_name=u
 	}
 
 	/**
-	 * @name is_yyp
+	 * @name __is_yyp
 	 * @type {Bool}
 	 * @memberof Kengine.Asset
 	 * @description Whether this asset's `id` is the real ID of a `YYAsset`.
@@ -207,12 +232,10 @@ function __KengineAsset(type, name, is_yyp=false, real_id=undefined, real_name=u
 	 */
 	self.real_name = real_name;
 
-	if (auto_index) {
-		var indexer_result = self.type.IndexAsset(self);
-		if indexer_result != undefined {
-			self.__is_indexed = indexer_result[0];
-			self.index = indexer_result[1];
-		}
+	var indexer_result = self.type.IndexAsset(self);
+	if indexer_result != undefined {
+		self.__is_indexed = indexer_result[0];
+		self.index = indexer_result[1];
 	}
 
 	if self.id == -1 {
@@ -231,13 +254,13 @@ function __KengineAsset(type, name, is_yyp=false, real_id=undefined, real_name=u
 	}
 
 	/**c
-	 * @function ReplaceBy
+	 * @function ReplaceWith
 	 * @memberof Kengine.Asset
 	 * @description Replaces this asset by the provided argument. It will have {@link KENGINE_ASSET_TAG_REPLACED} in its tags and also a `__replaced_by` variable. The replacing asset will have a `__replaces` variable.
 	 * @param {Kengine.Asset} replacer_asset
 	 *
 	 */
-	ReplaceBy = function(replacer_asset) {
+	ReplaceWith = function(replacer_asset) {
 		if self.type.is_replaceable {
 			if self.tags == undefined self.tags = new __KengineCollection();
 			if self.tags.GetInd(KENGINE_ASSET_TAG_FIXED) != -1 {

@@ -22,7 +22,7 @@
   "scripts": {
     "docs:api": "node docs/scripts/jsdoc2md2.js --configure docs/jsdoc.json ./**/*.gml --partials docs/templates/partials",
     "docs:serve": "python -m http.server -d docs",
-    "docs:api-old": "npx jsdoc2md --configure docs/jsdoc.json ./**/*.gml --partial docs/templates/partials/*.hbs > docs.md"
+    "docs:api-md": "npx jsdoc2md --configure docs/jsdoc.json ./**/*.gml --partial docs/templates/partials/*.hbs > docs.md"
   },
   "devDependencies": {
     "docsify": "^4.11.4",

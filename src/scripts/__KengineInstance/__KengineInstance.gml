@@ -10,7 +10,7 @@
  * The wrapped instance will get attributes such as `is_wrapped` and `wrapper`.
  * Note - It is recommended to use {@link Kengine.Utils.Instance.CreateLayer} and {@link Kengine.Utils.Instance.CreateDepth} functions whenever possible.
  *
- * @see Kengine.Utils.Instance.CreateLayer
+ * @see {@link Kengine.Utils.Instance.CreateLayer}
  * @see {@link Kengine.Utils.Instance.CreateDepth}
  *
  * @example
@@ -45,7 +45,7 @@ function __KengineInstance(object=undefined, asset=undefined) : __KengineStruct(
      */
     self.instance = object;
 
-	// Feather disable GM1044
+	/// feather disable GM1044
     var _asset = asset ?? __KengineStructUtils.Get(Kengine, "__default_object_asset");
 
 	if typeof(_asset) == "string" {

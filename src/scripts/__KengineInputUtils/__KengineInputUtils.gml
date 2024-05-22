@@ -5,10 +5,11 @@
  *
  */
 function __KengineInputUtils() : __KengineStruct() constructor {
+
 	/**
-	 * @function ken_keyboard_check_released
+	 * @function keyboard_check_released
 	 * @memberof Kengine.Utils.Input
-	 * @description Return whether key is released.
+	 * @description Returns whether key is released.
 	 * @param {Struct|Real} key
 	 * @return {Bool}
 	 *
@@ -27,7 +28,7 @@ function __KengineInputUtils() : __KengineStruct() constructor {
 	/**
 	 * @function keyboard_check
 	 * @memberof Kengine.Utils.Input
-	 * @description Return whether key is being held down.
+	 * @description Returns whether key is being held down.
 	 * @param {Struct|Real} key
 	 * @return {Bool}
 	 *
@@ -46,7 +47,7 @@ function __KengineInputUtils() : __KengineStruct() constructor {
 	/**
 	 * @function keyboard_check_pressed
 	 * @memberof Kengine.Utils.Input
-	 * @description Return whether key is pressed.
+	 * @description Returns whether key is pressed.
 	 * @param {Struct|Real} key
 	 * @return {Bool}
 	 *
@@ -65,7 +66,7 @@ function __KengineInputUtils() : __KengineStruct() constructor {
 	/**
 	 * @function keyboard_clear
 	 * @memberof Kengine.Utils.Input
-	 * @description Clear keyboard key state.
+	 * @description Clears keyboard key state.
 	 * @param {Struct|Real} key
 	 * @return {Bool|Undefined}
 	 *
@@ -81,4 +82,3 @@ function __KengineInputUtils() : __KengineStruct() constructor {
 		}	
 	}
 }
-//__KengineInputUtils();

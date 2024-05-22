@@ -1,34 +1,11 @@
-<img src="https://raw.githubusercontent.com/knno/kengine/master/images/ICON.png" width="50%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/knno/kengine/main/images/ICON.png" width="50%" style="display: block; margin: auto;" />
 <h1 align="center">Kengine 0.2</h1>
-<p align="center">A GameMaker framework for modding support of your projects by <a href="https://www.kenanmasri.com/" target="_blank">Kenan Masri</a></p>
+<p align="center">A GameMaker framework for modding support of your projects by <a href="https://www.kenanmasri.com/" target="_blank">Kenan Masri (knno)</a></p>
 <p align="center"><a href="https://github.com/knno/kengine/releases/" target="_blank">Download the .yymps</a></p>
 
 <a id="readme-top"></a>
 
 ---
-
-<!-- TABLE OF CONTENTS -->
-
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li><a href="#about-the-project">About The Project</a></li>
-      <ul>
-        <li><a href="#introduction">Introduction</a></li>
-        <li><a href="#what-is-kengine">What is Kengine?</a></li>
-      </ul>
-    <li><a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#installation-for-use">Installation for Use</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details>
 
 <!-- ABOUT THE PROJECT -->
 
@@ -38,7 +15,7 @@
 
 ### Introduction
 
-Sometimes, you want to make your GameMaker project moddable by your end-users community.
+Sometimes, you want to make your GameMaker project moddable by your end-users community, or you want to make DLC content for your game.
 
 For example, here's a few possible scenarios:
 
@@ -80,12 +57,14 @@ Kengine is a big library. It is a set of scripts that add many possibilites to y
 ### Quick Upgrade
 
 1. Download the latest .yymps from the Releases tab of GitHub.
-2. Backup your `KengineConfig` script in your GameMaker project to **another location and name** (if it exists)
-3. Delete the `Kengine` folder in your project.
-4. Import the downloaded file into your project by `Tools > Import local package`.
-5. Compare the values of both `KengineConfig`s scripts. It is recommended to use the newer values.
-6. Don't forget to add `obj_kengine` object to your very first room!
-7. Done
+2. Backup your `KengineConfig` script in your GameMaker project to **another location**.
+3. Backup your `KengineAssetTypes` script in your GameMaker project to **another location**.
+4. Delete the `Kengine` folder in your project.
+5. Import the downloaded file into your project by `Tools > Import local package`.
+6. Compare the values of both `KengineConfig` scripts. It is recommended to use the newer values.
+7. Do the same for the `KengineAssetTypes` scripts **carefully**. See the changelogs and act upon it if you have custom definitions.
+8. Don't forget to add `obj_kengine` object to your very first room!
+9. Done
 
 > If you'd like to sync the project however with all the projects you are working on, you can use my [GmDm](https://github.com/knno/gmdm) program. Simply clone the repository into a location for GmDm to > find, and install it by adding this link to your `gmdm.yml` file in your new/exiting project(s):
 > ```yml
@@ -102,10 +81,10 @@ Kengine is a big library. It is a set of scripts that add many possibilites to y
 
 ## Usage
 
-> For guides, please refer to the [Documentation](https://knno.github.io/kengine/). As there are many uses of Kengine.
+> Note that there are many uses of Kengine.
 > Ranging from replacing a simple asset, to managing game mods.
 
-These are a few examples on how to use Kengine.
+Below are a few examples on how to use Kengine.
 
 ### Simplest Asset Replacement Usage
 
@@ -118,7 +97,7 @@ see the following code as an example.
 // obj_player has  spr_player initially.
 // whether sprite is replaced or not, we must "refresh the sprite handle"
 
-sprite_index = Kengine.utils.get_asset("sprite", "spr_player").id;
+sprite_index = Kengine.Utils.GetAsset("sprite", "spr_player").id;
 
 // This code updates the object's sprite to a different sprite
 // since it is added or "replaced" to the runtime of your game.
@@ -127,7 +106,7 @@ sprite_index = Kengine.utils.get_asset("sprite", "spr_player").id;
 You must check if the asset is there, but it's not necessary **unless if it's not in the asset resources before.** because assets are indexed by default.
 
 ```gml
-var spr_asset = Kengine.utils.get_asset("sprite", "new_spr_player");
+var spr_asset = Kengine.Utils.GetAsset("sprite", "new_spr_player");
 if asset != undefined {
   sprite_index = spr_asset.id;
 } else {
@@ -136,7 +115,7 @@ if asset != undefined {
 ```
 
 > #### A note on custom objects
-> Did you know that you don't actually have to set the sprite_index if your object is a Kengine object (a custom asset) from a mod? Since mods can use self-referencing to sprites they have in definition. Example mod as below
+> Did you know that you don't actually have to set the `sprite_index` if your object is a Kengine object (a custom asset) from a mod? Since mods can self-reference sprites they have in definition. Example mod as below
 > ```yml
 > assets:
 >   sprite:
@@ -148,12 +127,11 @@ if asset != undefined {
 > ```
 
 Now let's look at this function:
+
 ```gml
-Kengine.utils.get_asset(asset_type, asset_name)
+Kengine.Utils.GetAsset(asset_type, asset_name)
 ```
 This will return the correct asset if it is replaced or not. it will be resolved to the correct asset. If the name is not in the index, it can return `undefined` if not found.
-
-From now on, please check the full documentation for concepts and info.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -163,7 +141,7 @@ From now on, please check the full documentation for concepts and info.
 
 ## Roadmap
 
-Check out this [Board](https://github.com/users/knno/projects/2) on GitHub.
+Check out the [Projects](https://github.com/knno/kengine/projects/) tab on GitHub.
 
 See the [open issues](https://github.com/knno/kengine/issues) for a full list of proposed features (and known issues).
 
@@ -187,7 +165,7 @@ Distributed under the MIT License. See [`LICENSE`](https://github.com/knno/kengi
 Kenan Masri
 * Discord: `knno`
 * Project link: [https://github.com/knno/kengine](https://github.com/knno/kengine)
-<!-- Marketplace link: [https://marketplace.] -->
+* Marketplace link: [https://knno.itch.io/kengine](https://knno.itch.io/kengine)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -196,7 +174,7 @@ Kenan Masri
 
 ## Acknowledgments
 
-Please click on [Credits](https://knno.github.io/kengine/#/latest/Credits) to view credits.
+Please click on [Credits](./Credits) to view credits.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -213,5 +191,5 @@ Please click on [Credits](https://knno.github.io/kengine/#/latest/Credits) to vi
 [issues-shield]: https://img.shields.io/github/issues/knno/kengine.svg
 [issues-url]: https://github.com/knno/kengine/issues
 [license-shield]: https://img.shields.io/github/license/knno/kengine.svg
-[license-url]: https://github.com/knno/kengine/blob/master/LICENSE.txt
+[license-url]: https://github.com/knno/kengine/blob/main/LICENSE.txt
 [concept-img]: images/concept-img.png

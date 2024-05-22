@@ -1,34 +1,21 @@
-- [Home](/README)
-- [Quick Start](/Quick-Start-Guide)
-- [Frequently Asked](/Frequently-Asked)
-- [Credits](/Credits)
+- [Home](README)
+- [Frequently Asked](Frequently-Asked)
+- [Credits](Credits)
 
 ---
 
 **Contents**
 
-- [Core](/Core)
-- [Utilities](/Utils)
-- [Extensions](/Extensions)
-- [Panels Extension](/Extensions-Panels)
-- [Tests Extension](/Extensions-Tests)
-- [Mods Extension](/Extensions-Mods)
+- [Code Structure](Code-Structure)
+- [Utilities](Utils)
+- [Extensions](Extensions)
 
 ---
 
 **Concepts**
 
-
-
----
-
-**Setting Up**
-
-- [Importing The Library](/Importing-The-Library)
-- [Updating The Library](/Updating-The-Library)
-- [Config Macros](/Config-Macros)
-
----
+- [Assets](Concepts.Assets)
+- [Runtimes](Concepts.Runtimes)
 
 <!--**Further Reading** -->
 
@@ -36,13 +23,13 @@
 
 **API**
 
-- [Kengine](/Kengine)
-- [Extensions.Mods](/Kengine.Extensions.Mods)
-- [Extensions.Tests](/Kengine.Extensions.Tests)
+- [Kengine](Kengine)
+- [Constants](Kengine-Constants)
+- [Extensions.Mods](Kengine.Extensions.Mods)
+- [Extensions.Tests](Kengine.Extensions.Tests)
 
 **Utils API**
 
-- [Utils](/Kengine.Utils)
 - [Arrays](/Kengine.Utils.Arrays)
 - [Ascii](/Kengine.Utils.Ascii)
 - [Benchmark](/Kengine.Utils.Benchmark)

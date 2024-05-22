@@ -1,3 +1,9 @@
+/**
+ * @namespace Tests
+ * @memberof Kengine.Extensions
+ * @description Kengine's Tests extension
+ *
+ */
 function __KengineTests() : __KengineStruct() constructor {
 
 	static name= "Tests"
@@ -27,7 +33,6 @@ function __KengineTests() : __KengineStruct() constructor {
     static AssertionError = __KengineTestsAssertionError
     static TestManager = __KengineTestsTestManager
 }
-//__KengineTests();
 
 
 function ken_init_ext_tests() {
@@ -40,21 +45,21 @@ function ken_init_ext_tests() {
      * @memberof Kengine.Utils.Errors.Types
      * @description Test function did not return a struct.
      */
-	Kengine.Utils.Errors.AddType("tests__test__func_invalid_return", "Test function did not return a struct.");
+	Kengine.Utils.Errors.Define("tests__test__func_invalid_return", "Test function did not return a struct.");
 
     /**
      * @member {String} tests__fixture__does_not_exist
      * @memberof Kengine.Utils.Errors.Types
      * @description Test fixture does not exist.
      */
-    Kengine.Utils.Errors.AddType("tests__fixture__does_not_exist", "Test fixture does not exist.");
+    Kengine.Utils.Errors.Define("tests__fixture__does_not_exist", "Test fixture does not exist.");
 
     /**
      * @member {String} tests__assertion__is_not
      * @memberof Kengine.Utils.Errors.Types
      * @description Assertion failure.
      */
-    Kengine.Utils.Errors.AddType("tests__assertion__is_not", "Assertion failure.");
+    Kengine.Utils.Errors.Define("tests__assertion__is_not", "Assertion failure.");
     #endregion
 
     #region Events
@@ -107,15 +112,6 @@ function ken_init_ext_tests() {
     Kengine.Utils.Events.Define("tests__tests_complete");
     #endregion
 
-	/**
-	 * @namespace Tests
-	 * @memberof Kengine.Extensions
-	 * @description Kengine's Tests extension
-	 * 
-	 * Note - Disabling copy on write behavior for arrays is required.
-	 *
-	 */
 	var _tests = new __KengineTests();
 	Kengine.Extensions.Add(_tests);
-
 }

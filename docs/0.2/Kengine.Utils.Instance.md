@@ -51,7 +51,7 @@ Checks whether object-type Asset is ancestor of another object-type Asset.
 
 ##### **Description**
 
-Create a Kengine <code>Instance</code> and adds it to the [instances](Kengine?id=kengine.instances) collection, creating a real instance in the room.
+Creates an <code>Instance</code> and adds it to the [instances](Kengine?id=kengine.instances) collection, creating a real instance in the room.
 
 
 **Returns**: <code>Kengine.Instance</code> - The <code>Instance</code>.  
@@ -74,7 +74,7 @@ Create a Kengine <code>Instance</code> and adds it to the [instances](Kengine?id
 
 ##### **Description**
 
-Create a Kengine <code>Instance</code> and adds it to the [instances](Kengine?id=kengine.instances) collection, creating a real instance in the room.
+Creates an <code>Instance</code> and adds it to the [instances](Kengine?id=kengine.instances) collection, creating a real instance in the room.
 
 
 **Returns**: <code>Kengine.Instance</code> - The <code>Instance</code>.  

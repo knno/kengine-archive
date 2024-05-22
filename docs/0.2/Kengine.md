@@ -11,6 +11,52 @@ The Kengine namespace.
 
 <!-- tabs:end -->
 
+## Options  :id=kengine-options
+
+Kengine.Options
+<!-- tabs:start -->
+
+
+<!-- tabs:end -->
+
+### Options  :id=kengine-options
+
+`new Kengine.Options(opts)`
+<!-- tabs:start -->
+
+
+##### **Description**
+
+A struct that contains key-value pairs to pass to a function as the main argument.
+Kinda whacky solution to using ...args
+
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opts | <code>Struct</code> | <p>The options to initialize it with</p> |
+
+
+##### **Example**
+
+```gml
+function MyClassOptions(options) : KengineOptions() constructor {  __start(options);  __add("x", 0);  __add("y", 0);  __add("width");  __add("height");  __done();}function MyClass(options) constructor {  if not is_instanceof(options, MyClassOptions) {    options = new MyClassOptions(options);  }  width = undefined;  height = undefined;  KengineOptions.__Apply(options, self);  width ??= 60;  height ??= 40;}
+```
+<!-- tabs:end -->
+
+## Struct  :id=kengine-struct
+
+`Kengine.Struct`
+<!-- tabs:start -->
+
+
+##### **Description**
+
+A base struct
+
+
+<!-- tabs:end -->
+
 ## instances  :id=kengine-instances
 
 [Kengine.instances](Kengine?id=kengine.instances) [<code>Collection</code>](Kengine?id=kengine.collection)
@@ -32,21 +78,7 @@ This collection contains all created [Instance](Kengine?id=kengine.instance).
 
 ##### **Description**
 
-A key value struct of name to Kengine extension.
-
-
-<!-- tabs:end -->
-
-### Tests  :id=kengine-extensions-tests
-
-[Kengine.Extensions.Tests](Kengine.Extensions.Tests) <code>object</code>
-<!-- tabs:start -->
-
-
-##### **Description**
-
-Kengine's Tests extension</p>
-<p>Note - Disabling copy on write behavior for arrays is required.
+A struct of <code>name</code> as key and <code>extension</code> as value.
 
 
 <!-- tabs:end -->
@@ -64,6 +96,32 @@ Kengine's Mods extension
 
 <!-- tabs:end -->
 
+### Panels  :id=kengine-extensions-panels
+
+[Kengine.Extensions.Panels](Kengine.Extensions.Panels) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
+Kengine's Panels extension
+
+
+<!-- tabs:end -->
+
+### Tests  :id=kengine-extensions-tests
+
+[Kengine.Extensions.Tests](Kengine.Extensions.Tests) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
+Kengine's Tests extension
+
+
+<!-- tabs:end -->
+
 ### Add  :id=kengine-extensions-add
 
 `Kengine.Extensions.Add(ext)` ⇒ <code>Struct</code>
@@ -72,7 +130,7 @@ Kengine's Mods extension
 
 ##### **Description**
 
-Add a struct to Kengine extensions.</p>
+Adds a struct to Kengine extensions.</p>
 <blockquote>
 <p>if your extension returns a struct, then it is added automatically and no need to call this method.
 </blockquote>
@@ -93,7 +151,7 @@ Add a struct to Kengine extensions.</p>
 
 ##### **Description**
 
-Return a Kengine extension by name.
+Returns a Kengine extension by name.
 
 
 
@@ -111,7 +169,7 @@ Return a Kengine extension by name.
 
 ##### **Description**
 
-Return whether a Kengine extension exists by name.
+Returns whether a Kengine extension exists by name.
 
 
 
@@ -123,26 +181,26 @@ Return whether a Kengine extension exists by name.
 
 ### GetAllNames  :id=kengine-extensions-getallnames
 
-`Kengine.Extensions.GetAllNames()` ⇒ <code>Array.&lt;String&gt;</code>
+`Kengine.Extensions.GetAllNames()` ⇒ <code>Array</code>
 <!-- tabs:start -->
 
 
 ##### **Description**
 
-Get all Extensions.
+Gets all Extensions' names.
 
 
 <!-- tabs:end -->
 
 ### GetAll  :id=kengine-extensions-getall
 
-`Kengine.Extensions.GetAll()` ⇒ <code>Array.&lt;Struct&gt;</code>
+`Kengine.Extensions.GetAll()` ⇒ <code>Array</code>
 <!-- tabs:start -->
 
 
 ##### **Description**
 
-Get all Extensions.
+Gets all Extensions.
 
 
 <!-- tabs:end -->
@@ -155,7 +213,7 @@ Get all Extensions.
 
 ##### **Description**
 
-An array of [Coroutine](Kengine?id=kengine.coroutine) currently processing.
+An array of [Coroutine](Kengine?id=kengine.coroutine) that are currently processing.
 
 
 <!-- tabs:end -->
@@ -168,7 +226,125 @@ An array of [Coroutine](Kengine?id=kengine.coroutine) currently processing.
 
 ##### **Description**
 
-The Room-type [Asset](Kengine?id=kengine.asset) currently active as room.
+The Room-type [Asset](Kengine?id=kengine.asset) currently active as <code>room</code>.
+
+
+<!-- tabs:end -->
+
+## asset_type_options  :id=kengine-asset_type_options
+
+[Kengine.asset_type_options](Kengine?id=kengine.asset_type_options) <code>Undefined</code> \| <code>Struct</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
+The asset type options for Kengine.
+
+
+<!-- tabs:end -->
+
+### script  :id=kengine-asset_type_options-script
+
+[Kengine.asset_type_options.script](Kengine?id=kengine.asset_type_options.script) <code>Struct</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
+An [AssetType](Kengine?id=kengine.assettype) definition that represents assets of type script in the YYP only. Required.
+
+
+<!-- tabs:end -->
+
+### sprite  :id=kengine-asset_type_options-sprite
+
+[Kengine.asset_type_options.sprite](Kengine?id=kengine.asset_type_options.sprite) <code>Struct</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
+An [AssetType](Kengine?id=kengine.assettype) definition that represents assets of type sprite in the YYP and sprite-type assets.
+
+
+<!-- tabs:end -->
+
+### path  :id=kengine-asset_type_options-path
+
+[Kengine.asset_type_options.path](Kengine?id=kengine.asset_type_options.path) <code>Struct</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
+An [AssetType](Kengine?id=kengine.assettype) definition that represents assets of type path in the YYP and path-type assets.
+
+
+<!-- tabs:end -->
+
+### tileset  :id=kengine-asset_type_options-tileset
+
+[Kengine.asset_type_options.tileset](Kengine?id=kengine.asset_type_options.tileset) <code>Struct</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
+An [AssetType](Kengine?id=kengine.assettype) definition that represents assets of type tileset in the YYP.
+
+
+<!-- tabs:end -->
+
+### sound  :id=kengine-asset_type_options-sound
+
+[Kengine.asset_type_options.sound](Kengine?id=kengine.asset_type_options.sound) <code>Struct</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
+An [AssetType](Kengine?id=kengine.assettype) definition that represents assets of type sound in the YYP and sound-type assets.
+
+
+<!-- tabs:end -->
+
+### object  :id=kengine-asset_type_options-object
+
+[Kengine.asset_type_options.object](Kengine?id=kengine.asset_type_options.object) <code>Struct</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
+An [AssetType](Kengine?id=kengine.assettype) definition that represents assets of type object in the YYP and object-type assets. Required.
+
+
+<!-- tabs:end -->
+
+### rm  :id=kengine-asset_type_options-rm
+
+[Kengine.asset_type_options.rm](Kengine?id=kengine.asset_type_options.rm) <code>Struct</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
+An [AssetType](Kengine?id=kengine.assettype) definition that represents assets of type rooms in the YYP and room-type assets. Required.
+
+
+<!-- tabs:end -->
+
+### &lt;kscript&gt;  :id=kengine-asset_type_options-&lt;kscript&gt;
+
+[Kengine.asset_type_options.&lt;kscript&gt;](Kengine?id=kengine.asset_type_options.&lt;kscript&gt;) <code>Struct</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
+An [AssetType](Kengine?id=kengine.assettype) definition that represents assets of type custom-script (script-type assets), thus can be added or replaced. Required.</p>
+<p>This definition name is changeable by changing the value of [KENGINE_CUSTOM_SCRIPT_ASSETTYPE_NAME](KENGINE_CUSTOM_SCRIPT_ASSETTYPE_NAME).
 
 
 <!-- tabs:end -->
@@ -184,6 +360,12 @@ The Room-type [Asset](Kengine?id=kengine.asset) currently active as room.
 The asset types struct of Kengine.
 
 
+
+##### **Example**
+
+```gml
+Kengine.asset_types.sprites
+```
 <!-- tabs:end -->
 
 ## __uids  :id=kengine-__uids
@@ -247,6 +429,19 @@ A struct containing Kengine arrays utilitiy functions
 ##### **Description**
 
 A struct containing Kengine ascii utilitiy functions
+
+
+<!-- tabs:end -->
+
+### Assets  :id=kengine-utils-assets
+
+[Kengine.Utils.Assets](Kengine.Utils.Assets) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
+A struct containing Kengine asset utilitiy functions
 
 
 <!-- tabs:end -->
@@ -433,6 +628,19 @@ A struct containing Kengine structs utilitiy functions
 
 <!-- tabs:end -->
 
+### Tiles  :id=kengine-utils-tiles
+
+[Kengine.Utils.Tiles](Kengine.Utils.Tiles) <code>object</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
+A struct containing Kengine tiles, tilesets and tilemaps utilitiy functions
+
+
+<!-- tabs:end -->
+
 ### GetAsset  :id=kengine-utils-getasset
 
 `Kengine.Utils.GetAsset(asset_type, id_or_name)` ⇒ [<code>Asset</code>](Kengine?id=kengine.asset) \| <code>Undefined</code>
@@ -441,7 +649,7 @@ A struct containing Kengine structs utilitiy functions
 
 ##### **Description**
 
-Retrieve an [Asset](Kengine?id=kengine.asset) from an AssetType (if loaded).
+Retrieves a [Asset](Kengine?id=kengine.asset) from <code>asset_type</code> (if loaded).
 
 
 **Returns**: [<code>Asset</code>](Kengine?id=kengine.asset) \| <code>Undefined</code> - An asset, or <code>undefined</code>.  
@@ -455,36 +663,22 @@ Retrieve an [Asset](Kengine?id=kengine.asset) from an AssetType (if loaded).
 
 ### Execute  :id=kengine-utils-execute
 
-`Kengine.Utils.Execute(scr, [args])` ⇒ <code>Any</code>
+`Kengine.Utils.Execute(script_or_method, [args])` ⇒ <code>Any</code>
 <!-- tabs:start -->
 
 
 ##### **Description**
 
-A replacement for execute_script. Executes the script or method or a script-type asset.
+A replacement for <code>execute_script</code>. Executes the script or method or a script-type asset.
 
 
 **Returns**: <code>Any</code> - The return of the script.  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| scr | <code>function</code> \| [<code>Asset</code>](Kengine?id=kengine.asset) | <p>The script to execute.</p> |
+| script_or_method | <code>function</code> \| [<code>Asset</code>](Kengine?id=kengine.asset) | <p>The script or method to execute.</p> |
 | [args] | <code>Array.&lt;Any&gt;</code> | <p>arguments to use in an array.</p> |
 
-<!-- tabs:end -->
-
-## initialized  :id=kengine-initialized
-
-[Kengine.initialized](Kengine?id=kengine.initialized) <code>Bool</code>
-<!-- tabs:start -->
-
-
-##### **Description**
-
-Whether Kengine has been initiated or not.
-
-
-**Read only**: true  
 <!-- tabs:end -->
 
 ## Asset  :id=kengine-asset
@@ -498,17 +692,13 @@ Whether Kengine has been initiated or not.
 An asset that represents sprites, objects, rooms, and can be any other customly defined assets.
 
 
-**Todo**
-
-- [ ] Fix documentation
-
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | type | <code>String</code> \| [<code>AssetType</code>](Kengine?id=kengine.assettype) |  | <p>The AssetType or its name that this Asset belongs to.</p> |
 | name | <code>String</code> |  | <p>The name of this Asset. This name should be the same as the name of the <code>YYAsset</code> if it represents one.</p> |
 | [is_yyp] | <code>Bool</code> | <code>false</code> | <p>Whether this asset is a representation of a real YYAsset. Defaults to <code>false</code>.</p> |
-| [real_id] | <code>Real</code> \| <code>Asset</code> |  | <p>The real ID of this Asset. This id should be the same as the index of the <code>YYAsset</code> if it represents one. Otherwise it is automatically assigned.</p> |
+| [real_id] | <code>Real</code> \| <code>Asset</code> |  | <p>The real ID of this Asset. This id should be the same as the ID of the <code>YYAsset</code> if it represents one. Otherwise it is automatically assigned.</p> |
 | [real_name] | <code>String</code> |  | <p>The real name of this Asset. This name should be the same as the name of the <code>YYAsset</code> if it represents one. Otherwise you can assign any name.</p> |
 | [auto_index] | <code>Bool</code> | <code>true</code> | <p>Whether to index the asset or not. Defaults to <code>true</code>.</p> |
 
@@ -572,6 +762,19 @@ The real ID of the asset.
 
 <!-- tabs:end -->
 
+### index  :id=kengine-asset-index
+
+[Kengine.Asset.index](Kengine?id=kengine.asset.index) <code>Real</code> \| <code>Undefined</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
+The index of the asset.
+
+
+<!-- tabs:end -->
+
 ### __original_name  :id=kengine-asset-__original_name
 
 [Kengine.Asset.__original_name](Kengine?id=kengine.asset.__original_name) <code>String</code>
@@ -598,9 +801,9 @@ Whether this asset has been renamed. The original name is at [__original_name](K
 
 <!-- tabs:end -->
 
-### is_yyp  :id=kengine-asset-is_yyp
+### __is_yyp  :id=kengine-asset-__is_yyp
 
-[Kengine.Asset.is_yyp](Kengine?id=kengine.asset.is_yyp) <code>Bool</code>
+[Kengine.Asset.__is_yyp](Kengine?id=kengine.asset.__is_yyp) <code>Bool</code>
 <!-- tabs:start -->
 
 
@@ -670,12 +873,6 @@ An asset type is a group of assets, such as rooms or custom levels. It can be a 
 | [indexing_options] | <code>Struct</code> \| <code>Undefined</code> |  | <p>A struct containing key-value configuration for indexing of this asset type. [IndexingOptions](Kengine?id=kengine.assettype.indexingoptions)</p> |
 | [var_struct] | <code>Struct</code> \| <code>Undefined</code> |  | <p>A struct of attributes to add to this asset type. If there is a function value, it is copied as a method with self as this asset type.</p> |
 
-
-##### **Example**
-
-```gml
-// This example defines an AssetType for the object YYAsset. Then it indexes all objects in the game.my_asset_type = new Kengine.AssetType("object", asset_object, {     index_range: [0,999999],     exclude_prefixes: ["_rm_",],		unique_attrs: ["id", "name", "real_name",], // Using default attrs.});my_asset_type.index_assets();
-```
 <!-- tabs:end -->
 
 ### name  :id=kengine-assettype-name
@@ -727,7 +924,7 @@ Whether assets can be added to this asset type in general. Can be provided in cr
 
 ##### **Description**
 
-The <code>asset_kind</code> property of the AssetType. Can be provided in creation options. Defaults to `[KENGINE_CUSTOM_ASSET_KIND](KENGINE_CUSTOM_ASSET_KIND).
+The <code>asset_kind</code> property of the AssetType. Can be provided in creation options. Defaults to <code>[KENGINE_CUSTOM_ASSET_KIND](KENGINE_CUSTOM_ASSET_KIND)</code>.
 
 
 **Default**: <code>KENGINE_CUSTOM_ASSET_KIND</code>  
@@ -797,7 +994,7 @@ Kengine.asset_types[my_type.name].assets == my_type.assets // Return true
 
 ##### **Description**
 
-Return an [Asset](Kengine?id=kengine.asset) by id or name. This function looks up the replacement chain of found asset, and iterates until it finds the final replacement of the asset and returns it.
+Returns an [Asset](Kengine?id=kengine.asset) by id or name. This function looks up the replacement chain of found asset, and iterates until it finds the final replacement of the asset and returns it.
 
 
 **Returns**: <code>Any</code> - The wanted return type. Could be asset, its id or its index in the collection. <code>undefined</code> if not found.  
@@ -824,7 +1021,7 @@ my_asset1 = my_asset_type.GetAssetReplacement("spr_character01", 0, "index"); //
 
 ##### **Description**
 
-The asset indexing functions (IndexAssets, index_asset) prepare and adds all the assets of this type, or only prepares and adds the provided [Asset](Kengine?id=kengine.asset) to the [kengine.Collection](kengine.Collection), returning whether operation was successful.
+The asset indexing functions (IndexAssets, IndexAsset) prepare and adds all the assets of this type, or only prepares and adds the provided [Asset](Kengine?id=kengine.asset) to the [Collection](Kengine?id=kengine.collection), returning whether operation was successful.
 
 
 **Returns**: <code>Bool</code> - Whether successful indexing occured or not.  
@@ -843,7 +1040,8 @@ The asset indexing functions (IndexAssets, index_asset) prepare and adds all the
 
 ##### **Description**
 
-The asset indexing functions (IndexAssets, index_asset) prepare and adds all the assets of this type, or only prepares and adds the provided [Asset](Kengine?id=kengine.asset) to the [kengine.Collection](kengine.Collection), returning whether operation was successful.
+The asset indexing functions (IndexAssets, IndexAsset) prepare and adds all the assets of this type, or only prepares and adds the provided [Asset](Kengine?id=kengine.asset) to the [Collection](Kengine?id=kengine.collection), returning whether operation was successful.
+The function surpasses <code>indexing_options.exclude_prefixes</code>.
 
 
 **Returns**: <code>Array.&lt;Any&gt;</code> - A two-value array containing whether the asset was added or not, and the index of the asset or -1.  
@@ -870,7 +1068,8 @@ AssetType indexing options struct.
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
 | [index_range] | <code>Array.&lt;Real&gt;</code> | <code>[0,999999]</code> | <p>An array of min, max for the indexing range.</p> |
-| [exclude_prefixes] | <code>Array.&lt;String&gt;</code> | <code>[&quot;__&quot;,]</code> | <p>An array of prefixing strings that should be excluding when indexing.</p> |
+| [rename_rules] | <code>Array.&lt;Struct&gt;</code> |  | <p>An array of renaming rules when indexing assets.</p> |
+| [exclude_prefixes] | <code>Array.&lt;String&gt;</code> | <code>[&quot;__&quot;,]</code> | <p>An array of prefixing strings that should be excluding when indexing at start.</p> |
 | [unique_attrs] | <code>Array.&lt;(String\|Array.&lt;String&gt;)&gt;</code> | <code>[&quot;id&quot;,&quot;name&quot;,&quot;real_name&quot;,]</code> | <p>A list of attribute names that are unique by nature. So when indexing happens, it is only added once, otherwise replaced. Attributes such as <code>id</code> and <code>real_name</code> must be unique when adding assets. You can also use array of attrs inside to make them unique together.</p> |
 
 <!-- tabs:end -->
@@ -903,7 +1102,7 @@ When removing a value from the collection, the index of the value would be reuse
 
 ##### **Description**
 
-Return all values inside the collection.
+Returns all values inside the collection.
 
 
 <!-- tabs:end -->
@@ -916,7 +1115,7 @@ Return all values inside the collection.
 
 ##### **Description**
 
-Return value searched by collection index.
+Returns value searched by collection index.
 
 
 **Returns**: <code>Any</code> - The value held in the collection index.  
@@ -935,7 +1134,7 @@ Return value searched by collection index.
 
 ##### **Description**
 
-Return index of the value in the collection.
+Returns index of the value in the collection.
 
 
 **Returns**: <code>Real</code> - The index of the value in the collection.  
@@ -955,7 +1154,7 @@ Return index of the value in the collection.
 
 ##### **Description**
 
-Return whether value is already in the collection.
+Returns whether value is already in the collection.
 
 
 **Returns**: <code>Bool</code> - Whether the value exists or not.  
@@ -975,7 +1174,7 @@ Return whether value is already in the collection.
 
 ##### **Description**
 
-Add the value to the collection.
+Adds the value to the collection.
 
 
 **Returns**: <code>Real</code> - The collection index of the added value.  
@@ -994,7 +1193,7 @@ Add the value to the collection.
 
 ##### **Description**
 
-Add the value to the collection, only if it does not exist already.
+Adds the value to the collection, only if it does not exist already.
 
 
 **Returns**: <code>Real</code> - The collection index of the value whether added or found.  
@@ -1014,7 +1213,7 @@ Add the value to the collection, only if it does not exist already.
 
 ##### **Description**
 
-Remove the value from the collection.
+Removes the value from the collection.
 
 
 **Returns**: <code>Any</code> - The removed value or undefined.  
@@ -1034,7 +1233,7 @@ Remove the value from the collection.
 
 ##### **Description**
 
-Remove a looked-up value by the provided index from the collection.
+Removes a looked-up value by the provided index from the collection.
 
 
 
@@ -1052,7 +1251,7 @@ Remove a looked-up value by the provided index from the collection.
 
 ##### **Description**
 
-Return length of the values in the collection.
+Returns length of the values in the collection.
 
 
 **Returns**: <code>Real</code> - The length of the values in the collection.  
@@ -1066,7 +1265,7 @@ Return length of the values in the collection.
 
 ##### **Description**
 
-Return a filtered array from the collection values.
+Returns a filtered array from the collection values.
 
 
 
@@ -1084,7 +1283,7 @@ Return a filtered array from the collection values.
 
 ##### **Description**
 
-Return a filtered copy of self from the collection values.
+Returns a filtered copy of self from the collection values.
 
 
 
@@ -1133,7 +1332,7 @@ Note - It is recommended to use [Kengine.Utils.Instance.CreateLayer](Kengine.Uti
 
 **See**
 
-- Kengine.Utils.Instance.CreateLayer
+- [Kengine.Utils.Instance.CreateLayer](Kengine.Utils.Instance?id=kengine.utils.instance.createlayer)
 - [Kengine.Utils.Instance.CreateDepth](Kengine.Utils.Instance?id=kengine.utils.instance.createdepth)
 
 
@@ -1220,6 +1419,89 @@ Destroy the real instance and remove this from the [instances](Kengine?id=kengin
 
 <!-- tabs:end -->
 
+## Tilemap  :id=kengine-tilemap
+
+`Kengine.Tilemap(tileset, tiledata)`
+<!-- tabs:start -->
+
+
+##### **Description**
+
+A tilemap representation to replicate internal tilemaps behavior.
+
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| tileset | [<code>Asset</code>](Kengine?id=kengine.asset) |  |
+| tiledata | <code>Id.Buffer</code> \| <code>Array</code> | <p>A buffer of type s32 or array which has the indices of tiles.</p> |
+
+<!-- tabs:end -->
+
+### mask  :id=kengine-tilemap-mask
+
+[Kengine.Tilemap.mask](Kengine?id=kengine.tilemap.mask) <code>Constant.TileMask</code> \| <code>Real</code>
+<!-- tabs:start -->
+
+
+<!-- tabs:end -->
+
+### SetMask  :id=kengine-tilemap-setmask
+
+`Kengine.Tilemap.SetMask(mask)`
+<!-- tabs:start -->
+
+
+##### **Description**
+
+Sets the mask for the tilemap.
+
+
+
+| Param | Type |
+| --- | --- |
+| mask | <code>Constant.TileMask</code> \| <code>Real</code> | 
+
+<!-- tabs:end -->
+
+## GetStatusArray  :id=kengine-getstatusarray
+
+`Kengine.GetStatusArray(type)` ⇒ <code>Array.&lt;Any&gt;</code>
+<!-- tabs:start -->
+
+
+##### **Description**
+
+Returns the current status of Kengine
+
+
+**Returns**: <code>Array.&lt;Any&gt;</code> - pairs of (name, status)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| type | <code>String</code> | <p>The <code>KENGINE_STATUS_TYPE</code> such as (MAIN, COROUTINES, EXTENSIONS)</p> |
+
+
+##### **Example**
+
+```gml
+var statuses = Kengine.GetStatusArray(KENGINE_STATUS_TYPE.MAIN);var i = array_find_index(statuses, function(ele) { return ele[0] == "Kengine"; });if i > -1 {  var kengine_status = statuses[i][1];  if kengine_status == "NOT_STARTED" ...  if kengine_status == "STARTING" ...  if kengine_status == "READY" ...}
+```
+<!-- tabs:end -->
+
+## new_uid  :id=kengine-new_uid
+
+`Kengine.new_uid()`
+<!-- tabs:start -->
+
+
+##### **Description**
+
+Returns a new UID. This is mostly used for assets.
+
+
+<!-- tabs:end -->
+
 ## KengineAssetTypes  :id=kengine-kengineassettypes
 
 `Kengine.KengineAssetTypes()` ⇒ <code>Struct</code> \| <code>Struct</code>
@@ -1228,7 +1510,15 @@ Destroy the real instance and remove this from the [instances](Kengine?id=kengin
 
 ##### **Description**
 
-Return a struct of asset types definitions. This is used at the start of the game to configure asset types.
+Returns a struct of asset types definitions. This is used at the start of the game to configure asset types.
+
+
+<!-- tabs:end -->
+
+## Constants  :id=kengine-constants
+
+[Kengine~Constants](Kengine-Constants) <code>object</code>
+<!-- tabs:start -->
 
 
 <!-- tabs:end -->

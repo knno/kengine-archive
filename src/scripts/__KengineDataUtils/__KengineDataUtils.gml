@@ -10,14 +10,14 @@ function __KengineDataUtils() : __KengineStruct() constructor {
      * @memberof Kengine.Utils.Data
      * @param {Struct|Array<Any>} struct_or_array
      * @param {Function} func
-     * @param {Struct|Array<Any>} [par] A parameter for recursive calls.
+     * @param {Struct|Array<Any>} [_par] A parameter for recursive calls.
      * @description Visit a struct's or array's values (that are not structs or arrays) and do a function with the values.
      * The returned value from the func is the new value. It accepts argument `val`.
      *
      * Note - Disabling copy on write behavior for arrays is required.
      *
      */
-    static ValuesMap = function(struct_or_array, func, par=undefined) {
+    static ValuesMap = function(struct_or_array, func, _par=undefined) {
         if is_struct(struct_or_array) {
             var n = struct_get_names(struct_or_array);
             for (var i=0; i<array_length(n); i++) {
@@ -29,11 +29,11 @@ function __KengineDataUtils() : __KengineStruct() constructor {
                 ValuesMap(struct_or_array[i], func, {array: struct_or_array, ind: i});
             }
         } else {
-            if par != undefined {
-                if __KengineStructUtils.Exists(par, "array") {
-                    par.array[par.ind] = func(struct_or_array);
+            if _par != undefined {
+                if __KengineStructUtils.Exists(_par, "array") {
+                    _par.array[_par.ind] = func(struct_or_array);
                 } else {
-                    par.struct[$ par.ind] = func(struct_or_array);
+                    _par.struct[$ _par.ind] = func(struct_or_array);
                 }
             }
         }
@@ -175,4 +175,3 @@ function __KengineDataUtils() : __KengineStruct() constructor {
     }
 
 }
-//__KengineDataUtils();

@@ -25,6 +25,8 @@ function ken_scr_test_custom_script(){
 		"print(arguments[0]);\n" +
 		"arguments[0] = 59;\n" +
 		"print(array_get(arguments, 0));\n" +
+		"print(string(self));\n" +
+		"print(string(this));\n" +
 		"return 69";
 	foo_cscript.Compile();
 
@@ -45,7 +47,7 @@ function ken_scr_test_ball() {
 		var beach_ball_asset = new Kengine.Asset(at_objects, "obj_ken_test_beach_ball", false, 5123);
 
 		Kengine.console.echo(" - Beach Ball Asset: " + string(beach_ball_asset));
-		ball_obj.ReplaceBy(beach_ball_asset);
+		ball_obj.ReplaceWith(beach_ball_asset);
 	} else {
 		Kengine.console.echo(" - Beach Ball was not created.");
 		return;
@@ -209,9 +211,7 @@ function ken_test_balls_collide() {
     }
 }
 
-// TODO Enable once mods are rewritten
-function __old__ken_test_mods_enabling_disabling() {
-	// TODO Enable once mods are rewritten
+function ken_test_mods_enabling_disabling() {
 	if not test.is_testing {
 		var fixtures = [
 			new Kengine.Extensions.Tests.Fixture("fixture-add-mods", function() {

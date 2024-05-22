@@ -1,6 +1,24 @@
 /**
  * @typedef {Struct} ConsoleOptions
  * @memberof Kengine.Extensions.Panels
+ * @see {@link KengineOptions}
+ * 
+ * @property {Real} color_echo
+ * @property {Real} color_error
+ * @property {Real} color_debug
+ * @property {Real} verbosity
+ * @property {String} log_file
+ * @property {Bool} log_enabled
+ * @property {Function} interpreter
+ * @property {Real} [toggle_key]
+ * @property {Bool} [notify_enabled]
+ * @property {Real} [notify_show_time] Defaults to 5 seconds.
+ * @property {Real} [enabled]
+ * @property {Asset.GMFont} [font]
+ * @property {Real} [lines_max]
+ * @property {Real} [lines_count]
+ * @property {Real} [lines_notify]
+ * 
  * @description Console options struct.
  * 
  */
@@ -17,7 +35,7 @@ function __KenginePanelsConsoleOptions(options) : __KenginePanelsPanelOptions(op
     __add("toggle_key", 192) // `
     __add("log_file")
     __add("log_enabled")
-    __add("font", font_ken_panels)
+    __add("font", fnt_ken_panels)
     __add("lines_max", 250)
     __add("lines_count", 30)
     __add("lines_notify", 10)
@@ -36,23 +54,7 @@ function __KenginePanelsConsole(options=undefined) : __KenginePanelsPanel(option
 	if not is_instanceof(options, __KenginePanelsConsoleOptions) {
 		options = new __KenginePanelsConsoleOptions(options);
 	}
-	if false { // feather ignore GM2047
-		color_echo = undefined
-		color_error = undefined
-		color_debug = undefined
-		notify_enabled = undefined
-		notify_show_time = undefined
-		enabled = undefined
-		verbosity = undefined
-		toggle_key = undefined
-		log_file = undefined
-		lines_max = undefined
-		lines_count = undefined
-		lines_notify = undefined
-		inputbox = undefined
-		log_enabled = undefined
-	}
-	__KengineOptions.__Apply(options, self);
+	KengineOptions.__Apply(options, self);
 
 	notify_timer = 0;
 	notify_state = 0; // 0 = idle, 1 = notify mode
@@ -94,7 +96,7 @@ function __KenginePanelsConsole(options=undefined) : __KenginePanelsPanel(option
 		}
 	};
 	interpreter = interpreter ?? __default_interpreter
-	font = __KengineStructUtils.SetDefault(options, "font", font_ken_panels);
+	font = __KengineStructUtils.SetDefault(options, "font", fnt_ken_panels);
 
 	lines_notify_current = 0;
 
@@ -165,7 +167,7 @@ function __KenginePanelsConsole(options=undefined) : __KenginePanelsPanel(option
 				draw_text(x+4-scroll_hpos, y+1+((lines_count-1)-(_i-scroll_pos))*str_height, _texty);
 			}
 			if scroll_pos > 0 or scroll_hpos > 0 {
-				// feather ignore GM1044
+				/// feather ignore GM1044
 				draw_set_color(color_echo);
 				draw_triangle(
 					width -25-12, height-25-15,
@@ -274,13 +276,15 @@ function __KenginePanelsConsole(options=undefined) : __KenginePanelsPanel(option
 		}
 		__kengine_log(msg);
 	}
-	debug = function(msg, notify=KENGINE_DEBUG) {
+	debug = function(msg, notify=undefined) {
+		notify ??= KENGINE_DEBUG
 		if enabled {
 			self.echo_ext(msg, color_debug, notify);
 			log_write(msg, "DEBUG");
 		}
 	}
-	verbose = function(msg, verbosity, notify=KENGINE_DEBUG) {
+	verbose = function(msg, verbosity, notify=undefined) {
+		notify ??= KENGINE_DEBUG
 		if enabled {
 			if Kengine.verbosity > verbosity {
 				self.debug(msg, notify);

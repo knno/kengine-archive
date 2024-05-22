@@ -1,5 +1,10 @@
 /// feather ignore all
 
+// Credits to YellowAfterLife's Tiny Expression Runtime
+//
+// Rewritten by knno
+//
+
 #region Configs
 #macro __TXR_VALUE_CALLS 1
 #endregion
@@ -2207,7 +2212,7 @@ function __TxrSystem() constructor {
 	}
 
 	/// @param {string} _name
-	/// @param {script|function} _script
+	/// @param {script|Function} _script
 	/// @param {int} _argc args count
 	/// Registers a script for use as a function in TXR programs
 	static _function_add = function(_name, _script, _argc) {

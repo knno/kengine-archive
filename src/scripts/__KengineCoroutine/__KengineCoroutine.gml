@@ -6,8 +6,8 @@
  * @description .
  * @param {String} [name]
  * @param {Array<function>} [functions=undefined]
- * @param {function} [callback=undefined]
- * @param {function} [halt_callback=undefined]
+ * @param {Function} [callback=undefined]
+ * @param {Function} [halt_callback=undefined]
  *
  */
 function __KengineCoroutine(name="", functions=undefined, callback=undefined, halt_callback=undefined) : __KengineStruct() constructor {
@@ -45,6 +45,7 @@ function __KengineCoroutine(name="", functions=undefined, callback=undefined, ha
 
 	Immediate = function() {
 		self.current_function = 0;
+		self.status = KENGINE_COROUTINES_STATUS.RUNNING;
 		var _donefunc = false;
 		while (array_length(self.__functions) > self.current_function) {
 			__RunSingle();

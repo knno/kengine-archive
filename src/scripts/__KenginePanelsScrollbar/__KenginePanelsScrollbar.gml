@@ -1,3 +1,11 @@
+/**
+ * @name Scrollbar
+ * @private
+ * @memberof Kengine.Extensions.Panels
+ * @new_name Kengine.Extensions.Panels.Scrollbar
+ * @description A scrollbar displayed on-demand for panels.
+ * 
+ */
 function __KenginePanelsScrollbar(type, value, spr, mw_enabled) constructor {
     self.type = type
     self.value = value
@@ -5,6 +13,11 @@ function __KenginePanelsScrollbar(type, value, spr, mw_enabled) constructor {
     self.mw_enabled = mw_enabled
     self.visible = true
 
+    /**
+     * @function DrawSlots
+     * @memberof Kengine.Extensions.Panels.Scrollbar
+     * 
+     */
     DrawSlots = function (x,y, len, slots, maxslots) {
         var sb,xx,yy,swh,s,ms,wh,mwh,spr,sw,sh,sel,sel2,a,sp,ep,tp;
         sb=self

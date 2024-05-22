@@ -29,7 +29,7 @@ function __KengineFooExtension() constructor {
 // Extension Initiater: remove the "dummy__" prefix to automatically activate.
 function dummy__ken_init_ext_foo_extension() {
 	// Define Error types here.
-	//Kengine.Utils.Errors.AddType("foo_extension__class1__func1__invalid_return", "Class1 function1 returned invalid.");
+	//Kengine.Utils.Errors.Define("foo_extension__class1__func1__invalid_return", "Class1 function1 returned invalid.");
 	
 	// Define (and implement) your events here.
 	//Kengine.Utils.Events.Define("foo_extension__class1__init__before");

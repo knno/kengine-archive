@@ -9,7 +9,7 @@ function __KengineEventUtils() : __KengineStruct() constructor {
     /**
      * @function Define
      * @memberof Kengine.Utils.Events
-     * @description Define an event.
+     * @description Defines an event.
      * @param {String} event The event name.
      * @param {Array<Function>} [listeners] The event listener functions
      *
@@ -17,11 +17,12 @@ function __KengineEventUtils() : __KengineStruct() constructor {
     static Define = function(event, listeners=[]) {
 		__KengineEventUtils.__all[$ event] ??= listeners;
     }
+    AddEvent = Define;
 
     /**
      * @function AddListener
      * @memberof Kengine.Utils.Events
-     * @description Add an event listener (function) or more to the events.
+     * @description Adds an event listener (function) or more to the events.
      * @param {String} event The event name.
      * @param {Function|Array<Function>} listener The event listener function(s)
      * @return {Bool} Whether added successfuly (if the event is defined) or not.
@@ -47,7 +48,7 @@ function __KengineEventUtils() : __KengineStruct() constructor {
     /**
      * @function RemoveListener
      * @memberof Kengine.Utils.Events
-     * @description Remove an event listener (function) or more from the events.
+     * @description Removes an event listener (function) or more from the events.
      * @param {String} event The event name.
      * @param {Function|Array<Function>} listener The event listener function(s)
      * @param {Bool} [_all=true] Whether to remove all occurences of the function. Defaults to `true`.
@@ -74,7 +75,7 @@ function __KengineEventUtils() : __KengineStruct() constructor {
     /**
      * @function Fire
      * @memberof Kengine.Utils.Events
-     * @description Fire an event with arguments.
+     * @description Fires an event with arguments.
      * @param {String} event The event name.
      * @param {Any} args The event arguments
      * @return {Bool|Undefined} Whether the event is registered.
@@ -92,7 +93,7 @@ function __KengineEventUtils() : __KengineStruct() constructor {
             }
         }
         if (KENGINE_BENCHMARK and event != "start__before") {
-            var timer = get_timer(); var diff = timer - Kengine._timings[0]; Kengine._timings[0] = timer;
+            var timer = get_timer(); var diff = timer - __KengineBenchmarkUtils.__slot5Timer; __KengineBenchmarkUtils.__slot5Timer = timer;
             Kengine.console.verbose("Kengine: Benchmark: Event: " + event + ": " + string(diff/1000) + "ms", 2);
         }
         return true;
@@ -101,6 +102,7 @@ function __KengineEventUtils() : __KengineStruct() constructor {
     /**
      * @member __all
      * @type {Struct}
+     * @private
      * @memberof Kengine.Utils.Events
      * @description A struct that contains Kengine events as keys and an array of functions (listeners) to call on event fire.
      * 
@@ -312,5 +314,4 @@ function __KengineEventUtils() : __KengineStruct() constructor {
 
     }
 	__all = new __all();
-
 }
