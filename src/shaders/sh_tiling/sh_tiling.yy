@@ -4,7 +4,7 @@
   "name":"sh_tiling",
   "parent":{
     "name":"Shaders",
-    "path":"folders/Shaders.yy",
+    "path":"folders/Kengine/Shaders.yy",
   },
   "resourceType":"GMShader",
   "resourceVersion":"2.0",
