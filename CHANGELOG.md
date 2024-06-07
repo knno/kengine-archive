@@ -1,6 +1,7 @@
 
 # Change Log
-All notable changes to this project will be documented in this file.
+
+See releases.
 
 <!--
 ## [v.v.v] - yyyy-mm-dd
@@ -19,11 +20,3 @@ straightforward as possible.
 ### Fixed
 
 -->
-
-## [1.0.0] - 2023-02-07
- 
-### Added
-   
-### Changed
- 
-### Fixed
