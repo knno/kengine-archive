@@ -1,5 +1,7 @@
 <!-- Template used: https://github.com/othneildrew/Best-README-Template -->
 
+<h1>This repository is archived.</h1>
+
 <!-- PROJECT LOGO -->
 
 <br />
