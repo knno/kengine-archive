@@ -1,7 +1,7 @@
-<img src="https://raw.githubusercontent.com/knno/kengine/main/images/ICON.png" width="50%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/knno/kengine-archive/main/images/ICON.png" width="50%" style="display: block; margin: auto;" />
 <h1 align="center">Kengine 0.2</h1>
 <p align="center">A GameMaker framework for modding support of your projects by <a href="https://www.kenanmasri.com/" target="_blank">Kenan Masri (knno)</a></p>
-<p align="center"><a href="https://github.com/knno/kengine/releases/" target="_blank">Download the .yymps</a></p>
+<p align="center"><a href="https://github.com/knno/kengine-archive/releases/" target="_blank">Download the .yymps</a></p>
 
 <a id="readme-top"></a>
 
@@ -141,9 +141,9 @@ This will return the correct asset if it is replaced or not. it will be resolved
 
 ## Roadmap
 
-Check out the [Projects](https://github.com/knno/kengine/projects/) tab on GitHub.
+Check out the [Projects](https://github.com/knno/kengine-archive/projects/) tab on GitHub.
 
-See the [open issues](https://github.com/knno/kengine/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/knno/kengine-archive/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -152,7 +152,7 @@ See the [open issues](https://github.com/knno/kengine/issues) for a full list of
 <!-- LICENSE -->
 ## License
 
-Distributed under the MIT License. See [`LICENSE`](https://github.com/knno/kengine/blob/main/LICENSE) for more information.
+Distributed under the MIT License. See [`LICENSE`](https://github.com/knno/kengine-archive/blob/main/LICENSE) for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -164,7 +164,7 @@ Distributed under the MIT License. See [`LICENSE`](https://github.com/knno/kengi
 
 Kenan Masri
 * Discord: `knno`
-* Project link: [https://github.com/knno/kengine](https://github.com/knno/kengine)
+* Project link: [https://github.com/knno/kengine-archive](https://github.com/knno/kengine-archive)
 * Marketplace link: [https://knno.itch.io/kengine](https://knno.itch.io/kengine)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -182,14 +182,14 @@ Please click on [Credits](./Credits) to view credits.
 
 <!-- MARKDOWN LINKS & IMAGES -->
 
-[contributors-shield]: https://img.shields.io/github/contributors/knno/kengine.svg
-[contributors-url]: https://github.com/knno/kengine/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/knno/kengine.svg
-[forks-url]: https://github.com/knno/kengine/network/members
-[stars-shield]: https://img.shields.io/github/stars/knno/kengine.svg
-[stars-url]: https://github.com/knno/kengine/stargazers
-[issues-shield]: https://img.shields.io/github/issues/knno/kengine.svg
-[issues-url]: https://github.com/knno/kengine/issues
-[license-shield]: https://img.shields.io/github/license/knno/kengine.svg
-[license-url]: https://github.com/knno/kengine/blob/main/LICENSE.txt
+[contributors-shield]: https://img.shields.io/github/contributors/knno/kengine-archive.svg
+[contributors-url]: https://github.com/knno/kengine-archive/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/knno/kengine-archive.svg
+[forks-url]: https://github.com/knno/kengine-archive/network/members
+[stars-shield]: https://img.shields.io/github/stars/knno/kengine-archive.svg
+[stars-url]: https://github.com/knno/kengine-archive/stargazers
+[issues-shield]: https://img.shields.io/github/issues/knno/kengine-archive.svg
+[issues-url]: https://github.com/knno/kengine-archive/issues
+[license-shield]: https://img.shields.io/github/license/knno/kengine-archive.svg
+[license-url]: https://github.com/knno/kengine-archive/blob/main/LICENSE.txt
 [concept-img]: images/concept-img.png

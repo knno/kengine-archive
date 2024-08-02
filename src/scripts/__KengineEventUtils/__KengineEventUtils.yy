@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"__KengineEventUtils",
   "isCompatibility":false,
   "isDnD":false,

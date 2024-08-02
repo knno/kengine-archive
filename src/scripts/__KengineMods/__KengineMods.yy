@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"__KengineMods",
   "isCompatibility":false,
   "isDnD":false,

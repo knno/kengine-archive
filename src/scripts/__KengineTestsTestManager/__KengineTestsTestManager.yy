@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"__KengineTestsTestManager",
   "isCompatibility":false,
   "isDnD":false,

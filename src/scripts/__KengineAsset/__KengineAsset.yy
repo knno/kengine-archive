@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"__KengineAsset",
   "isCompatibility":false,
   "isDnD":false,

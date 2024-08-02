@@ -5,7 +5,7 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/knno/kengine.git"
+    "url": "git+https://github.com/knno/kengine-archive.git"
   },
   "keywords": [
     "gamemaker",
@@ -16,9 +16,9 @@
   "author": "Kenan Masri <kenanmasri@outlook.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/knno/kengine/issues"
+    "url": "https://github.com/knno/kengine-archive/issues"
   },
-  "homepage": "https://github.com/knno/kengine#readme",
+  "homepage": "https://github.com/knno/kengine-archive#readme",
   "scripts": {
     "docs:api": "node docs/scripts/jsdoc2md2.js --configure docs/jsdoc.json ./**/*.gml --partials docs/templates/partials",
     "docs:serve": "python -m http.server -d docs",

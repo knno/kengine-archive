@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"ken_scr_room_get_json",
   "isCompatibility":false,
   "isDnD":false,

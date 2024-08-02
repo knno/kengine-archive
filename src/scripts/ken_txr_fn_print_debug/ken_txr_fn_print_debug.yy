@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"ken_txr_fn_print_debug",
   "isCompatibility":false,
   "isDnD":false,

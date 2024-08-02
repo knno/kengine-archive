@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"ken_txr_fn_array_set",
   "isCompatibility":false,
   "isDnD":false,

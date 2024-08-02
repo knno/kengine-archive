@@ -2,9 +2,8 @@
 	Kengine v0.0.2
 	
 	Author:			knno <kenanmasri@outlook.com>
-	Download:		https://knno.itch.io/kengine/
-	GitHub repo:	https://github.com/knno/kengine
-	Documentation:	https://knno.github.io/kengine/
+	GitHub repo:	https://github.com/knno/kengine-archive
+	Documentation:	https://knno.github.io/kengine-archive/
 
 */
 

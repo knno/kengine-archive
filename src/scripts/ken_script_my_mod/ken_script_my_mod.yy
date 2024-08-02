@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"ken_script_my_mod",
   "isCompatibility":false,
   "isDnD":false,
